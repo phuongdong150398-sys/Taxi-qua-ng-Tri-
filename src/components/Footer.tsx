@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { siteConfig } from "@/config/siteConfig";
-import { Phone, MessageCircle, Mail, MapPin, Clock, ShieldCheck, Heart } from "lucide-react";
+import { Phone, MessageCircle, MapPin, Clock, ShieldCheck } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -23,39 +23,44 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-xs text-amber-400 font-bold bg-[#0B2240] border border-[#133863] p-3 rounded-2xl">
               <ShieldCheck className="w-4 h-4 flex-shrink-0 text-amber-400" />
-              <span>Giá cước chuẩn 20.000đ/km - Đón đúng giờ 100%</span>
+              <span>Giá chuẩn 20.000đ/km • Phục vụ toàn tỉnh Quảng Trị & Quảng Bình</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-3">
             <h4 className="text-sm font-black text-white uppercase tracking-wider">
-              Dịch Vụ Taxi Quảng Trị
+              Tuyến Xe Trọng Điểm
             </h4>
             <ul className="space-y-2 text-xs font-medium">
               <li>
                 <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Taxi Đông Hà - Sân Bay Phú Bài (Huế)
+                  • Taxi Đông Hà ⇄ TP. Đồng Hới (Quảng Bình)
                 </a>
               </li>
               <li>
                 <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Taxi Đông Hà - Sân Bay Đồng Hới (Quảng Bình)
+                  • Xe Đi Động Phong Nha - Động Thiên Đường
                 </a>
               </li>
               <li>
                 <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Taxi Đông Hà - Cửa Khẩu Lao Bảo
+                  • Taxi Đi Cửa Khẩu Lao Bảo (QL9) - Khe Sanh
                 </a>
               </li>
               <li>
                 <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Xe Đi Hành Hương Đức Mẹ La Vang
+                  • Xe Đi Hành Hương Đức Mẹ La Vang - Thành Cổ
                 </a>
               </li>
               <li>
-                <a href="#doi-xe" className="hover:text-amber-400 transition">
-                  • Thuê Xe Đi Du Lịch Cửa Việt - Cửa Tùng
+                <a href="#dat-xe" className="hover:text-amber-400 transition">
+                  • Xe Đi Mộ Đại Tướng (Vũng Chùa - Đảo Yến)
+                </a>
+              </li>
+              <li>
+                <a href="#dat-xe" className="hover:text-amber-400 transition">
+                  • Đưa Đón Sân Bay Đồng Hới & Sân Bay Phú Bài
                 </a>
               </li>
             </ul>
@@ -111,6 +116,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li className="text-slate-300 font-medium">✓ Giá cước niêm yết 20.000 VNĐ/km</li>
+              <li className="text-slate-300 font-medium">✓ Giảm 50% chiều về khi đi khứ hồi 2 chiều</li>
               <li className="text-slate-300 font-medium">✓ Miễn phí hủy chuyến trước giờ đón</li>
               <li className="text-slate-300 font-medium">✓ Tài xế bản xứ thân thiện, an toàn</li>
               <li className="pt-2">
@@ -127,9 +133,9 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <p>© {new Date().getFullYear()} {siteConfig.name}. Phục vụ tận tâm 24/7 trên mọi nẻo đường Quảng Trị.</p>
+          <p>© {new Date().getFullYear()} {siteConfig.name}. Phục vụ tận tâm 24/7 tại toàn tỉnh Quảng Trị & Quảng Bình.</p>
           <p className="flex items-center gap-1 text-amber-400 font-bold">
-            ⚡ Giá cước: 20.000 VNĐ / km
+            ⚡ Giá cước niêm yết: 20.000 VNĐ / km
           </p>
         </div>
       </div>

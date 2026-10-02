@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/siteConfig";
-import { Phone, MessageCircle, MapPin, Clock, ShieldCheck } from "lucide-react";
+import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
 
 export default function ContactSection() {
   return (
@@ -17,11 +17,11 @@ export default function ContactSection() {
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-                CẦN XE GẤP HOẶC TƯ VẤN LỘ TRÌNH TẠI QUẢNG TRỊ?
+                CẦN XE GẤP HOẶC TƯ VẤN LỘ TRÌNH TẠI QUẢNG TRỊ & QUẢNG BÌNH?
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Đội ngũ tổng đài viên và tài xế của <strong className="text-amber-400 font-bold">{siteConfig.name}</strong> túc trực 24/24 trên khắp các tuyến đường Quảng Trị, sẵn sàng đón bạn sau 5 phút với giá cước niêm yết 20.000đ/km.
+                Đội ngũ tài xế của <strong className="text-amber-400 font-bold">{siteConfig.name}</strong> túc trực 24/24 trên khắp các tuyến đường Quảng Trị và Quảng Bình (Đông Hà, Đồng Hới, Lao Bảo, Ba Đồn, Phong Nha, La Vang, Vĩnh Linh,...), sẵn sàng đón bạn sau 5 phút với giá cước niêm yết chuẩn 20.000đ/km.
               </p>
 
               <div className="space-y-4 pt-2">
@@ -62,7 +62,7 @@ export default function ContactSection() {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase">Khu vực phục vụ:</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase">Địa bàn hoạt động:</div>
                     <div className="text-sm font-semibold text-slate-200">
                       {siteConfig.address}
                     </div>
@@ -96,7 +96,7 @@ export default function ContactSection() {
               <div>
                 <h3 className="text-2xl font-black text-white uppercase">ĐẶT TAXI SIÊU TỐC</h3>
                 <p className="text-xs sm:text-sm text-slate-300 mt-2 font-medium">
-                  Chỉ một cuộc gọi hoặc tin nhắn Zalo, tài xế gần bạn nhất tại Quảng Trị sẽ đến đón sau 5 phút!
+                  Chỉ một cuộc gọi hoặc tin nhắn Zalo, tài xế gần bạn nhất tại Quảng Trị & Quảng Bình sẽ đến đón sau 5 phút!
                 </p>
               </div>
 

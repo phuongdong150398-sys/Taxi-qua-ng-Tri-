@@ -41,42 +41,61 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Gợi ý điểm đến phổ biến tại Quảng Trị & lân cận
+  // Gợi ý điểm đến phổ biến tại Quảng Trị & Quảng Bình
   const popularLocations = [
-    "Sân bay Phú Bài (Huế)",
+    "TP. Đồng Hới",
     "Sân bay Đồng Hới",
+    "Động Phong Nha",
     "Cửa khẩu Lao Bảo",
     "Đức Mẹ La Vang",
-    "Biển Cửa Việt",
+    "Thành Cổ Quảng Trị",
+    "Địa đạo Vịnh Mốc",
     "TP. Đông Hà",
-    "TX. Quảng Trị",
-    "TP. Huế",
-    "TP. Đà Nẵng",
+    "Sân bay Phú Bài",
   ];
 
-  // Dự tính giá tham khảo đơn giản
+  // Dự tính giá tham khảo theo địa danh Quảng Trị & Quảng Bình
   const getEstimatedPrice = () => {
     const combined = (pickupLocation + " " + dropoffLocation).toLowerCase();
     
+    // Tuyến Đông Hà ⇄ Đồng Hới
+    if (combined.includes("đồng hới") && (combined.includes("đông hà") || combined.includes("quảng trị"))) {
+      return carType === "4-seats" ? "800.000đ - 900.000đ" : carType === "7-seats" ? "950.000đ - 1.100.000đ" : "1.600.000đ";
+    }
+    // Tuyến Phong Nha - Kẻ Bàng / Thiên Đường
+    if (combined.includes("phong nha") || combined.includes("thiên đường") || combined.includes("kẻ bàng")) {
+      return carType === "4-seats" ? "1.100.000đ - 1.250.000đ" : carType === "7-seats" ? "1.300.000đ - 1.500.000đ" : "2.100.000đ";
+    }
+    // Tuyến Vũng Chùa - Đảo Yến
+    if (combined.includes("vũng chùa") || combined.includes("đảo yến") || combined.includes("mộ đại tướng")) {
+      return carType === "4-seats" ? "1.350.000đ" : carType === "7-seats" ? "1.600.000đ" : "2.500.000đ";
+    }
+    // Tuyến Sân Bay Phú Bài / Huế
     if (combined.includes("phú bài") || combined.includes("huế")) {
       return carType === "4-seats" ? "750.000đ - 850.000đ" : carType === "7-seats" ? "900.000đ - 1.050.000đ" : "1.500.000đ";
     }
-    if (combined.includes("đồng hới") || combined.includes("quảng bình")) {
-      return carType === "4-seats" ? "850.000đ - 950.000đ" : carType === "7-seats" ? "1.000.000đ - 1.150.000đ" : "1.700.000đ";
-    }
-    if (combined.includes("lao bảo") || combined.includes("khe sanh")) {
+    // Tuyến Cửa Khẩu Lao Bảo / Khe Sanh
+    if (combined.includes("lao bảo") || combined.includes("khe sanh") || combined.includes("hướng hóa")) {
       return carType === "4-seats" ? "700.000đ - 800.000đ" : carType === "7-seats" ? "850.000đ - 950.000đ" : "1.400.000đ";
     }
-    if (combined.includes("la vang") || combined.includes("thành cổ")) {
+    // Tuyến La Vang / Thành Cổ / TX. Quảng Trị
+    if (combined.includes("la vang") || combined.includes("thành cổ") || combined.includes("thị xã quảng trị")) {
       return carType === "4-seats" ? "250.000đ - 300.000đ" : carType === "7-seats" ? "320.000đ - 380.000đ" : "550.000đ";
     }
+    // Tuyến Địa đạo Vịnh Mốc / Cầu Hiền Lương
+    if (combined.includes("vịnh mốc") || combined.includes("hiền lương") || combined.includes("bến hải") || combined.includes("vĩnh linh")) {
+      return carType === "4-seats" ? "380.000đ - 450.000đ" : carType === "7-seats" ? "480.000đ - 550.000đ" : "800.000đ";
+    }
+    // Tuyến Biển Cửa Việt / Cửa Tùng
     if (combined.includes("cửa việt") || combined.includes("cửa tùng")) {
       return carType === "4-seats" ? "220.000đ - 280.000đ" : carType === "7-seats" ? "290.000đ - 350.000đ" : "500.000đ";
     }
+    // Tuyến Đà Nẵng
     if (combined.includes("đà nẵng")) {
       return carType === "4-seats" ? "1.500.000đ" : carType === "7-seats" ? "1.800.000đ" : "2.800.000đ";
     }
-    return carType === "4-seats" ? "20.000 VNĐ / km" : carType === "7-seats" ? "Từ 20.000 - 22.000đ / km" : "Giá theo lộ trình";
+    // Mặc định tính theo km
+    return carType === "4-seats" ? "20.000 VNĐ / km" : carType === "7-seats" ? "Từ 20.000 - 22.000đ / km" : "Giá ưu đãi theo tour";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -140,7 +159,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
       id="hero"
       className="relative min-h-screen pt-28 pb-16 lg:pt-36 lg:pb-24 bg-gradient-to-b from-[#040E1C] via-[#07172C] to-[#040E1C] text-white overflow-hidden"
     >
-      {/* Background Decorative Glow in Brand Colors (Navy & Gold) */}
+      {/* Background Decorative Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-[#FDB813]/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-2/3 right-0 w-[450px] h-[450px] bg-[#0055D4]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -157,15 +176,15 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
               />
               <div className="text-left border-l border-slate-300 pl-3">
                 <div className="text-[11px] font-black text-[#07172C] uppercase tracking-wider">
-                  Dịch Vụ Taxi Uy Tín 24/7
+                  Dịch Vụ Taxi Quảng Trị - Quảng Bình
                 </div>
                 <div className="text-xs font-bold text-amber-600">
-                  Giá cước: 20.000 VNĐ / KM
+                  Giá chuẩn: 20.000 VNĐ / KM
                 </div>
               </div>
             </div>
 
-            {/* Main Headline styled like the Logo font */}
+            {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-tight uppercase">
               <span className="text-white">TAXI </span>
               <span className="text-amber-400">QUẢNG TRỊ </span>
@@ -173,14 +192,14 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                 24H
               </span>
               <br />
-              <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-slate-200 mt-2 block normal-case">
-                Đón Nhanh Sau 5 Phút • Phục Vụ Tận Nơi
+              <span className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-200 mt-2 block normal-case">
+                Đưa Đón Quảng Trị ⇄ Quảng Bình • Sân Bay • Đi Tỉnh
               </span>
             </h1>
 
             {/* Subtext */}
             <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Đón trả tận nơi tại Đông Hà, TX. Quảng Trị, Lao Bảo, La Vang, Cửa Việt và các tỉnh lân cận. Giá cước niêm yết chuẩn <span className="text-amber-400 font-bold">20.000 VNĐ/km</span>, xe đời mới 4 - 7 - 16 chỗ sạch sẽ thơm mát.
+              Phục vụ tận tâm 24/7 tại <strong className="text-white font-bold">Đông Hà, Đồng Hới, Ba Đồn, Lao Bảo, La Vang, Vĩnh Linh, Phong Nha</strong>. Xe đời mới 4 - 7 - 16 chỗ sạch sẽ không mùi, giá cước niêm yết chuẩn <span className="text-amber-400 font-bold">20.000 VNĐ/km</span>.
             </p>
 
             {/* Highlights Grid */}
@@ -189,7 +208,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                 <div className="flex items-center gap-2 text-amber-400 font-black text-sm">
                   <Zap className="w-4 h-4 stroke-[2.5]" /> Có mặt sau 5p
                 </div>
-                <div className="text-xs text-slate-400 mt-1 font-medium">Phục vụ 24/7 toàn tỉnh</div>
+                <div className="text-xs text-slate-400 mt-1 font-medium">Quảng Trị & Quảng Bình</div>
               </div>
 
               <div className="bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
@@ -240,7 +259,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                     <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
                   </span>
                   <h2 className="text-base sm:text-lg font-black text-white uppercase tracking-wider">
-                    ĐẶT XE TAXI QUẢNG TRỊ
+                    ĐẶT XE QUẢNG TRỊ - QUẢNG BÌNH
                   </h2>
                 </div>
                 <span className="text-xs px-3 py-1 rounded-full bg-amber-400 text-[#040E1C] font-black tracking-wide shadow">
@@ -253,8 +272,8 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                 {[
                   { id: "airport", label: "Sân Bay" },
                   { id: "provincial", label: "Đi Tỉnh" },
-                  { id: "city", label: "Nội Thành" },
-                  { id: "convenient", label: "Tiện Chuyến" },
+                  { id: "city", label: "Nội Tỉnh" },
+                  { id: "convenient", label: "Du Lịch / Tour" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -297,7 +316,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                           : "text-slate-400"
                       }`}
                     >
-                      2 Chiều (Khứ hồi)
+                      2 Chiều (Giảm 50% về)
                     </button>
                   </div>
 
@@ -309,7 +328,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   >
                     <option value="4-seats">Xe 4 Chỗ (20.000đ/km)</option>
                     <option value="7-seats">Xe 7 Chỗ (22.000đ/km)</option>
-                    <option value="16-seats">Xe 16 Chỗ (Transit)</option>
+                    <option value="16-seats">Xe 16 Chỗ (Transit Tour)</option>
                     <option value="vip-limousine">VIP Limousine 9 Chỗ</option>
                   </select>
                 </div>
@@ -325,7 +344,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                       required
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
-                      placeholder="Điểm đón (VD: Đông Hà, TX. Quảng Trị, Khách sạn...)"
+                      placeholder="Điểm đón (VD: Đông Hà, Đồng Hới, Lao Bảo, Vĩnh Linh...)"
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-emerald-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
                     />
                   </div>
@@ -339,7 +358,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                       required
                       value={dropoffLocation}
                       onChange={(e) => setDropoffLocation(e.target.value)}
-                      placeholder="Điểm đến (VD: Sân bay Phú Bài, Lao Bảo, La Vang...)"
+                      placeholder="Điểm đến (VD: Đồng Hới, Phong Nha, La Vang, Sân bay...)"
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-amber-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
                     />
                   </div>
@@ -348,7 +367,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                 {/* Quick location buttons */}
                 <div className="flex flex-wrap gap-1.5 items-center">
                   <span className="text-[11px] text-slate-400 font-semibold">Tuyến nhanh:</span>
-                  {popularLocations.slice(0, 4).map((loc) => (
+                  {popularLocations.slice(0, 5).map((loc) => (
                     <button
                       key={loc}
                       type="button"
