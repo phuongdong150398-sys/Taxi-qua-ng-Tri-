@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-yellow: #fdb813;
+    --brand-yellow-hover: #e5a408;
+    --brand-navy-darkest: #040e1c;
+    --brand-navy-dark: #07172c;
+    --brand-navy-card: #0b2240;
+    --brand-navy-border: #133863;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Hiệu ứng rung chuông / gọi điện thoại */
+@keyframes ring-phone {
+  0% { transform: rotate(0deg) scale(1); }
+  10% { transform: rotate(-15deg) scale(1.05); }
+  20% { transform: rotate(15deg) scale(1.05); }
+  30% { transform: rotate(-10deg) scale(1.05); }
+  40% { transform: rotate(10deg) scale(1.05); }
+  50% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.animate-ring {
+  animation: ring-phone 2s infinite ease-in-out;
+}
+
+/* Sóng lan tỏa của nút gọi */
+@keyframes pulse-wave {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.pulse-red {
+  animation: pulse-wave 1.8s infinite;
+}
+
+@keyframes pulse-wave-blue {
+  0% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(14, 165, 233, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+  }
+}
+
+.pulse-blue {
+  animation: pulse-wave-blue 1.8s infinite;
+}
+
+@keyframes pulse-wave-gold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(253, 184, 19, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(253, 184, 19, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(253, 184, 19, 0);
+  }
+}
+
+.pulse-gold {
+  animation: pulse-wave-gold 1.8s infinite;
+}
+
+/* Dải kẻ caro Taxi */
+.taxi-pattern {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #fdb813,
+    #fdb813 12px,
+    #07172c 12px,
+    #07172c 24px
+  );
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07172c;
+}
+::-webkit-scrollbar-thumb {
+  background: #133863;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fdb813;
+}
