@@ -10,8 +10,6 @@ import {
   Calendar,
   Clock,
   Send,
-  Users,
-  CheckCircle2,
   Sparkles,
   ArrowRight,
   ShieldCheck,
@@ -25,7 +23,7 @@ interface HeroProps {
 }
 
 export default function Hero({ onBookingSuccess }: HeroProps) {
-  const [serviceType, setServiceType] = useState<ServiceType>("airport");
+  const [serviceType, setServiceType] = useState<ServiceType>("tour");
   const [carType, setCarType] = useState<CarType>("4-seats");
   const [tripType, setTripType] = useState<TripType>("one-way");
   const [pickupLocation, setPickupLocation] = useState("");
@@ -41,61 +39,67 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Gợi ý điểm đến phổ biến tại Quảng Trị & Quảng Bình
+  // Gợi ý điểm đến phổ biến theo hình ảnh du lịch Quảng Bình & Quảng Trị
   const popularLocations = [
-    "TP. Đồng Hới",
-    "Sân bay Đồng Hới",
     "Động Phong Nha",
-    "Cửa khẩu Lao Bảo",
-    "Đức Mẹ La Vang",
-    "Thành Cổ Quảng Trị",
-    "Địa đạo Vịnh Mốc",
+    "Động Thiên Đường",
+    "Suối Nước Moọc",
+    "Sông Chày - Hang Tối",
+    "Thung Lũng Hava",
+    "Công Viên Ozo",
+    "Vũng Chùa Đảo Yến",
+    "Bãi Tắm Đá Nhảy",
+    "Đồi Cát Quang Phú",
+    "Khe Nước Lạnh",
+    "TP. Đồng Hới",
     "TP. Đông Hà",
-    "Sân bay Phú Bài",
   ];
 
-  // Dự tính giá tham khảo theo địa danh Quảng Trị & Quảng Bình
+  // Dự tính giá tham khảo theo bảng giá mới: 4 chỗ 12k/km, 6 chỗ 15k/km, mở cửa 20k
   const getEstimatedPrice = () => {
+    if (carType === "16-seats" || carType === "32-seats" || carType === "vip-limousine") {
+      return "Liên hệ Hotline 0877.669.555 để nhận báo giá ưu đãi";
+    }
+
     const combined = (pickupLocation + " " + dropoffLocation).toLowerCase();
     
-    // Tuyến Đông Hà ⇄ Đồng Hới
-    if (combined.includes("đồng hới") && (combined.includes("đông hà") || combined.includes("quảng trị"))) {
-      return carType === "4-seats" ? "800.000đ - 900.000đ" : carType === "7-seats" ? "950.000đ - 1.100.000đ" : "1.600.000đ";
+    // Tuyến 1: Đồng Hới - Động Phong Nha (~45km)
+    if (combined.includes("phong nha")) {
+      return carType === "4-seats" ? "540.000 VNĐ" : "680.000 VNĐ";
     }
-    // Tuyến Phong Nha - Kẻ Bàng / Thiên Đường
-    if (combined.includes("phong nha") || combined.includes("thiên đường") || combined.includes("kẻ bàng")) {
-      return carType === "4-seats" ? "1.100.000đ - 1.250.000đ" : carType === "7-seats" ? "1.300.000đ - 1.500.000đ" : "2.100.000đ";
+    // Tuyến 2: Đồng Hới - Động Thiên Đường (~65km)
+    if (combined.includes("thiên đường")) {
+      return carType === "4-seats" ? "780.000 VNĐ" : "980.000 VNĐ";
     }
-    // Tuyến Vũng Chùa - Đảo Yến
+    // Tuyến 3: Đồng Hới - Ozo / Hava / Sông Chày / Suối Moọc (~60km)
+    if (combined.includes("suối moọc") || combined.includes("moọc") || combined.includes("sông chày") || combined.includes("hava") || combined.includes("ozo")) {
+      return carType === "4-seats" ? "720.000 VNĐ" : "900.000 VNĐ";
+    }
+    // Tuyến 8: Đồng Hới - Vũng Chùa Đảo Yến - Đá Nhảy (~70km)
     if (combined.includes("vũng chùa") || combined.includes("đảo yến") || combined.includes("mộ đại tướng")) {
-      return carType === "4-seats" ? "1.350.000đ" : carType === "7-seats" ? "1.600.000đ" : "2.500.000đ";
+      return carType === "4-seats" ? "840.000 VNĐ" : "1.050.000 VNĐ";
     }
-    // Tuyến Sân Bay Phú Bài / Huế
-    if (combined.includes("phú bài") || combined.includes("huế")) {
-      return carType === "4-seats" ? "750.000đ - 850.000đ" : carType === "7-seats" ? "900.000đ - 1.050.000đ" : "1.500.000đ";
+    // Tuyến 9: Tour Đồi Cát - Bãi Tắm Đá Nhảy (~30km)
+    if (combined.includes("đá nhảy") || combined.includes("đồi cát")) {
+      return carType === "4-seats" ? "360.000 VNĐ" : "450.000 VNĐ";
     }
-    // Tuyến Cửa Khẩu Lao Bảo / Khe Sanh
-    if (combined.includes("lao bảo") || combined.includes("khe sanh") || combined.includes("hướng hóa")) {
-      return carType === "4-seats" ? "700.000đ - 800.000đ" : carType === "7-seats" ? "850.000đ - 950.000đ" : "1.400.000đ";
+    // Tuyến 10: Tour Khe Nước Lạnh (~40km)
+    if (combined.includes("khe nước lạnh")) {
+      return carType === "4-seats" ? "480.000 VNĐ" : "600.000 VNĐ";
     }
-    // Tuyến La Vang / Thành Cổ / TX. Quảng Trị
-    if (combined.includes("la vang") || combined.includes("thành cổ") || combined.includes("thị xã quảng trị")) {
-      return carType === "4-seats" ? "250.000đ - 300.000đ" : carType === "7-seats" ? "320.000đ - 380.000đ" : "550.000đ";
+    // Tuyến 11: Đông Hà ⇄ Đồng Hới (~90km)
+    if (combined.includes("đông hà") && combined.includes("đồng hới")) {
+      return carType === "4-seats" ? "1.080.000 VNĐ" : "1.350.000 VNĐ";
     }
-    // Tuyến Địa đạo Vịnh Mốc / Cầu Hiền Lương
-    if (combined.includes("vịnh mốc") || combined.includes("hiền lương") || combined.includes("bến hải") || combined.includes("vĩnh linh")) {
-      return carType === "4-seats" ? "380.000đ - 450.000đ" : carType === "7-seats" ? "480.000đ - 550.000đ" : "800.000đ";
+    // Tuyến 12: Lao Bảo (~80km)
+    if (combined.includes("lao bảo") || combined.includes("khe sanh")) {
+      return carType === "4-seats" ? "960.000 VNĐ" : "1.200.000 VNĐ";
     }
-    // Tuyến Biển Cửa Việt / Cửa Tùng
-    if (combined.includes("cửa việt") || combined.includes("cửa tùng")) {
-      return carType === "4-seats" ? "220.000đ - 280.000đ" : carType === "7-seats" ? "290.000đ - 350.000đ" : "500.000đ";
-    }
-    // Tuyến Đà Nẵng
-    if (combined.includes("đà nẵng")) {
-      return carType === "4-seats" ? "1.500.000đ" : carType === "7-seats" ? "1.800.000đ" : "2.800.000đ";
-    }
-    // Mặc định tính theo km
-    return carType === "4-seats" ? "20.000 VNĐ / km" : carType === "7-seats" ? "Từ 20.000 - 22.000đ / km" : "Giá ưu đãi theo tour";
+
+    // Mặc định tính theo công thức: Giá mở cửa 20k + 12k/km (4 chỗ) hoặc 15k/km (6 chỗ)
+    return carType === "4-seats"
+      ? "Mở cửa 20k • 12.000đ / km"
+      : "Mở cửa 20k • 15.000đ / km";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -176,10 +180,10 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
               />
               <div className="text-left border-l border-slate-300 pl-3">
                 <div className="text-[11px] font-black text-[#07172C] uppercase tracking-wider">
-                  Dịch Vụ Taxi Quảng Trị - Quảng Bình
+                  Tự Do Khám Phá Quảng Bình - Quảng Trị
                 </div>
                 <div className="text-xs font-bold text-amber-600">
-                  Giá chuẩn: 20.000 VNĐ / KM
+                  4 Chỗ 12k/km • 6 Chỗ 15k/km • Mở cửa 20k
                 </div>
               </div>
             </div>
@@ -193,36 +197,36 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
               </span>
               <br />
               <span className="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-200 mt-2 block normal-case">
-                Đưa Đón Quảng Trị ⇄ Quảng Bình • Sân Bay • Đi Tỉnh
+                Tour Khám Phá Quảng Bình • Đưa Đón Sân Bay & Đi Tỉnh
               </span>
             </h1>
 
             {/* Subtext */}
             <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Phục vụ tận tâm 24/7 tại <strong className="text-white font-bold">Đông Hà, Đồng Hới, Ba Đồn, Lao Bảo, La Vang, Vĩnh Linh, Phong Nha</strong>. Xe đời mới 4 - 7 - 16 chỗ sạch sẽ không mùi, giá cước niêm yết chuẩn <span className="text-amber-400 font-bold">20.000 VNĐ/km</span>.
+              Đưa đón tận nơi tại <strong className="text-white font-bold">Đồng Hới, Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa, Đông Hà, Lao Bảo</strong>. Giá xe 4 chỗ chỉ <span className="text-amber-400 font-bold">12.000đ/km</span>, xe 6 chỗ chỉ <span className="text-amber-400 font-bold">15.000đ/km</span>, giá mở cửa 20k. Cho thuê xe có lái & lái xe hộ an toàn.
             </p>
 
             {/* Highlights Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
               <div className="bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
                 <div className="flex items-center gap-2 text-amber-400 font-black text-sm">
-                  <Zap className="w-4 h-4 stroke-[2.5]" /> Có mặt sau 5p
+                  <Zap className="w-4 h-4 stroke-[2.5]" /> Xe 4 chỗ 12k/km
                 </div>
-                <div className="text-xs text-slate-400 mt-1 font-medium">Quảng Trị & Quảng Bình</div>
+                <div className="text-xs text-slate-400 mt-1 font-medium">Xe 6 chỗ 15k/km</div>
               </div>
 
               <div className="bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
                 <div className="flex items-center gap-2 text-emerald-400 font-black text-sm">
-                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" /> 20.000đ / km
+                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" /> Mở cửa 20k
                 </div>
                 <div className="text-xs text-slate-400 mt-1 font-medium">Giá cước niêm yết</div>
               </div>
 
               <div className="col-span-2 sm:col-span-1 bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
                 <div className="flex items-center gap-2 text-blue-400 font-black text-sm">
-                  <Car className="w-4 h-4 stroke-[2.5]" /> Xe 2022-2025
+                  <Car className="w-4 h-4 stroke-[2.5]" /> Xe 4-6-16-32 chỗ
                 </div>
-                <div className="text-xs text-slate-400 mt-1 font-medium">Nội thất thơm mát</div>
+                <div className="text-xs text-slate-400 mt-1 font-medium">Đời mới sạch đẹp</div>
               </div>
             </div>
 
@@ -259,21 +263,21 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                     <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
                   </span>
                   <h2 className="text-base sm:text-lg font-black text-white uppercase tracking-wider">
-                    ĐẶT XE QUẢNG TRỊ - QUẢNG BÌNH
+                    ĐẶT XE NHANH 24/7
                   </h2>
                 </div>
                 <span className="text-xs px-3 py-1 rounded-full bg-amber-400 text-[#040E1C] font-black tracking-wide shadow">
-                  20.000 VNĐ / Km
+                  4 Chỗ 12k • 6 Chỗ 15k
                 </span>
               </div>
 
               {/* Service Type Tabs */}
               <div className="grid grid-cols-4 gap-1.5 bg-[#040E1C] p-1.5 rounded-2xl mt-4 border border-[#133863]/80">
                 {[
+                  { id: "tour", label: "Tour Du Lịch" },
                   { id: "airport", label: "Sân Bay" },
                   { id: "provincial", label: "Đi Tỉnh" },
                   { id: "city", label: "Nội Tỉnh" },
-                  { id: "convenient", label: "Du Lịch / Tour" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -316,7 +320,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                           : "text-slate-400"
                       }`}
                     >
-                      2 Chiều (Giảm 50% về)
+                      2 Chiều (Khứ hồi)
                     </button>
                   </div>
 
@@ -326,10 +330,11 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                     onChange={(e) => setCarType(e.target.value as CarType)}
                     className="w-full bg-[#040E1C] border border-[#133863] text-white rounded-xl px-3 py-2 text-xs sm:text-sm font-bold focus:border-amber-400 focus:outline-none"
                   >
-                    <option value="4-seats">Xe 4 Chỗ (20.000đ/km)</option>
-                    <option value="7-seats">Xe 7 Chỗ (22.000đ/km)</option>
-                    <option value="16-seats">Xe 16 Chỗ (Transit Tour)</option>
-                    <option value="vip-limousine">VIP Limousine 9 Chỗ</option>
+                    <option value="4-seats">Xe 4 Chỗ (Mở cửa 20k • 12k/km)</option>
+                    <option value="6-seats">Xe 6 - 7 Chỗ (Mở cửa 20k • 15k/km)</option>
+                    <option value="16-seats">Xe 16 Chỗ (Liên hệ báo giá)</option>
+                    <option value="32-seats">Xe 32 Chỗ (Liên hệ báo giá)</option>
+                    <option value="vip-limousine">VIP Limousine 9 Chỗ (Liên hệ)</option>
                   </select>
                 </div>
 
@@ -344,7 +349,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                       required
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
-                      placeholder="Điểm đón (VD: Đông Hà, Đồng Hới, Lao Bảo, Vĩnh Linh...)"
+                      placeholder="Điểm đón (VD: Đồng Hới, Ga, Sân bay, Đông Hà...)"
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-emerald-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
                     />
                   </div>
@@ -358,7 +363,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                       required
                       value={dropoffLocation}
                       onChange={(e) => setDropoffLocation(e.target.value)}
-                      placeholder="Điểm đến (VD: Đồng Hới, Phong Nha, La Vang, Sân bay...)"
+                      placeholder="Điểm đến (VD: Động Phong Nha, Thiên Đường, Suối Moọc...)"
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-amber-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
                     />
                   </div>
@@ -366,7 +371,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
 
                 {/* Quick location buttons */}
                 <div className="flex flex-wrap gap-1.5 items-center">
-                  <span className="text-[11px] text-slate-400 font-semibold">Tuyến nhanh:</span>
+                  <span className="text-[11px] text-slate-400 font-semibold">Điểm hot:</span>
                   {popularLocations.slice(0, 5).map((loc) => (
                     <button
                       key={loc}
@@ -437,7 +442,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-700 px-2.5 py-1 rounded-lg">
-                      ✓ Chuẩn 20.000đ/km
+                      ✓ Giá mở cửa 20k
                     </span>
                   </div>
                 </div>

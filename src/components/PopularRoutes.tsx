@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/siteConfig";
-import { Clock, ArrowRight, Plane, MapPin } from "lucide-react";
+import { Clock, ArrowRight, MapPin, Sparkles } from "lucide-react";
 
 interface PopularRoutesProps {
   onSelectRoute: (from: string, to: string) => void;
@@ -14,14 +14,14 @@ export default function PopularRoutes({ onSelectRoute }: PopularRoutesProps) {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
-            <Plane className="w-3.5 h-3.5" />
-            <span>TUYẾN ĐƯỜNG PHỔ BIẾN TẠI QUẢNG TRỊ</span>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>DANH SÁCH CÁC TUYẾN TOUR & ĐƯỜNG DÀI</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-            CÁC TUYẾN TAXI SÂN BAY & ĐƯỜNG DÀI TRỌN GÓI
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight uppercase">
+            CÁC TUYẾN DU LỊCH & ĐƯỜNG DÀI TRỌN GÓI
           </h2>
           <p className="text-slate-300 text-base">
-            Giá trọn gói niêm yết trên từng tuyến đường. Đón tận nhà, trả tận nơi, miễn phí chờ đợi tại sân bay.
+            Bảng giá áp dụng chuẩn cho xe 4 chỗ (12.000đ/km) và xe 6 chỗ (15.000đ/km). Đón tận nơi tại ga, sân bay, khách sạn Đồng Hới & các điểm lân cận.
           </p>
         </div>
 
@@ -33,11 +33,16 @@ export default function PopularRoutes({ onSelectRoute }: PopularRoutesProps) {
               className="bg-[#0B2240] border border-[#133863] hover:border-amber-400/80 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between group shadow-xl hover:shadow-amber-500/15"
             >
               <div className="space-y-4">
-                {/* Tag & Distance info */}
+                {/* Number Badge & Distance info */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black px-3 py-1 rounded-full bg-amber-400 text-[#040E1C] shadow">
-                    {route.tag}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-[#040E1C] font-black text-xs flex items-center justify-center shadow">
+                      {route.number || "•"}
+                    </span>
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300">
+                      {route.tag}
+                    </span>
+                  </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-300 font-bold">
                     <Clock className="w-3.5 h-3.5 text-amber-400" />
                     <span>{route.time}</span>
@@ -47,7 +52,7 @@ export default function PopularRoutes({ onSelectRoute }: PopularRoutesProps) {
                 </div>
 
                 {/* Route Name */}
-                <h3 className="text-lg font-black text-white group-hover:text-amber-400 transition-colors">
+                <h3 className="text-lg font-black text-white group-hover:text-amber-400 transition-colors leading-snug">
                   {route.name}
                 </h3>
 
@@ -73,15 +78,15 @@ export default function PopularRoutes({ onSelectRoute }: PopularRoutesProps) {
                     </div>
                   </div>
                   <div className="bg-[#040E1C] p-2.5 rounded-xl border border-[#133863]">
-                    <div className="text-[10px] text-slate-400 font-medium">Xe 7 Chỗ</div>
+                    <div className="text-[10px] text-slate-400 font-medium">Xe 6 Chỗ</div>
                     <div className="text-xs sm:text-sm font-black text-amber-400 mt-0.5 font-mono">
-                      {route.price7Seats}
+                      {route.price6Seats}
                     </div>
                   </div>
                   <div className="bg-[#040E1C] p-2.5 rounded-xl border border-[#133863]">
-                    <div className="text-[10px] text-slate-400 font-medium">Xe 16 Chỗ</div>
-                    <div className="text-xs sm:text-sm font-black text-amber-400 mt-0.5 font-mono">
-                      {route.price16Seats}
+                    <div className="text-[10px] text-slate-400 font-medium">16/32/VIP</div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-300 mt-0.5 truncate">
+                      {route.priceOther || "Báo giá"}
                     </div>
                   </div>
                 </div>

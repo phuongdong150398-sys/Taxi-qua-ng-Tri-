@@ -14,7 +14,7 @@ export default function HowItWorks() {
     {
       step: "02",
       title: "Báo Giá & Điều Tài Xế",
-      desc: "Tổng đài liên hệ lại sau 1-3 phút để chốt giá cước chuẩn 20.000 VNĐ/km và điều tài xế gần bạn nhất.",
+      desc: "Tổng đài liên hệ lại sau 1-3 phút để chốt giá cước niêm yết rõ ràng và điều tài xế gần bạn nhất.",
       icon: CheckCircle,
     },
     {

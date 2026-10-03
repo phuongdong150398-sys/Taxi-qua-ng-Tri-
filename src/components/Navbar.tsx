@@ -44,7 +44,7 @@ export default function Navbar() {
               <Clock className="w-3.5 h-3.5 stroke-[2.5]" /> PHỤC VỤ 24/7 TẠI QUẢNG TRỊ - CÓ MẶT SAU 5 PHÚT
             </span>
             <span className="flex items-center gap-1.5 font-bold">
-              <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" /> GIÁ CƯỚC NIÊM YẾT 20.000 VNĐ / KM
+              <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" /> 4 CHỖ 12K/KM • 6 CHỖ 15K/KM • MỞ CỬA 20K
             </span>
           </div>
           <div className="flex items-center space-x-5 font-black tracking-wide">

@@ -114,11 +114,13 @@ export default function AdminPage() {
   const getCarName = (type: string) => {
     switch (type) {
       case "4-seats":
-        return "Xe 4 Chỗ (20k/km)";
-      case "7-seats":
-        return "Xe 7 Chỗ (22k/km)";
+        return "Xe 4 Chỗ (12k/km)";
+      case "6-seats":
+        return "Xe 6 Chỗ (15k/km)";
       case "16-seats":
         return "Xe 16 Chỗ";
+      case "32-seats":
+        return "Xe 32 Chỗ";
       case "vip-limousine":
         return "Limousine VIP";
       default:

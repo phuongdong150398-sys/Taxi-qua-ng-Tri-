@@ -21,7 +21,7 @@ export default function ContactSection() {
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Đội ngũ tài xế của <strong className="text-amber-400 font-bold">{siteConfig.name}</strong> túc trực 24/24 trên khắp các tuyến đường Quảng Trị và Quảng Bình (Đông Hà, Đồng Hới, Lao Bảo, Ba Đồn, Phong Nha, La Vang, Vĩnh Linh,...), sẵn sàng đón bạn sau 5 phút với giá cước niêm yết chuẩn 20.000đ/km.
+                Đội ngũ tài xế của <strong className="text-amber-400 font-bold">{siteConfig.name}</strong> túc trực 24/24 trên khắp các tuyến đường Quảng Trị và Quảng Bình (Đông Hà, Đồng Hới, Lao Bảo, Ba Đồn, Phong Nha, La Vang, Vĩnh Linh,...), sẵn sàng đón bạn sau 5 phút với giá mở cửa 20.000đ, xe 4 chỗ chỉ 12.000đ/km, xe 6 chỗ chỉ 15.000đ/km.
               </p>
 
               <div className="space-y-4 pt-2">
@@ -121,7 +121,7 @@ export default function ContactSection() {
               </div>
 
               <div className="pt-2 text-[11px] text-slate-400 font-medium">
-                ✓ Miễn phí 100% cuộc gọi tư vấn • Giá chuẩn 20.000 VNĐ / km
+                ✓ Miễn phí 100% cuộc gọi tư vấn • 4 Chỗ 12k/km • 6 Chỗ 15k/km • Mở cửa 20k
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-export type CarType = "4-seats" | "7-seats" | "16-seats" | "vip-limousine";
+export type CarType = "4-seats" | "6-seats" | "16-seats" | "32-seats" | "vip-limousine";
 
 export type TripType = "one-way" | "round-trip";
 

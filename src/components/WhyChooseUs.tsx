@@ -13,8 +13,8 @@ export default function WhyChooseUs() {
     },
     {
       icon: BadgePercent,
-      title: "Giá Chuẩn 20.000 VNĐ / Km",
-      desc: "Bảng giá cước rõ ràng, không phát sinh chi phí. Giảm giá tới 50% chiều về khi đặt xe 2 chiều.",
+      title: "Giá Rẻ Từ 12.000 VNĐ / Km",
+      desc: "Xe 4 chỗ 12k/km, xe 6 chỗ 15k/km, giá mở cửa 20.000đ. Rõ ràng, minh bạch, không phụ phí phát sinh.",
       color: "from-emerald-500 to-teal-400",
     },
     {

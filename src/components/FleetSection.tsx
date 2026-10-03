@@ -15,18 +15,18 @@ export default function FleetSection({ onSelectCar }: FleetSectionProps) {
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>ĐỘI XE TAXI QUẢNG TRỊ ĐỜI MỚI</span>
+            <span>ĐỘI XE TAXI QUẢNG BÌNH & QUẢNG TRỊ ĐỜI MỚI</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-            ĐA DẠNG CÁC DÒNG XE TỪ 4 ĐẾN 16 CHỖ & VIP
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight uppercase">
+            ĐA DẠNG CÁC DÒNG XE TỪ 4 - 6 - 16 - 32 CHỖ & VIP
           </h2>
           <p className="text-slate-300 text-base">
-            100% xe đời mới 2022 - 2025, máy lạnh mát sâu, không mùi say xe, tài xế lịch sự, an toàn tuyệt đối.
+            100% xe đời mới 2022 - 2025, máy lạnh mát sâu, không mùi say xe, tài xế bản địa lịch sự, lái xe an toàn và am hiểu mọi tuyến điểm du lịch.
           </p>
         </div>
 
         {/* Fleet Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {siteConfig.fleet.map((car) => (
             <div
               key={car.id}
@@ -34,7 +34,7 @@ export default function FleetSection({ onSelectCar }: FleetSectionProps) {
             >
               <div>
                 {/* Image Container */}
-                <div className="relative h-48 w-full overflow-hidden bg-[#040E1C]">
+                <div className="relative h-52 w-full overflow-hidden bg-[#040E1C]">
                   <img
                     src={car.image}
                     alt={car.name}
@@ -69,7 +69,7 @@ export default function FleetSection({ onSelectCar }: FleetSectionProps) {
                     </div>
                     <div className="flex items-center gap-2 text-slate-300 font-medium">
                       <Briefcase className="w-4 h-4 text-amber-400" />
-                      <span>{car.luggage}</span>
+                      <span className="truncate">{car.luggage}</span>
                     </div>
                   </div>
 
@@ -100,7 +100,7 @@ export default function FleetSection({ onSelectCar }: FleetSectionProps) {
                   className="w-full py-2.5 px-3 rounded-xl bg-[#040E1C] hover:bg-[#07172C] text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition border border-[#133863]"
                 >
                   <Phone className="w-3.5 h-3.5 text-red-400" />
-                  <span>Gọi tổng đài: {siteConfig.hotline}</span>
+                  <span>Tổng đài: {siteConfig.hotline}</span>
                 </a>
               </div>
             </div>
