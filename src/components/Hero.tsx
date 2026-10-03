@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { siteConfig } from "@/config/siteConfig";
 import { CarType, TripType, ServiceType } from "@/types";
+import AddressAutocompleteInput, { PlaceItem } from "./AddressAutocompleteInput";
 import {
   Phone,
   Car,
@@ -15,19 +16,50 @@ import {
   ShieldCheck,
   Zap,
   MessageCircle,
+  Navigation,
+  Loader2,
+  Route,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface HeroProps {
   onBookingSuccess: (bookingData: any) => void;
+  initialFrom?: string;
+  initialTo?: string;
+  initialCarType?: CarType;
 }
 
-export default function Hero({ onBookingSuccess }: HeroProps) {
+interface DistanceData {
+  distanceKm: number;
+  durationMinutes: number;
+  routingMethod: string;
+  pricing: {
+    "4-seats": { oneWay: number; roundTrip: number; formattedOneWay: string; formattedRoundTrip: string };
+    "6-seats": { oneWay: number; roundTrip: number; formattedOneWay: string; formattedRoundTrip: string };
+    "16-seats": { formattedOneWay: string; formattedRoundTrip: string };
+    "32-seats": { formattedOneWay: string; formattedRoundTrip: string };
+    "vip-limousine": { formattedOneWay: string; formattedRoundTrip: string };
+  };
+}
+
+export default function Hero({ onBookingSuccess, initialFrom, initialTo, initialCarType }: HeroProps) {
   const [serviceType, setServiceType] = useState<ServiceType>("tour");
-  const [carType, setCarType] = useState<CarType>("4-seats");
+  const [carType, setCarType] = useState<CarType>(initialCarType || "4-seats");
   const [tripType, setTripType] = useState<TripType>("one-way");
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
+  const [pickupLocation, setPickupLocation] = useState(initialFrom || "");
+  const [dropoffLocation, setDropoffLocation] = useState(initialTo || "");
+  const [pickupCoords, setPickupCoords] = useState<{ lat?: number; lng?: number }>({});
+  const [dropoffCoords, setDropoffCoords] = useState<{ lat?: number; lng?: number }>({});
+
+  useEffect(() => {
+    if (initialFrom) setPickupLocation(initialFrom);
+    if (initialTo) setDropoffLocation(initialTo);
+  }, [initialFrom, initialTo]);
+
+  useEffect(() => {
+    if (initialCarType) setCarType(initialCarType);
+  }, [initialCarType]);
+  
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [pickupDate, setPickupDate] = useState(() => {
@@ -39,64 +71,98 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Gợi ý điểm đến phổ biến theo hình ảnh du lịch Quảng Bình & Quảng Trị
+  // Real-time distance and price state
+  const [distanceInfo, setDistanceInfo] = useState<DistanceData | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  // Gợi ý điểm đến phổ biến
   const popularLocations = [
-    "Động Phong Nha",
-    "Động Thiên Đường",
-    "Suối Nước Moọc",
-    "Sông Chày - Hang Tối",
-    "Thung Lũng Hava",
-    "Công Viên Ozo",
-    "Vũng Chùa Đảo Yến",
-    "Bãi Tắm Đá Nhảy",
-    "Đồi Cát Quang Phú",
-    "Khe Nước Lạnh",
-    "TP. Đồng Hới",
-    "TP. Đông Hà",
+    { name: "Động Phong Nha", lat: 17.5898, lng: 106.2828 },
+    { name: "Động Thiên Đường", lat: 17.5190, lng: 106.2230 },
+    { name: "Suối Nước Moọc", lat: 17.5458, lng: 106.2625 },
+    { name: "Sông Chày - Hang Tối", lat: 17.5645, lng: 106.2575 },
+    { name: "Thung Lũng Hava", lat: 17.5580, lng: 106.2600 },
+    { name: "Công Viên Ozo", lat: 17.5100, lng: 106.2900 },
+    { name: "Vũng Chùa Đảo Yến", lat: 17.9150, lng: 106.4780 },
+    { name: "Bãi Tắm Đá Nhảy", lat: 17.6980, lng: 106.5250 },
+    { name: "Đồi Cát Quang Phú", lat: 17.5150, lng: 106.6180 },
+    { name: "Khe Nước Lạnh", lat: 17.3100, lng: 106.6300 },
+    { name: "TP. Đồng Hới", lat: 17.4696, lng: 106.6225 },
+    { name: "TP. Đông Hà", lat: 16.8167, lng: 107.1000 },
   ];
 
-  // Dự tính giá tham khảo theo bảng giá mới: 4 chỗ 12k/km, 6 chỗ 15k/km, mở cửa 20k
-  const getEstimatedPrice = () => {
+  // Tính khoảng cách tự động khi người dùng nhập hoặc chọn địa điểm
+  const calculateDistance = useCallback(async () => {
+    if (!pickupLocation.trim() || !dropoffLocation.trim()) {
+      setDistanceInfo(null);
+      return;
+    }
+
+    setIsCalculating(true);
+    try {
+      const res = await fetch("/api/distance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          origin: pickupLocation,
+          destination: dropoffLocation,
+          originCoords: pickupCoords,
+          destCoords: dropoffCoords,
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success && json.data) {
+        setDistanceInfo(json.data);
+      }
+    } catch (e) {
+      // Ignore network errors
+    } finally {
+      setIsCalculating(false);
+    }
+  }, [pickupLocation, dropoffLocation, pickupCoords, dropoffCoords]);
+
+  // Debounced effect for distance calculation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      calculateDistance();
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [calculateDistance]);
+
+  const handleSelectPickup = (place: PlaceItem) => {
+    setPickupLocation(place.name);
+    setPickupCoords({ lat: place.lat, lng: place.lng });
+  };
+
+  const handleSelectDropoff = (place: PlaceItem) => {
+    setDropoffLocation(place.name);
+    setDropoffCoords({ lat: place.lat, lng: place.lng });
+  };
+
+  const handleQuickSelectDropoff = (loc: { name: string; lat: number; lng: number }) => {
+    setDropoffLocation(loc.name);
+    setDropoffCoords({ lat: loc.lat, lng: loc.lng });
+    if (!pickupLocation) {
+      setPickupLocation("TP. Đồng Hới (Trung tâm)");
+      setPickupCoords({ lat: 17.4696, lng: 106.6225 });
+    }
+  };
+
+  // Lấy giá hiển thị theo dòng xe và khoảng cách
+  const getDisplayPrice = () => {
     if (carType === "16-seats" || carType === "32-seats" || carType === "vip-limousine") {
       return "Liên hệ Hotline 0877.669.555 để nhận báo giá ưu đãi";
     }
 
-    const combined = (pickupLocation + " " + dropoffLocation).toLowerCase();
-    
-    // Tuyến 1: Đồng Hới - Động Phong Nha (~45km)
-    if (combined.includes("phong nha")) {
-      return carType === "4-seats" ? "540.000 VNĐ" : "680.000 VNĐ";
-    }
-    // Tuyến 2: Đồng Hới - Động Thiên Đường (~65km)
-    if (combined.includes("thiên đường")) {
-      return carType === "4-seats" ? "780.000 VNĐ" : "980.000 VNĐ";
-    }
-    // Tuyến 3: Đồng Hới - Ozo / Hava / Sông Chày / Suối Moọc (~60km)
-    if (combined.includes("suối moọc") || combined.includes("moọc") || combined.includes("sông chày") || combined.includes("hava") || combined.includes("ozo")) {
-      return carType === "4-seats" ? "720.000 VNĐ" : "900.000 VNĐ";
-    }
-    // Tuyến 8: Đồng Hới - Vũng Chùa Đảo Yến - Đá Nhảy (~70km)
-    if (combined.includes("vũng chùa") || combined.includes("đảo yến") || combined.includes("mộ đại tướng")) {
-      return carType === "4-seats" ? "840.000 VNĐ" : "1.050.000 VNĐ";
-    }
-    // Tuyến 9: Tour Đồi Cát - Bãi Tắm Đá Nhảy (~30km)
-    if (combined.includes("đá nhảy") || combined.includes("đồi cát")) {
-      return carType === "4-seats" ? "360.000 VNĐ" : "450.000 VNĐ";
-    }
-    // Tuyến 10: Tour Khe Nước Lạnh (~40km)
-    if (combined.includes("khe nước lạnh")) {
-      return carType === "4-seats" ? "480.000 VNĐ" : "600.000 VNĐ";
-    }
-    // Tuyến 11: Đông Hà ⇄ Đồng Hới (~90km)
-    if (combined.includes("đông hà") && combined.includes("đồng hới")) {
-      return carType === "4-seats" ? "1.080.000 VNĐ" : "1.350.000 VNĐ";
-    }
-    // Tuyến 12: Lao Bảo (~80km)
-    if (combined.includes("lao bảo") || combined.includes("khe sanh")) {
-      return carType === "4-seats" ? "960.000 VNĐ" : "1.200.000 VNĐ";
+    if (distanceInfo && distanceInfo.pricing) {
+      const p = distanceInfo.pricing[carType as "4-seats" | "6-seats"];
+      if (p) {
+        return tripType === "round-trip" ? p.formattedRoundTrip : p.formattedOneWay;
+      }
     }
 
-    // Mặc định
     return "Báo giá trọn gói ưu đãi nhất";
   };
 
@@ -121,7 +187,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
         carType,
         tripType,
         serviceType,
-        notes,
+        notes: notes + (distanceInfo ? ` [Cự ly: ${distanceInfo.distanceKm}km - ${distanceInfo.durationMinutes}phút]` : ""),
       };
 
       const res = await fetch("/api/booking", {
@@ -144,7 +210,8 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
 
         onBookingSuccess({
           ...data.booking,
-          estimatedPrice: getEstimatedPrice(),
+          estimatedPrice: getDisplayPrice(),
+          distanceKm: distanceInfo?.distanceKm,
         });
       } else {
         setErrorMsg(data.message || "Không thể gửi yêu cầu đặt xe. Vui lòng thử lại!");
@@ -336,33 +403,33 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   </select>
                 </div>
 
-                {/* Pickup & Dropoff Locations */}
+                {/* Pickup & Dropoff Locations with Google Maps / Smart Autocomplete */}
                 <div className="space-y-2.5">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-400">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="text"
+                  <div>
+                    <label className="text-[11px] text-slate-300 font-bold block mb-1">
+                      Điểm đón khách (Gợi ý tự động bản đồ):
+                    </label>
+                    <AddressAutocompleteInput
                       required
                       value={pickupLocation}
-                      onChange={(e) => setPickupLocation(e.target.value)}
-                      placeholder="Điểm đón (VD: Đồng Hới, Ga, Sân bay, Đông Hà...)"
-                      className="w-full bg-[#040E1C] border border-[#133863] focus:border-emerald-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
+                      onChange={setPickupLocation}
+                      onSelectPlace={handleSelectPickup}
+                      placeholder="Nhập điểm đón (VD: Đồng Hới, Ga, Sân bay, Đông Hà...)"
+                      labelIconColor="text-emerald-400"
                     />
                   </div>
 
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amber-400">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="text"
+                  <div>
+                    <label className="text-[11px] text-slate-300 font-bold block mb-1">
+                      Điểm đến / Tham quan:
+                    </label>
+                    <AddressAutocompleteInput
                       required
                       value={dropoffLocation}
-                      onChange={(e) => setDropoffLocation(e.target.value)}
-                      placeholder="Điểm đến (VD: Động Phong Nha, Thiên Đường, Suối Moọc...)"
-                      className="w-full bg-[#040E1C] border border-[#133863] focus:border-amber-500 rounded-xl pl-10 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
+                      onChange={setDropoffLocation}
+                      onSelectPlace={handleSelectDropoff}
+                      placeholder="Nhập điểm đến (VD: Động Phong Nha, Thiên Đường, Suối Moọc...)"
+                      labelIconColor="text-amber-400"
                     />
                   </div>
                 </div>
@@ -370,17 +437,42 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                 {/* Quick location buttons */}
                 <div className="flex flex-wrap gap-1.5 items-center">
                   <span className="text-[11px] text-slate-400 font-semibold">Điểm hot:</span>
-                  {popularLocations.slice(0, 5).map((loc) => (
+                  {popularLocations.slice(0, 6).map((loc) => (
                     <button
-                      key={loc}
+                      key={loc.name}
                       type="button"
-                      onClick={() => setDropoffLocation(loc)}
-                      className="text-[11px] bg-[#0B2240] hover:bg-[#133863] text-slate-300 hover:text-amber-400 px-2.5 py-0.5 rounded-lg border border-[#133863] transition font-medium"
+                      onClick={() => handleQuickSelectDropoff(loc)}
+                      className="text-[11px] bg-[#0B2240] hover:bg-[#133863] text-slate-300 hover:text-amber-400 px-2.5 py-0.5 rounded-lg border border-[#133863] transition font-medium cursor-pointer"
                     >
-                      + {loc}
+                      + {loc.name}
                     </button>
                   ))}
                 </div>
+
+                {/* Real-time Distance and Route Info Display */}
+                {isCalculating ? (
+                  <div className="bg-[#0B2240] border border-[#133863] rounded-2xl p-2.5 flex items-center justify-center gap-2 text-xs text-amber-300">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Đang đo khoảng cách bản đồ & tính cước chính xác...</span>
+                  </div>
+                ) : distanceInfo ? (
+                  <div className="bg-gradient-to-r from-[#0B2240] to-[#07172C] border border-amber-500/40 rounded-2xl p-3 flex items-center justify-between shadow-md">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-400">
+                        <Route className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-400 font-semibold">Khoảng cách lộ trình thực tế:</div>
+                        <div className="text-xs sm:text-sm font-black text-amber-300 font-mono">
+                          {distanceInfo.distanceKm} km • ~{distanceInfo.durationMinutes} phút
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-700">
+                      ✓ Chuẩn km bản đồ
+                    </span>
+                  </div>
+                ) : null}
 
                 {/* Customer Contact Information */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -435,7 +527,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   <div>
                     <div className="text-[11px] text-amber-300 font-bold uppercase">Giá cước ước tính:</div>
                     <div className="text-base sm:text-lg font-black text-amber-400 font-mono">
-                      {getEstimatedPrice()}
+                      {getDisplayPrice()}
                     </div>
                   </div>
                   <div className="text-right">

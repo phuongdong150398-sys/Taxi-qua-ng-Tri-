@@ -17,13 +17,16 @@ import BookingSuccessModal from "@/components/BookingSuccessModal";
 
 export default function HomePage() {
   const [successBooking, setSuccessBooking] = useState<any | null>(null);
+  const [selectedFrom, setSelectedFrom] = useState<string>("");
+  const [selectedTo, setSelectedTo] = useState<string>("");
+  const [selectedCar, setSelectedCar] = useState<any>("4-seats");
 
   const handleBookingSuccess = (bookingData: any) => {
     setSuccessBooking(bookingData);
   };
 
   const handleSelectCar = (carId: string) => {
-    // Smooth scroll to booking form
+    setSelectedCar(carId);
     const bookingSection = document.getElementById("dat-xe");
     if (bookingSection) {
       bookingSection.scrollIntoView({ behavior: "smooth" });
@@ -31,7 +34,8 @@ export default function HomePage() {
   };
 
   const handleSelectRoute = (from: string, to: string) => {
-    // Smooth scroll to booking form
+    setSelectedFrom(from);
+    setSelectedTo(to);
     const bookingSection = document.getElementById("dat-xe");
     if (bookingSection) {
       bookingSection.scrollIntoView({ behavior: "smooth" });
@@ -44,7 +48,12 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero with Instant Booking Box */}
-      <Hero onBookingSuccess={handleBookingSuccess} />
+      <Hero
+        onBookingSuccess={handleBookingSuccess}
+        initialFrom={selectedFrom}
+        initialTo={selectedTo}
+        initialCarType={selectedCar}
+      />
 
       {/* Fleet Showcase */}
       <FleetSection onSelectCar={handleSelectCar} />
