@@ -64,7 +64,7 @@ export default function PricingTable() {
             >
               {item.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-yellow-400 text-[#040E1C] text-[11px] font-black px-3.5 py-0.5 rounded-full uppercase tracking-wider shadow-lg whitespace-nowrap">
-                  12.000 VNĐ / KM
+                  PHỔ BIẾN NHẤT
                 </div>
               )}
 
@@ -197,7 +197,7 @@ export default function PricingTable() {
                     {estimatedTotal.toLocaleString("vi-VN")} <span className="text-sm font-semibold">VNĐ</span>
                   </div>
                   <div className="text-[11px] font-bold text-emerald-400 bg-emerald-950/80 py-1.5 px-2.5 rounded-lg border border-emerald-700">
-                    ✓ Giá mở cửa 20k • {calcCarType === "4-seats" ? "12k/km" : "15k/km"}
+                    ✓ Giá Rẻ - Uy Tín - An Toàn
                   </div>
                 </>
               ) : (

@@ -121,7 +121,7 @@ export default function ContactSection() {
               </div>
 
               <div className="pt-2 text-[11px] text-slate-400 font-medium">
-                ✓ Miễn phí 100% cuộc gọi tư vấn • 4 Chỗ 12k/km • 6 Chỗ 15k/km • Mở cửa 20k
+                ✓ Miễn phí 100% cuộc gọi tư vấn • Giá Rẻ - Uy Tín - An Toàn
               </div>
             </div>
           </div>

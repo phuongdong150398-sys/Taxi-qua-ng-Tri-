@@ -24,9 +24,9 @@ export default function BookingSuccessModal({ booking, onClose }: BookingSuccess
   const getCarLabel = (type: string) => {
     switch (type) {
       case "4-seats":
-        return "Xe 4 Chỗ (12k/km • Mở cửa 20k)";
+        return "Xe 4 - 5 Chỗ (Sedan)";
       case "6-seats":
-        return "Xe 6 - 7 Chỗ (15k/km • Mở cửa 20k)";
+        return "Xe 6 - 7 Chỗ (MPV/SUV)";
       case "16-seats":
         return "Xe 16 Chỗ (Transit / Solati)";
       case "32-seats":

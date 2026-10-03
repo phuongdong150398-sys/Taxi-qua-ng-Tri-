@@ -96,10 +96,8 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
       return carType === "4-seats" ? "960.000 VNĐ" : "1.200.000 VNĐ";
     }
 
-    // Mặc định tính theo công thức: Giá mở cửa 20k + 12k/km (4 chỗ) hoặc 15k/km (6 chỗ)
-    return carType === "4-seats"
-      ? "Mở cửa 20k • 12.000đ / km"
-      : "Mở cửa 20k • 15.000đ / km";
+    // Mặc định
+    return "Báo giá trọn gói ưu đãi nhất";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -180,10 +178,10 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
               />
               <div className="text-left border-l border-slate-300 pl-3">
                 <div className="text-[11px] font-black text-[#07172C] uppercase tracking-wider">
-                  Tự Do Khám Phá Quảng Bình - Quảng Trị
+                  Taxi Quảng Trị 24H
                 </div>
-                <div className="text-xs font-bold text-amber-600">
-                  4 Chỗ 12k/km • 6 Chỗ 15k/km • Mở cửa 20k
+                <div className="text-xs font-black text-amber-600 uppercase tracking-wide">
+                  Giá Rẻ - Uy Tín - An Toàn
                 </div>
               </div>
             </div>
@@ -203,23 +201,23 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
 
             {/* Subtext */}
             <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Đưa đón tận nơi tại <strong className="text-white font-bold">Đồng Hới, Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa, Đông Hà, Lao Bảo</strong>. Giá xe 4 chỗ chỉ <span className="text-amber-400 font-bold">12.000đ/km</span>, xe 6 chỗ chỉ <span className="text-amber-400 font-bold">15.000đ/km</span>, giá mở cửa 20k. Cho thuê xe có lái & lái xe hộ an toàn.
+              Đưa đón tận nơi tại <strong className="text-white font-bold">Đồng Hới, Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa, Đông Hà, Lao Bảo</strong>. Phục vụ chuyên nghiệp 24/7, xe đời mới sạch sẽ, lái xe an toàn, chu đáo và thân thiện.
             </p>
 
             {/* Highlights Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
               <div className="bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
                 <div className="flex items-center gap-2 text-amber-400 font-black text-sm">
-                  <Zap className="w-4 h-4 stroke-[2.5]" /> Xe 4 chỗ 12k/km
+                  <Zap className="w-4 h-4 stroke-[2.5]" /> Giá Rẻ - Uy Tín
                 </div>
-                <div className="text-xs text-slate-400 mt-1 font-medium">Xe 6 chỗ 15k/km</div>
+                <div className="text-xs text-slate-400 mt-1 font-medium">Báo giá trọn gói</div>
               </div>
 
               <div className="bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
                 <div className="flex items-center gap-2 text-emerald-400 font-black text-sm">
-                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" /> Mở cửa 20k
+                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" /> Đón Nhanh 5 Phút
                 </div>
-                <div className="text-xs text-slate-400 mt-1 font-medium">Giá cước niêm yết</div>
+                <div className="text-xs text-slate-400 mt-1 font-medium">Phục vụ 24/7 toàn tỉnh</div>
               </div>
 
               <div className="col-span-2 sm:col-span-1 bg-[#0B2240] backdrop-blur-sm border border-[#133863] rounded-2xl p-3.5 text-left shadow-md">
@@ -267,7 +265,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   </h2>
                 </div>
                 <span className="text-xs px-3 py-1 rounded-full bg-amber-400 text-[#040E1C] font-black tracking-wide shadow">
-                  4 Chỗ 12k • 6 Chỗ 15k
+                  Giá Rẻ - Uy Tín - An Toàn
                 </span>
               </div>
 
@@ -330,11 +328,11 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                     onChange={(e) => setCarType(e.target.value as CarType)}
                     className="w-full bg-[#040E1C] border border-[#133863] text-white rounded-xl px-3 py-2 text-xs sm:text-sm font-bold focus:border-amber-400 focus:outline-none"
                   >
-                    <option value="4-seats">Xe 4 Chỗ (Mở cửa 20k • 12k/km)</option>
-                    <option value="6-seats">Xe 6 - 7 Chỗ (Mở cửa 20k • 15k/km)</option>
-                    <option value="16-seats">Xe 16 Chỗ (Liên hệ báo giá)</option>
-                    <option value="32-seats">Xe 32 Chỗ (Liên hệ báo giá)</option>
-                    <option value="vip-limousine">VIP Limousine 9 Chỗ (Liên hệ)</option>
+                    <option value="4-seats">Xe 4 - 5 Chỗ (Sedan)</option>
+                    <option value="6-seats">Xe 6 - 7 Chỗ (MPV/SUV)</option>
+                    <option value="16-seats">Xe 16 Chỗ (Du Lịch)</option>
+                    <option value="32-seats">Xe 32 Chỗ (Đoàn Lớn)</option>
+                    <option value="vip-limousine">VIP Limousine 9 Chỗ</option>
                   </select>
                 </div>
 
@@ -442,7 +440,7 @@ export default function Hero({ onBookingSuccess }: HeroProps) {
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-700 px-2.5 py-1 rounded-lg">
-                      ✓ Giá mở cửa 20k
+                      ✓ Giá Rẻ - Uy Tín - An Toàn
                     </span>
                   </div>
                 </div>

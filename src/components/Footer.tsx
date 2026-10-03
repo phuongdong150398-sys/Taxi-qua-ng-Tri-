@@ -23,7 +23,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-xs text-amber-400 font-bold bg-[#0B2240] border border-[#133863] p-3 rounded-2xl">
               <ShieldCheck className="w-4 h-4 flex-shrink-0 text-amber-400" />
-              <span>4 chỗ 12k/km • 6 chỗ 15k/km • Mở cửa 20k • Phục vụ toàn tỉnh</span>
+              <span>Giá Rẻ - Uy Tín - An Toàn • Phục vụ 24/7 toàn tỉnh</span>
             </div>
           </div>
 
@@ -135,7 +135,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
           <p>© {new Date().getFullYear()} {siteConfig.name}. Phục vụ tận tâm 24/7 tại toàn tỉnh Quảng Trị & Quảng Bình.</p>
           <p className="flex items-center gap-1 text-amber-400 font-bold">
-            ⚡ 4 Chỗ 12.000đ/km • 6 Chỗ 15.000đ/km • Mở cửa 20k
+            ⚡ TAXI QUẢNG TRỊ 24H • GIÁ RẺ - UY TÍN - AN TOÀN
           </p>
         </div>
       </div>

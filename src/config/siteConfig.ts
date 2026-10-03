@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "TAXI Quảng Trị 24h",
   logo: "/logo.png",
-  slogan: "Dịch Vụ Taxi Giá Rẻ Quảng Trị - Quảng Bình • Xe 4 Chỗ 12k/km • Xe 6 Chỗ 15k/km",
+  slogan: "Dịch Vụ Taxi Quảng Trị - Quảng Bình 24H • Giá Rẻ - Uy Tín - An Toàn",
   description:
-    "Chuyên dịch vụ taxi gia đình, tour du lịch khám phá Quảng Bình - Quảng Trị (Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa Đảo Yến, Đá Nhảy, La Vang, Lao Bảo). Xe 4 chỗ chỉ 12.000đ/km, xe 6 chỗ chỉ 15.000đ/km, mở cửa 20k. Xe 16 - 32 chỗ và Limousine VIP liên hệ trực tiếp.",
+    "Chuyên dịch vụ taxi gia đình, tour du lịch khám phá Quảng Bình - Quảng Trị (Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa Đảo Yến, Đá Nhảy, La Vang, Lao Bảo). Uy tín, an toàn, giá cước tiết kiệm, phục vụ chu đáo 24/7.",
   hotline: "0877.669.555",
   hotlineFormatted: "0877669555",
   zalo: "0398.567.070",
@@ -257,7 +257,7 @@ export const siteConfig = {
       features: ["Mở cửa 20.000đ", "Giá mỗi km: 12.000đ", "Điều hòa mát sâu", "Nước suối & khăn lạnh"],
       image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
       description: "Phù hợp cho cá nhân, gia đình nhỏ 2 - 4 người đi công tác, đưa đón sân bay Đồng Hới, tour Phong Nha.",
-      startingPrice: "Mở cửa 20k • 12k/km",
+      startingPrice: "Xe 4 Chỗ Tiết Kiệm",
     },
     {
       id: "6-seats",
@@ -269,7 +269,7 @@ export const siteConfig = {
       features: ["Mở cửa 20.000đ", "Giá mỗi km: 15.000đ", "Khoang ngồi rộng thoáng", "Điều hòa đa vùng"],
       image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
       description: "Lựa chọn số 1 cho gia đình đông thành viên đi tour khám phá Quảng Bình, Suối Moọc, Ozo, Vũng Chùa.",
-      startingPrice: "Mở cửa 20k • 15k/km",
+      startingPrice: "Xe 6 Chỗ Rộng Rãi",
     },
     {
       id: "16-seats",
