@@ -122,6 +122,16 @@ export default function BookingSuccessModal({ booking, onClose }: BookingSuccess
             <span>Gọi tổng đài xác nhận: {siteConfig.hotline}</span>
           </a>
 
+          <a
+            href={siteConfig.zaloUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3 rounded-2xl bg-[#0068FF] hover:bg-[#0055D4] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Gửi đơn qua Zalo: {siteConfig.zalo}</span>
+          </a>
+
           <div className="flex gap-2">
             <button
               onClick={copyBookingInfo}

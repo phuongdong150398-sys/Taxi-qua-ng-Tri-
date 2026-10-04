@@ -19,6 +19,11 @@ import {
   ArrowLeft,
   RefreshCw,
   TrendingUp,
+  Send,
+  Bell,
+  HelpCircle,
+  ExternalLink,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -27,17 +32,38 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [showTelegramGuide, setShowTelegramGuide] = useState(false);
 
   const fetchBookings = async () => {
     setLoading(true);
+    let serverBookings: BookingRecord[] = [];
     try {
       const res = await fetch("/api/booking");
       const data = await res.json();
-      if (data.success) {
-        setBookings(data.data);
+      if (data.success && Array.isArray(data.data)) {
+        serverBookings = data.data;
       }
     } catch (error) {
-      console.error("Error fetching bookings:", error);
+      console.error("Error fetching bookings from server:", error);
+    }
+
+    // Merge with local cache to ensure no orders are ever lost on serverless
+    try {
+      const localData = JSON.parse(localStorage.getItem("admin_bookings_cache") || "[]");
+      const combined = [...serverBookings, ...localData];
+      const uniqueMap = new Map<string, BookingRecord>();
+      combined.forEach((b) => {
+        if (b.id && !uniqueMap.has(b.id)) {
+          uniqueMap.set(b.id, b);
+        }
+      });
+      const mergedList = Array.from(uniqueMap.values()).sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setBookings(mergedList);
+      localStorage.setItem("admin_bookings_cache", JSON.stringify(mergedList));
+    } catch (e) {
+      setBookings(serverBookings);
     } finally {
       setLoading(false);
     }
@@ -50,17 +76,21 @@ export default function AdminPage() {
   const updateStatus = async (id: string, newStatus: BookingRecord["status"]) => {
     setUpdatingId(id);
     try {
-      const res = await fetch("/api/booking", {
+      await fetch("/api/booking", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status: newStatus }),
       });
-      const data = await res.json();
-      if (data.success) {
-        setBookings((prev) =>
-          prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
-        );
-      }
+
+      setBookings((prev) => {
+        const updated = prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b));
+        try {
+          localStorage.setItem("admin_bookings_cache", JSON.stringify(updated));
+        } catch (e) {
+          // ignore
+        }
+        return updated;
+      });
     } catch (error) {
       console.error("Error updating status:", error);
     } finally {
@@ -163,6 +193,14 @@ export default function AdminPage() {
 
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setShowTelegramGuide(!showTelegramGuide)}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#0088cc]/20 hover:bg-[#0088cc]/40 text-[#0088cc] text-xs font-bold transition border border-[#0088cc]/50 cursor-pointer"
+            >
+              <Bell className="w-4 h-4" />
+              <span>Cài đặt Telegram / Zalo</span>
+            </button>
+
+            <button
               onClick={fetchBookings}
               disabled={loading}
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#0B2240] hover:bg-[#133863] text-white text-xs font-bold transition cursor-pointer border border-[#133863]"
@@ -170,6 +208,7 @@ export default function AdminPage() {
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-amber-400" : ""}`} />
               <span>Làm mới</span>
             </button>
+
             <Link
               href="/"
               className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-[#040E1C] text-xs font-black transition shadow-lg hover:from-amber-400 hover:to-yellow-300"
@@ -178,6 +217,53 @@ export default function AdminPage() {
             </Link>
           </div>
         </div>
+
+        {/* Telegram & Notification Integration Box */}
+        {showTelegramGuide && (
+          <div className="bg-gradient-to-br from-[#0B2240] to-[#07172C] border-2 border-[#0088cc]/60 rounded-3xl p-6 shadow-2xl space-y-4 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-[#133863]">
+              <div className="flex items-center gap-2.5 text-[#0088cc] font-black text-base">
+                <Bell className="w-5 h-5" />
+                <span>HƯỚNG DẪN NHẬN THÔNG BÁO ĐƠN ĐẶT XE VỀ TELEGRAM TỨC THỜI</span>
+              </div>
+              <button
+                onClick={() => setShowTelegramGuide(false)}
+                className="text-xs text-slate-400 hover:text-white font-bold"
+              >
+                ✕ Đóng
+              </button>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+              Khi khách hàng đặt xe trên website, hệ thống sẽ tự động gửi tin nhắn kèm chuông báo về điện thoại của bạn qua Telegram ngay lập tức!
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="bg-[#040E1C] p-4 rounded-2xl border border-[#133863] space-y-2">
+                <div className="font-bold text-amber-400">Bước 1: Tạo Bot Telegram</div>
+                <p className="text-slate-300">
+                  Mở Telegram, tìm kiếm <strong>@BotFather</strong>, gõ lệnh <code>/newbot</code> và làm theo hướng dẫn để lấy <strong>Bot Token</strong>.
+                </p>
+              </div>
+
+              <div className="bg-[#040E1C] p-4 rounded-2xl border border-[#133863] space-y-2">
+                <div className="font-bold text-amber-400">Bước 2: Lấy Chat ID của bạn</div>
+                <p className="text-slate-300">
+                  Tìm kiếm <strong>@userinfobot</strong> trên Telegram và bấm Start, bot sẽ gửi lại cho bạn mã <strong>Id (Chat ID)</strong>.
+                </p>
+              </div>
+
+              <div className="bg-[#040E1C] p-4 rounded-2xl border border-[#133863] space-y-2">
+                <div className="font-bold text-amber-400">Bước 3: Thêm vào Vercel</div>
+                <p className="text-slate-300">
+                  Vào <strong>Vercel &gt; Settings &gt; Environment Variables</strong>, thêm 2 biến:
+                  <br />• <code>TELEGRAM_BOT_TOKEN</code>
+                  <br />• <code>TELEGRAM_CHAT_ID</code>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -253,7 +339,7 @@ export default function AdminPage() {
             </div>
           ) : filteredBookings.length === 0 ? (
             <div className="bg-[#07172C] border border-[#133863] rounded-3xl p-12 text-center text-slate-400 text-sm font-medium">
-              Chưa có đơn đặt xe nào phù hợp.
+              Chưa có đơn đặt xe nào. Hãy thử đặt 1 chuyến trên trang chủ để kiểm tra!
             </div>
           ) : (
             filteredBookings.map((b) => (
@@ -333,6 +419,12 @@ export default function AdminPage() {
                       <Clock className="w-3.5 h-3.5 text-blue-400" />
                       <span>Thời gian: {b.pickupTime} - Ngày {b.pickupDate}</span>
                     </div>
+
+                    {b.estimatedPrice && (
+                      <div className="text-xs text-amber-400 font-bold">
+                        Giá cước tạm tính: <span className="font-mono text-sm">{b.estimatedPrice}</span>
+                      </div>
+                    )}
 
                     {b.notes && (
                       <div className="text-xs text-slate-400 italic">

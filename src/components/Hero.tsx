@@ -208,11 +208,21 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
           // ignore
         }
 
-        onBookingSuccess({
+        const finalBooking = {
           ...data.booking,
           estimatedPrice: getDisplayPrice(),
           distanceKm: distanceInfo?.distanceKm,
-        });
+        };
+
+        try {
+          const cache = JSON.parse(localStorage.getItem("admin_bookings_cache") || "[]");
+          const merged = [finalBooking, ...cache.filter((item: any) => item.id !== finalBooking.id)];
+          localStorage.setItem("admin_bookings_cache", JSON.stringify(merged.slice(0, 100)));
+        } catch (e) {
+          // ignore
+        }
+
+        onBookingSuccess(finalBooking);
       } else {
         setErrorMsg(data.message || "Không thể gửi yêu cầu đặt xe. Vui lòng thử lại!");
       }
