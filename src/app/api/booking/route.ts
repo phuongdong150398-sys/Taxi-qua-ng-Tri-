@@ -52,6 +52,15 @@ function saveBookings(bookings: BookingRecord[]) {
   }
 }
 
+function escapeHtml(text: string) {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 // Hàm gửi thông báo đơn đặt xe về Telegram của tài xế / chủ xe
 async function sendTelegramNotification(booking: BookingRecord) {
   const token =
@@ -62,6 +71,7 @@ async function sendTelegramNotification(booking: BookingRecord) {
     process.env.TELEGRAM_CHAT_ID ||
     process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID ||
     "1499064181";
+
   if (!token || !chatId) {
     console.log("Telegram not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in environment variables.");
     return;
@@ -84,21 +94,22 @@ async function sendTelegramNotification(booking: BookingRecord) {
     }
   };
 
+  const cleanPhone = (booking.phone || "").replace(/\D/g, "");
+  const zaloUrl = cleanPhone ? `https://zalo.me/${cleanPhone}` : "https://zalo.me";
+
   const message = `
 🚖 <b>ĐƠN ĐẶT TAXI MỚI - ${siteConfig.name.toUpperCase()}</b>
 ━━━━━━━━━━━━━━━━━━━━
 🆔 <b>Mã đơn:</b> <code>#${booking.id}</code>
-👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b>
-📞 <b>Điện thoại:</b> <code>${booking.phone}</code>
-📍 <b>Điểm đón:</b> ${booking.pickupLocation}
-🏁 <b>Điểm đến:</b> ${booking.dropoffLocation}
+👤 <b>Khách hàng:</b> <b>${escapeHtml(booking.fullName || "Khách đặt xe")}</b>
+📞 <b>Số điện thoại:</b> <code>${booking.phone}</code> <i>(Chạm để sao chép)</i>
+📍 <b>Điểm đón:</b> ${escapeHtml(booking.pickupLocation)}
+🏁 <b>Điểm đến:</b> ${escapeHtml(booking.dropoffLocation)}
 🚘 <b>Loại xe:</b> ${getCarLabel(booking.carType)}
 🔄 <b>Loại chuyến:</b> ${booking.tripType === "round-trip" ? "Khứ hồi 2 chiều" : "1 chiều"}
-⏰ <b>Thời gian:</b> ${booking.pickupTime} (Ngày ${booking.pickupDate})
-${booking.estimatedPrice ? `💰 <b>Giá cước ước tính:</b> ${booking.estimatedPrice}\n` : ""}
-${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}
-━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Vui lòng gọi lại xác nhận cho khách ngay!</i>
+⏰ <b>Thời gian đón:</b> ${booking.pickupTime} (Ngày ${booking.pickupDate})
+${booking.estimatedPrice ? `💰 <b>Giá ước tính:</b> <b>${booking.estimatedPrice}</b>\n` : ""}${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Chạm vào số điện thoại hoặc bấm nút bên dưới để liên hệ ngay:</i>
 `;
 
   try {
@@ -108,13 +119,13 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: message,
+        text: message.trim(),
         parse_mode: "HTML",
         reply_markup: {
           inline_keyboard: [
             [
-              { text: `📞 Bấm Gọi: ${booking.phone}`, url: `tel:${booking.phone}` },
-              { text: `💬 Nhắn Zalo Khách`, url: `https://zalo.me/${booking.phone}` },
+              { text: "💬 Nhắn Zalo Khách", url: zaloUrl },
+              { text: "📊 Xem Đơn / Quản Trị", url: "https://taxiquangtri.com.vn/admin" },
             ],
           ],
         },
@@ -124,6 +135,8 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}
     if (!res.ok) {
       const errText = await res.text();
       console.error("Telegram API Error:", errText);
+    } else {
+      console.log("Telegram notification sent successfully for booking:", booking.id);
     }
   } catch (error) {
     console.error("Failed to send Telegram notification:", error);

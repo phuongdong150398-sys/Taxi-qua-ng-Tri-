@@ -187,6 +187,7 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
         carType,
         tripType,
         serviceType,
+        estimatedPrice: getDisplayPrice(),
         notes: notes + (distanceInfo ? ` [Cự ly: ${distanceInfo.distanceKm}km - ${distanceInfo.durationMinutes}phút]` : ""),
       };
 
