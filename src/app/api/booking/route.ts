@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { BookingRecord, BookingFormInput } from "@/types";
 import { siteConfig } from "@/config/siteConfig";
+import {
+  checkIpRateLimit,
+  checkPhoneCooldown,
+  isValidVietnamesePhone,
+  containsSpamContent,
+  sanitizeInput,
+} from "@/lib/security";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -150,38 +157,123 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // 1. Thu thập IP client để Rate Limit
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const realIp = request.headers.get("x-real-ip");
+    const clientIp = (forwardedFor ? forwardedFor.split(",")[0].trim() : realIp) || "127.0.0.1";
+
     const body: BookingFormInput = await request.json();
 
+    // 2. HONEYPOT CHECK (Bẫy Bot Spam)
+    // Nếu trường ẩn hp_website có dữ liệu -> chắc chắn là bot tự động điền form
+    if (body.hp_website && body.hp_website.trim().length > 0) {
+      console.warn(`[SPAM DETECTED] Honeypot triggered from IP: ${clientIp}`);
+      // Trả về thành công giả lập để bot không thử lại, nhưng KHÔNG lưu và KHÔNG gửi Telegram
+      return NextResponse.json({
+        success: true,
+        message: "Đặt xe thành công! Tổng đài sẽ gọi lại quý khách sau 1-3 phút.",
+        booking: { id: `TX-${Date.now().toString().slice(-6)}` },
+      });
+    }
+
+    // 3. SUBMISSION SPEED CHECK (Bot thường submit < 2 giây)
+    if (body.submitTimestamp) {
+      const timeElapsedMs = Date.now() - body.submitTimestamp;
+      if (timeElapsedMs < 2000) {
+        console.warn(`[SPAM DETECTED] Fast submit (${timeElapsedMs}ms) from IP: ${clientIp}`);
+        return NextResponse.json(
+          { success: false, message: "Thao tác quá nhanh. Vui lòng kiểm tra lại thông tin và gửi lại sau vài giây!" },
+          { status: 429 }
+        );
+      }
+    }
+
+    // 4. IP RATE LIMIT CHECK (Tối đa 5 lượt / 10 phút / IP)
+    const ipCheck = checkIpRateLimit(clientIp, 5, 10 * 60 * 1000);
+    if (!ipCheck.allowed) {
+      console.warn(`[RATE LIMIT EXCEEDED] IP: ${clientIp} exceeded booking limit.`);
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Hệ thống ghi nhận nhiều yêu cầu từ bạn. Vui lòng gọi trực tiếp Hotline ${siteConfig.hotline} để đặt xe ngay!`,
+        },
+        { status: 429 }
+      );
+    }
+
+    // 5. KIỂM TRA DỮ LIỆU BẮT BUỘC
     if (!body.phone || !body.pickupLocation || !body.dropoffLocation) {
       return NextResponse.json(
-        { success: false, message: "Vui lòng nhập đầy đủ Số điện thoại, Điểm đón và Điểm đến" },
+        { success: false, message: "Vui lòng nhập đầy đủ Số điện thoại, Điểm đón và Điểm đến!" },
         { status: 400 }
       );
     }
 
-    const bookings = getBookings();
-    const newBooking: BookingRecord = {
-      ...body,
+    // 6. VALIDATE SỐ ĐIỆN THOẠI CHUẨN VIỆT NAM & CHẶN SỐ RÁC
+    const phoneValidation = isValidVietnamesePhone(body.phone);
+    if (!phoneValidation.valid) {
+      return NextResponse.json(
+        { success: false, message: phoneValidation.reason || "Số điện thoại không hợp lệ!" },
+        { status: 400 }
+      );
+    }
+
+    // 7. PHONE COOLDOWN (Chống 1 người/tool spam liên tục cùng 1 SĐT trong 40 giây)
+    const phoneCooldown = checkPhoneCooldown(body.phone, 40 * 1000);
+    if (!phoneCooldown.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Yêu cầu đặt xe của số điện thoại ${body.phone} đã được tiếp nhận. Tài xế sẽ gọi lại cho bạn ngay! (Vui lòng chờ ${phoneCooldown.waitSeconds}s nếu muốn gửi thêm)`,
+        },
+        { status: 429 }
+      );
+    }
+
+    // 8. KIỂM TRA NỘI DUNG SPAM / MÃ ĐỘC / QUẢNG CÁO RÁC
+    const combinedContent = `${body.fullName || ""} ${body.pickupLocation} ${body.dropoffLocation} ${body.notes || ""}`;
+    if (containsSpamContent(combinedContent)) {
+      console.warn(`[MALICIOUS CONTENT DETECTED] From IP: ${clientIp}`);
+      return NextResponse.json(
+        { success: false, message: "Nội dung chứa từ khóa không hợp lệ hoặc bị nghi ngờ là tin rác!" },
+        { status: 400 }
+      );
+    }
+
+    // 9. LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU ĐẦU VÀO (XSS SANITIZATION)
+    const sanitizedBooking: BookingRecord = {
       id: `TX-${Date.now().toString().slice(-6)}`,
+      fullName: sanitizeInput(body.fullName || "Khách hàng", 60),
+      phone: body.phone.trim().slice(0, 15),
+      pickupLocation: sanitizeInput(body.pickupLocation, 180),
+      dropoffLocation: sanitizeInput(body.dropoffLocation, 180),
+      pickupDate: sanitizeInput(body.pickupDate || new Date().toISOString().split("T")[0], 20),
+      pickupTime: sanitizeInput(body.pickupTime || "Đón ngay", 40),
+      carType: body.carType,
+      tripType: body.tripType,
+      serviceType: body.serviceType || "tour",
+      estimatedPrice: body.estimatedPrice ? sanitizeInput(body.estimatedPrice, 80) : undefined,
+      notes: body.notes ? sanitizeInput(body.notes, 300) : undefined,
       createdAt: new Date().toISOString(),
       status: "pending",
     };
 
-    bookings.unshift(newBooking);
+    const bookings = getBookings();
+    bookings.unshift(sanitizedBooking);
     saveBookings(bookings);
 
-    // Gửi thông báo tức thời về Telegram
-    await sendTelegramNotification(newBooking);
+    // 10. GỬI THÔNG BÁO TỨC THỜI VỀ TELEGRAM CHỦ XE
+    await sendTelegramNotification(sanitizedBooking);
 
     return NextResponse.json({
       success: true,
       message: "Đặt xe thành công! Tổng đài sẽ gọi lại quý khách sau 1-3 phút.",
-      booking: newBooking,
+      booking: sanitizedBooking,
     });
   } catch (error) {
     console.error("API Booking Error:", error);
     return NextResponse.json(
-      { success: false, message: "Lỗi hệ thống khi gửi thông tin đặt xe" },
+      { success: false, message: "Lỗi hệ thống khi gửi thông tin đặt xe. Vui lòng gọi trực tiếp Hotline!" },
       { status: 500 }
     );
   }

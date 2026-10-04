@@ -71,6 +71,19 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Anti-Spam & Security States
+  const [honeypot, setHoneypot] = useState("");
+  const [formLoadedAt] = useState(() => Date.now());
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setCooldownSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldownSeconds]);
+
   // Real-time distance and price state
   const [distanceInfo, setDistanceInfo] = useState<DistanceData | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -170,8 +183,21 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
     e.preventDefault();
     setErrorMsg("");
 
+    if (cooldownSeconds > 0) {
+      setErrorMsg(`Vui lòng chờ ${cooldownSeconds}s trước khi gửi tiếp đơn mới!`);
+      return;
+    }
+
     if (!phone.trim() || !pickupLocation.trim() || !dropoffLocation.trim()) {
       setErrorMsg("Vui lòng điền Số điện thoại, Điểm đón và Điểm đến để đặt xe!");
+      return;
+    }
+
+    // Client-side phone verification
+    const cleanPhone = phone.replace(/[\s\.\-\(\)]/g, "");
+    const vnPhoneRegex = /^(0|\+84)(3[2-9]|5[25689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}$/;
+    if (!vnPhoneRegex.test(cleanPhone)) {
+      setErrorMsg("Số điện thoại không đúng định dạng (Ví dụ: 0398.567.070). Vui lòng kiểm tra lại!");
       return;
     }
 
@@ -179,7 +205,7 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
     try {
       const payload = {
         fullName: fullName || "Khách hàng",
-        phone,
+        phone: cleanPhone,
         pickupLocation,
         dropoffLocation,
         pickupDate,
@@ -189,6 +215,9 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
         serviceType,
         estimatedPrice: getDisplayPrice(),
         notes: notes + (distanceInfo ? ` [Cự ly: ${distanceInfo.distanceKm}km - ${distanceInfo.durationMinutes}phút]` : ""),
+        // Anti-spam security parameters
+        hp_website: honeypot,
+        submitTimestamp: formLoadedAt,
       };
 
       const res = await fetch("/api/booking", {
@@ -199,6 +228,7 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
 
       const data = await res.json();
       if (res.ok && data.success) {
+        setCooldownSeconds(30); // 30s cooldown before next booking
         try {
           confetti({
             particleCount: 80,
@@ -225,7 +255,7 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
 
         onBookingSuccess(finalBooking);
       } else {
-        setErrorMsg(data.message || "Không thể gửi yêu cầu đặt xe. Vui lòng thử lại!");
+        setErrorMsg(data.message || "Không thể gửi yêu cầu đặt xe. Vui lòng gọi trực tiếp Hotline!");
       }
     } catch (err) {
       setErrorMsg("Có lỗi kết nối. Bạn hãy bấm gọi Hotline để được phục vụ ngay!");
@@ -372,6 +402,24 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
 
               {/* Booking Form */}
               <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                {/* Honeypot field (Bẫy bot spam - ẩn hoàn toàn khỏi người dùng thật) */}
+                <div
+                  className="absolute opacity-0 -z-50 pointer-events-none h-0 w-0 overflow-hidden"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                >
+                  <label htmlFor="hp_website">Website</label>
+                  <input
+                    id="hp_website"
+                    type="text"
+                    name="hp_website"
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                  />
+                </div>
+
                 {/* Trip Type (1 chiều / 2 chiều) & Car Selection */}
                 <div className="grid grid-cols-2 gap-3">
                   {/* Trip Type */}
@@ -557,11 +605,19 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-[#040E1C] font-black text-base uppercase tracking-wider shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-70"
+                  disabled={isSubmitting || cooldownSeconds > 0}
+                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-[#040E1C] font-black text-base uppercase tracking-wider shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSubmitting ? (
-                    <span>Đang gửi thông tin...</span>
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Đang bảo mật & gửi thông tin...
+                    </span>
+                  ) : cooldownSeconds > 0 ? (
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-800" />
+                      ĐÃ GỬI THÀNH CÔNG (CHỜ {cooldownSeconds}S)
+                    </span>
                   ) : (
                     <>
                       <Send className="w-5 h-5 stroke-[2.5]" />

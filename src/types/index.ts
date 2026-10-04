@@ -15,6 +15,10 @@ export interface BookingFormInput {
   tripType: TripType;
   serviceType: ServiceType;
   notes?: string;
+  estimatedPrice?: string;
+  // Security & Anti-spam honeypot / timestamps
+  hp_website?: string;
+  submitTimestamp?: number;
 }
 
 export interface BookingRecord extends BookingFormInput {
