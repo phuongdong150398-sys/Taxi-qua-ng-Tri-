@@ -244,7 +244,7 @@ export default function AdminPage() {
                 pattern="[0-9]*"
                 maxLength={6}
                 autoFocus
-                placeholder="Nhập mã PIN (Mặc định: 8888)"
+                placeholder="Nhập mã PIN bảo mật..."
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 className="w-full bg-[#040E1C] border-2 border-[#133863] focus:border-amber-400 rounded-2xl py-3.5 px-4 text-center text-xl font-mono tracking-widest text-white placeholder:text-xs placeholder:tracking-normal placeholder:text-slate-500 focus:outline-none"
@@ -297,11 +297,10 @@ export default function AdminPage() {
             ))}
           </div>
 
-          <div className="mt-6 flex items-center justify-between text-xs text-slate-500">
+          <div className="mt-6 flex items-center justify-center text-xs text-slate-500">
             <Link href="/" className="hover:text-amber-400 flex items-center gap-1">
-              <ArrowLeft className="w-3.5 h-3.5" /> Về trang chủ
+              <ArrowLeft className="w-3.5 h-3.5" /> Quay lại trang chủ
             </Link>
-            <span>Mã PIN ban đầu: <b>8888</b></span>
           </div>
         </div>
       </div>
