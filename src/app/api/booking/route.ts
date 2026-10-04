@@ -54,9 +54,14 @@ function saveBookings(bookings: BookingRecord[]) {
 
 // Hàm gửi thông báo đơn đặt xe về Telegram của tài xế / chủ xe
 async function sendTelegramNotification(booking: BookingRecord) {
-  const token = process.env.TELEGRAM_BOT_TOKEN || process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID || process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
-
+  const token =
+    process.env.TELEGRAM_BOT_TOKEN ||
+    process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN ||
+    "8888405865:AAG0tj-prAYFngu4qlcRYBtF2T_13xHZQo4";
+  const chatId =
+    process.env.TELEGRAM_CHAT_ID ||
+    process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID ||
+    "1499064181";
   if (!token || !chatId) {
     console.log("Telegram not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in environment variables.");
     return;
