@@ -18,8 +18,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
-  title: `${siteConfig.name} - Dịch Vụ Taxi Giá Rẻ 20.000đ/km, Đón Nhanh 24/7`,
+  metadataBase: new URL("https://taxiquangtri.com.vn"),
+  title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn | Đón Nhanh 24/7`,
   description: siteConfig.description,
   icons: {
     icon: "/favicon.png",
@@ -37,10 +37,12 @@ export const metadata: Metadata = {
     "taxi quảng trị 24h",
     "đặt xe taxi quảng trị",
     "taxi giá rẻ quảng trị",
+    "taxi đồng hới",
+    "taxi phong nha",
   ],
   authors: [{ name: siteConfig.name }],
   openGraph: {
-    title: `${siteConfig.name} - Đón Nhanh Sau 5 Phút`,
+    title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn`,
     description: siteConfig.description,
     type: "website",
     locale: "vi_VN",
