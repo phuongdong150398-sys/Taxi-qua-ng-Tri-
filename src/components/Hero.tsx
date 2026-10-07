@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
+import { trackConversionEvent } from "@/lib/analytics";
+
 interface HeroProps {
   onBookingSuccess: (bookingData: any) => void;
   initialFrom?: string;
@@ -127,6 +129,11 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
       const json = await res.json();
       if (json.success && json.data) {
         setDistanceInfo(json.data);
+        trackConversionEvent("calculate_route", {
+          pickup: pickupLocation,
+          dropoff: dropoffLocation,
+          distanceKm: json.data.distanceKm,
+        });
       }
     } catch (e) {
       // Ignore network errors
@@ -157,6 +164,7 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
   const handleQuickSelectDropoff = (loc: { name: string; lat: number; lng: number }) => {
     setDropoffLocation(loc.name);
     setDropoffCoords({ lat: loc.lat, lng: loc.lng });
+    trackConversionEvent("view_popular_route", { route: loc.name });
     if (!pickupLocation) {
       setPickupLocation("TP. Đồng Hới (Trung tâm)");
       setPickupCoords({ lat: 17.4696, lng: 106.6225 });
@@ -229,6 +237,16 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
       const data = await res.json();
       if (res.ok && data.success) {
         setCooldownSeconds(30); // 30s cooldown before next booking
+        
+        // Bắn sự kiện chuyển đổi Macro
+        trackConversionEvent("submit_booking_form", {
+          route: `${pickupLocation} ➔ ${dropoffLocation}`,
+          carType,
+          tripType,
+          price: getDisplayPrice(),
+          phone: cleanPhone,
+        });
+
         try {
           confetti({
             particleCount: 80,
@@ -340,6 +358,12 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
               <a
                 href={`tel:${siteConfig.hotlineFormatted}`}
+                onClick={() =>
+                  trackConversionEvent("call_hotline", {
+                    position: "hero_main_banner",
+                    number: siteConfig.hotline,
+                  })
+                }
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-500 hover:to-red-400 text-white font-black text-base shadow-xl shadow-red-600/30 hover:scale-105 transition-all"
               >
                 <Phone className="w-5 h-5 animate-ring" />
@@ -350,6 +374,12 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
                 href={siteConfig.zaloUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackConversionEvent("click_zalo", {
+                    position: "hero_main_banner",
+                    number: siteConfig.zalo,
+                  })
+                }
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-[#0068FF] hover:bg-[#0055D4] text-white font-bold text-base transition-all shadow-lg shadow-blue-500/20 hover:scale-105"
               >
                 <MessageCircle className="w-5 h-5" />

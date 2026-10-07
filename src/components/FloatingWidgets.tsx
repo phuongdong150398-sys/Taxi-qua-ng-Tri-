@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/siteConfig";
 import { Phone, MessageCircle, ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
+import { trackConversionEvent } from "@/lib/analytics";
+
 export default function FloatingWidgets() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -19,6 +21,20 @@ export default function FloatingWidgets() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleCall = (position: string) => {
+    trackConversionEvent("call_hotline", {
+      position,
+      number: siteConfig.hotline,
+    });
+  };
+
+  const handleZalo = (position: string) => {
+    trackConversionEvent("click_zalo", {
+      position,
+      number: siteConfig.zalo,
+    });
+  };
+
   return (
     <>
       {/* Floating Buttons: Bottom Left (Hotline) & Bottom Right (Zalo & Scroll) */}
@@ -26,6 +42,7 @@ export default function FloatingWidgets() {
         {/* Hotline Pulsing Call Button */}
         <a
           href={`tel:${siteConfig.hotlineFormatted}`}
+          onClick={() => handleCall("floating_left_button")}
           className="relative group flex items-center"
           aria-label="Gọi hotline"
         >
@@ -47,6 +64,7 @@ export default function FloatingWidgets() {
           href={siteConfig.zaloUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => handleZalo("floating_right_button")}
           className="relative group flex items-center"
           aria-label="Chat Zalo"
         >
@@ -76,6 +94,7 @@ export default function FloatingWidgets() {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 p-2.5 flex items-center gap-2">
         <a
           href={`tel:${siteConfig.hotlineFormatted}`}
+          onClick={() => handleCall("mobile_bottom_bar")}
           className="flex-1 py-3 px-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-600/20"
         >
           <Phone className="w-4 h-4 animate-ring" />
@@ -86,6 +105,7 @@ export default function FloatingWidgets() {
           href={siteConfig.zaloUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => handleZalo("mobile_bottom_bar")}
           className="flex-1 py-3 px-3 rounded-xl bg-blue-600 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg"
         >
           <MessageCircle className="w-4 h-4" />

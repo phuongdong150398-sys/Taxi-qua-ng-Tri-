@@ -5,6 +5,8 @@ import Link from "next/link";
 import { siteConfig } from "@/config/siteConfig";
 import { Phone, MessageCircle, Menu, X, Clock, ShieldCheck } from "lucide-react";
 
+import { trackConversionEvent } from "@/lib/analytics";
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,6 +18,20 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleCall = (position: string) => {
+    trackConversionEvent("call_hotline", {
+      position,
+      number: siteConfig.hotline,
+    });
+  };
+
+  const handleZalo = (position: string) => {
+    trackConversionEvent("click_zalo", {
+      position,
+      number: siteConfig.zalo,
+    });
+  };
 
   const navLinks = [
     { name: "Trang chủ", href: "#hero" },
@@ -48,8 +64,22 @@ export default function Navbar() {
             </span>
           </div>
           <div className="flex items-center space-x-5 font-black tracking-wide">
-            <span>📞 TỔNG ĐÀI ĐẶT XE: {siteConfig.hotline}</span>
-            <span>💬 ZALO: {siteConfig.zalo}</span>
+            <a
+              href={`tel:${siteConfig.hotlineFormatted}`}
+              onClick={() => handleCall("top_banner")}
+              className="hover:underline"
+            >
+              📞 TỔNG ĐÀI ĐẶT XE: {siteConfig.hotline}
+            </a>
+            <a
+              href={siteConfig.zaloUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => handleZalo("top_banner")}
+              className="hover:underline"
+            >
+              💬 ZALO: {siteConfig.zalo}
+            </a>
           </div>
         </div>
       </div>
@@ -86,6 +116,7 @@ export default function Navbar() {
               href={siteConfig.zaloUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => handleZalo("navbar_desktop")}
               className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#0068FF] hover:bg-[#0055D4] text-white text-xs font-bold transition-all shadow-md shadow-blue-500/20 hover:scale-105"
             >
               <MessageCircle className="w-4 h-4" />
@@ -94,6 +125,7 @@ export default function Navbar() {
 
             <a
               href={`tel:${siteConfig.hotlineFormatted}`}
+              onClick={() => handleCall("navbar_desktop")}
               className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-black transition-all shadow-lg shadow-red-600/30 hover:scale-105"
             >
               <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center animate-ring">
@@ -114,6 +146,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 xl:hidden">
             <a
               href={`tel:${siteConfig.hotlineFormatted}`}
+              onClick={() => handleCall("navbar_mobile_icon")}
               className="sm:hidden flex items-center justify-center w-10 h-10 rounded-2xl bg-red-600 text-white animate-ring shadow-md shadow-red-600/30"
               aria-label="Gọi hotline"
             >
@@ -149,6 +182,10 @@ export default function Navbar() {
           <div className="pt-2 border-t border-[#133863] flex flex-col gap-2.5">
             <a
               href={`tel:${siteConfig.hotlineFormatted}`}
+              onClick={() => {
+                handleCall("navbar_mobile_drawer");
+                setMobileMenuOpen(false);
+              }}
               className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-red-500 text-white font-black text-center shadow-lg shadow-red-600/30 text-sm"
             >
               <Phone className="w-4 h-4 animate-ring" />
@@ -158,6 +195,10 @@ export default function Navbar() {
               href={siteConfig.zaloUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                handleZalo("navbar_mobile_drawer");
+                setMobileMenuOpen(false);
+              }}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-[#0068FF] text-white font-bold text-center text-sm shadow-md"
             >
               <MessageCircle className="w-4 h-4" />

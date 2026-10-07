@@ -58,6 +58,8 @@ export const metadata: Metadata = {
   },
 };
 
+import AnalyticsScripts from "@/components/AnalyticsScripts";
+
 export default function RootLayout({
   children,
 }: {
@@ -66,6 +68,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`scroll-smooth ${montserrat.variable}`}>
       <body className={`${montserrat.className} bg-[#040E1C] text-slate-100 antialiased selection:bg-amber-400 selection:text-[#040E1C]`}>
+        <AnalyticsScripts />
         {children}
       </body>
     </html>
