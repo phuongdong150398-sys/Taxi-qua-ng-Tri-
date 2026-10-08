@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getDrivers,
   saveDrivers,
+  deleteDriver,
   getWalletTransactions,
   getFleetSettings,
   saveFleetSettings,
@@ -166,11 +167,33 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ success: true, message: "Cập nhật trạng thái tài xế thành công!", driver: drivers[index] });
     }
 
+    // 5. Xóa tài xế khỏi hệ thống
+    if (action === "delete_driver" && driverId) {
+      deleteDriver(driverId);
+      await syncFleetStateToTelegramCloud();
+      return NextResponse.json({ success: true, message: "Đã xóa tài xế thành công!" });
+    }
+
     return NextResponse.json({ success: false, message: "Hành động không hợp lệ!" }, { status: 400 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message || "Lỗi xử lý yêu cầu" },
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (id) {
+      deleteDriver(id);
+      await syncFleetStateToTelegramCloud();
+      return NextResponse.json({ success: true, message: "Đã xóa tài xế thành công!" });
+    }
+    return NextResponse.json({ success: false, message: "Thiếu mã tài xế" }, { status: 400 });
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 });
   }
 }

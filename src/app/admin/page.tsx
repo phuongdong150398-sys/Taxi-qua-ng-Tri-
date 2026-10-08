@@ -56,6 +56,7 @@ import {
   Building2,
   ChevronRight,
   UserPlus,
+  Trash2,
 } from "lucide-react";
 
 interface AnalyticsData {
@@ -284,13 +285,14 @@ export default function AdminPage() {
     setLoadingDrivers(true);
     let serverDrivers: Driver[] = [];
     let serverTransactions: WalletTransaction[] = [];
+    const MOCK_IDS = new Set(["DRV-7401", "DRV-7402", "DRV-7301", "DRV-7302"]);
 
     try {
       const res = await fetch("/api/drivers", { cache: "no-store" });
       const data = await res.json();
       if (data.success && data.data) {
-        serverDrivers = data.data.drivers || [];
-        serverTransactions = data.data.transactions || [];
+        serverDrivers = (data.data.drivers || []).filter((d: Driver) => d && d.id && !MOCK_IDS.has(d.id));
+        serverTransactions = (data.data.transactions || []).filter((t: WalletTransaction) => t && t.driverId && !MOCK_IDS.has(t.driverId));
         if (data.data.settings) {
           setFleetSettings(data.data.settings);
         }
@@ -299,13 +301,13 @@ export default function AdminPage() {
       console.error("Error fetching drivers data:", error);
     }
 
-    // Merge với bộ nhớ đệm trình duyệt để đảm bảo luôn hiển thị ngay lập tức
+    // Merge với bộ nhớ đệm trình duyệt và lọc bỏ 100% tài xế ảo
     try {
       const localDrivers: Driver[] = JSON.parse(localStorage.getItem("admin_drivers_cache") || "[]");
       const driverMap = new Map<string, Driver>();
 
-      localDrivers.forEach((d) => d.id && driverMap.set(d.id, d));
-      serverDrivers.forEach((d) => d.id && driverMap.set(d.id, d));
+      localDrivers.filter((d) => d && d.id && !MOCK_IDS.has(d.id)).forEach((d) => driverMap.set(d.id, d));
+      serverDrivers.filter((d) => d && d.id && !MOCK_IDS.has(d.id)).forEach((d) => driverMap.set(d.id, d));
 
       const mergedDrivers = Array.from(driverMap.values());
       setDrivers(mergedDrivers);
@@ -316,6 +318,28 @@ export default function AdminPage() {
       setTransactions(serverTransactions);
     } finally {
       setLoadingDrivers(false);
+    }
+  };
+
+  const handleDeleteDriver = async (driver: Driver) => {
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa Bác tài ${driver.name} (${driver.phone}) khỏi hệ thống?`)) {
+      return;
+    }
+    try {
+      await fetch(`/api/drivers?id=${driver.id}`, {
+        method: "DELETE",
+      });
+      // Xóa khỏi cache local
+      setDrivers((prev) => {
+        const next = prev.filter((d) => d.id !== driver.id);
+        try {
+          localStorage.setItem("admin_drivers_cache", JSON.stringify(next));
+        } catch (e) {}
+        return next;
+      });
+      fetchDriversData();
+    } catch (e) {
+      alert("✕ Lỗi khi xóa tài xế!");
     }
   };
 
@@ -1220,6 +1244,18 @@ export default function AdminPage() {
                                 🚘 {driver.plateNumber} ({driver.carType === "6-seats" ? "6-7 Chỗ" : "4-5 Chỗ"})
                               </span>
                             </div>
+                            <div className="flex items-center gap-1.5 text-[11px] text-amber-400/90 font-medium mt-1.5">
+                              <Calendar className="w-3 h-3 text-amber-400" />
+                              <span>
+                                Đăng ký: {new Date(driver.registeredAt || Date.now()).toLocaleDateString("vi-VN", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </span>
+                            </div>
                           </div>
 
                           <div className="flex flex-col items-end gap-1">
@@ -1305,7 +1341,7 @@ export default function AdminPage() {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="grid grid-cols-4 gap-2 mt-4 pt-3 border-t border-[#133863]">
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 pt-3 border-t border-[#133863]">
                         <button
                           onClick={() => {
                             setSelectedDriver(driver);
@@ -1347,7 +1383,7 @@ export default function AdminPage() {
                           onClick={() => handleToggleDriverStatus(driver)}
                           className={`py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1 cursor-pointer ${
                             driver.status === "active"
-                              ? "bg-red-950/50 hover:bg-red-900 border border-red-800 text-red-300"
+                              ? "bg-amber-950/50 hover:bg-amber-900 border border-amber-800 text-amber-300"
                               : "bg-emerald-950/50 hover:bg-emerald-900 border border-emerald-800 text-emerald-300"
                           }`}
                         >
@@ -1362,6 +1398,14 @@ export default function AdminPage() {
                               <span>Mở</span>
                             </>
                           )}
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteDriver(driver)}
+                          className="py-2 rounded-xl bg-red-950/50 hover:bg-red-900 border border-red-800 text-red-300 hover:text-white font-bold text-xs transition flex items-center justify-center gap-1 cursor-pointer col-span-2 sm:col-span-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Xóa</span>
                         </button>
                       </div>
                     </div>

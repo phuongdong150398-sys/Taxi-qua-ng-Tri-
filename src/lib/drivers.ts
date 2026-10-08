@@ -1,6 +1,6 @@
 /**
  * Taxi Quảng Trị - Driver Fleet & Wallet Management Module
- * Quản lý đội ngũ tài xế, Ví cọc tạm ứng, Lịch sử giao dịch và Cấu hình chiết khấu
+ * Quản lý đội ngũ tài xế THỰC TẾ, Ví cọc tạm ứng, Lịch sử giao dịch và Cấu hình chiết khấu
  * Tích hợp Telegram Cloud Storage Sync Bridge để lưu trữ vĩnh viễn và đồng bộ thời gian thực
  */
 
@@ -25,6 +25,9 @@ const OWNER_CHAT_ID =
   process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID ||
   "1499064181";
 
+// Mock IDs to purge
+const MOCK_DRIVER_IDS = new Set(["DRV-7401", "DRV-7402", "DRV-7301", "DRV-7302"]);
+
 // Default Fleet Settings
 export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
   commissionRate: 0.15, // 15% chiết khấu
@@ -35,73 +38,8 @@ export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
   bankAccountName: "NGUYEN PHUONG DONG",
 };
 
-// Initial Driver Fleet data
-const INITIAL_DRIVERS: Driver[] = [
-  {
-    id: "DRV-7401",
-    name: "Nguyễn Văn Hùng",
-    phone: "0912345678",
-    plateNumber: "74A-123.45",
-    carType: "4-seats",
-    region: "TP. Đông Hà & TX. Quảng Trị",
-    telegramId: "1499064181",
-    telegramUsername: "hung_taxi74",
-    walletBalance: 500000,
-    status: "active",
-    totalTripsCompleted: 14,
-    totalEarnings: 9200000,
-    totalCommissionPaid: 1380000,
-    registeredAt: new Date(Date.now() - 7 * 86400000).toISOString(),
-  },
-  {
-    id: "DRV-7402",
-    name: "Trần Quốc Tuấn",
-    phone: "0988765432",
-    plateNumber: "74A-678.90",
-    carType: "6-seats",
-    region: "TP. Đông Hà & Lao Bảo",
-    telegramId: "1499064182",
-    telegramUsername: "tuan_xpander",
-    walletBalance: 350000,
-    status: "active",
-    totalTripsCompleted: 8,
-    totalEarnings: 6800000,
-    totalCommissionPaid: 1020000,
-    registeredAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-  },
-  {
-    id: "DRV-7301",
-    name: "Lê Hoàng Nam",
-    phone: "0905123888",
-    plateNumber: "73A-111.22",
-    carType: "4-seats",
-    region: "TP. Đồng Hới & Sân Bay",
-    telegramId: "1499064183",
-    telegramUsername: "nam_donghoi",
-    walletBalance: 600000,
-    status: "active",
-    totalTripsCompleted: 19,
-    totalEarnings: 12500000,
-    totalCommissionPaid: 1875000,
-    registeredAt: new Date(Date.now() - 12 * 86400000).toISOString(),
-  },
-  {
-    id: "DRV-7302",
-    name: "Phạm Minh Đức",
-    phone: "0977889900",
-    plateNumber: "73A-333.44",
-    carType: "6-seats",
-    region: "Phong Nha - Bố Trạch & Thiên Đường",
-    telegramId: "1499064184",
-    telegramUsername: "duc_phongnha",
-    walletBalance: 400000,
-    status: "active",
-    totalTripsCompleted: 11,
-    totalEarnings: 8400000,
-    totalCommissionPaid: 1260000,
-    registeredAt: new Date(Date.now() - 9 * 86400000).toISOString(),
-  },
-];
+// Initial Driver Fleet data (Empty - Only Real Drivers!)
+const INITIAL_DRIVERS: Driver[] = [];
 
 export interface DriverRegistrationSession {
   telegramId: string;
@@ -115,7 +53,7 @@ export interface DriverRegistrationSession {
   updatedAt: number;
 }
 
-let inMemoryDrivers: Driver[] = [...INITIAL_DRIVERS];
+let inMemoryDrivers: Driver[] = [];
 let inMemoryTransactions: WalletTransaction[] = [];
 let inMemorySettings: FleetSystemSettings = { ...DEFAULT_FLEET_SETTINGS };
 let inMemorySessions: Record<string, DriverRegistrationSession> = {};
@@ -131,12 +69,17 @@ function ensureDataDir() {
   } catch (e) {}
 }
 
+function cleanRealDrivers(drivers: Driver[]): Driver[] {
+  if (!Array.isArray(drivers)) return [];
+  return drivers.filter((d) => d && d.id && !MOCK_DRIVER_IDS.has(d.id));
+}
+
 /**
  * Tải dữ liệu Đội Xe & Số Dư từ Telegram Cloud Storage về bộ nhớ
  */
 export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
   // Tránh gọi API dồn dập nếu vừa fetch trong vòng 2 giây
-  if (Date.now() - lastCloudFetchTime < 2000 && inMemoryDrivers.length > INITIAL_DRIVERS.length) {
+  if (Date.now() - lastCloudFetchTime < 2000 && inMemoryDrivers.length > 0) {
     return true;
   }
 
@@ -154,9 +97,11 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
       const rawJson = pinned.text.replace("#FLEET_STATE#", "").trim();
       const parsed = JSON.parse(rawJson);
       if (parsed.drivers && Array.isArray(parsed.drivers)) {
-        inMemoryDrivers = parsed.drivers;
+        inMemoryDrivers = cleanRealDrivers(parsed.drivers);
         if (parsed.transactions && Array.isArray(parsed.transactions)) {
-          inMemoryTransactions = parsed.transactions;
+          inMemoryTransactions = parsed.transactions.filter(
+            (t: WalletTransaction) => t && t.driverId && !MOCK_DRIVER_IDS.has(t.driverId)
+          );
         }
         if (parsed.settings) {
           inMemorySettings = { ...DEFAULT_FLEET_SETTINGS, ...parsed.settings };
@@ -171,7 +116,7 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
         } catch (e) {}
 
         lastCloudFetchTime = Date.now();
-        console.log(`[TELEGRAM CLOUD] Loaded ${inMemoryDrivers.length} drivers from Telegram Cloud!`);
+        console.log(`[TELEGRAM CLOUD] Loaded ${inMemoryDrivers.length} real drivers from Telegram Cloud!`);
         return true;
       }
     }
@@ -186,6 +131,7 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
  */
 export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
   try {
+    inMemoryDrivers = cleanRealDrivers(inMemoryDrivers);
     const payload = {
       drivers: inMemoryDrivers,
       transactions: inMemoryTransactions.slice(0, 100),
@@ -275,23 +221,35 @@ export function getDrivers(): Driver[] {
     if (fs.existsSync(DRIVERS_FILE)) {
       const data = fs.readFileSync(DRIVERS_FILE, "utf-8");
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+      if (Array.isArray(parsed)) {
+        inMemoryDrivers = cleanRealDrivers(parsed);
+        return inMemoryDrivers;
       }
     }
   } catch (e) {}
+  inMemoryDrivers = cleanRealDrivers(inMemoryDrivers);
   return inMemoryDrivers;
 }
 
 export function saveDrivers(drivers: Driver[]) {
-  inMemoryDrivers = drivers;
+  inMemoryDrivers = cleanRealDrivers(drivers);
   try {
     ensureDataDir();
-    fs.writeFileSync(DRIVERS_FILE, JSON.stringify(drivers, null, 2), "utf-8");
+    fs.writeFileSync(DRIVERS_FILE, JSON.stringify(inMemoryDrivers, null, 2), "utf-8");
   } catch (e) {}
 
   // Đồng bộ Telegram Cloud
   syncFleetStateToTelegramCloud().catch(() => {});
+}
+
+export function deleteDriver(id: string): boolean {
+  const drivers = getDrivers();
+  const filtered = drivers.filter((d) => d.id !== id);
+  if (filtered.length !== drivers.length) {
+    saveDrivers(filtered);
+    return true;
+  }
+  return false;
 }
 
 export function getDriverByTelegramId(telegramId: string): Driver | undefined {
@@ -311,7 +269,8 @@ export function getWalletTransactions(): WalletTransaction[] {
       const data = fs.readFileSync(TRANSACTIONS_FILE, "utf-8");
       const parsed = JSON.parse(data);
       if (Array.isArray(parsed)) {
-        return parsed;
+        inMemoryTransactions = parsed.filter((t) => t && t.driverId && !MOCK_DRIVER_IDS.has(t.driverId));
+        return inMemoryTransactions;
       }
     }
   } catch (e) {}
@@ -396,7 +355,7 @@ export function registerDriverFromTelegram(params: {
     phone: params.phone.trim(),
     plateNumber: params.plateNumber.trim().toUpperCase(),
     carType: params.carType,
-    region: params.region || "Quảng Trị - Quảng Bình",
+    region: params.region || "Quảng Trị & Lân Cận",
     telegramId: String(params.telegramId).trim(),
     telegramUsername: params.telegramUsername ? params.telegramUsername.replace("@", "").trim() : undefined,
     walletBalance: 0,
