@@ -3,7 +3,7 @@
  * Quản lý đội ngũ tài xế, Ví cọc tạm ứng, Lịch sử giao dịch và Cấu hình chiết khấu
  */
 
-import { Driver, WalletTransaction, FleetSystemSettings, BookingRecord } from "@/types";
+import { Driver, WalletTransaction, FleetSystemSettings, BookingRecord, CarType } from "@/types";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -12,6 +12,7 @@ const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "da
 const DRIVERS_FILE = path.join(DATA_DIR, "drivers.json");
 const TRANSACTIONS_FILE = path.join(DATA_DIR, "wallet_transactions.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "fleet_settings.json");
+const SESSIONS_FILE = path.join(DATA_DIR, "driver_reg_sessions.json");
 
 // Default Fleet Settings
 export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
@@ -23,7 +24,7 @@ export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
   bankAccountName: "TAXI QUANG TRI 24H",
 };
 
-// Initial Driver Fleet data for immediate use
+// Initial Driver Fleet data
 const INITIAL_DRIVERS: Driver[] = [
   {
     id: "DRV-7401",
@@ -91,9 +92,22 @@ const INITIAL_DRIVERS: Driver[] = [
   },
 ];
 
+export interface DriverRegistrationSession {
+  telegramId: string;
+  step: "name" | "phone" | "plate" | "cartype" | "completed";
+  name?: string;
+  phone?: string;
+  plateNumber?: string;
+  carType?: CarType;
+  region?: string;
+  telegramUsername?: string;
+  updatedAt: number;
+}
+
 let inMemoryDrivers: Driver[] = [...INITIAL_DRIVERS];
 let inMemoryTransactions: WalletTransaction[] = [];
 let inMemorySettings: FleetSystemSettings = { ...DEFAULT_FLEET_SETTINGS };
+let inMemorySessions: Record<string, DriverRegistrationSession> = {};
 
 function ensureDataDir() {
   try {
@@ -147,7 +161,7 @@ export function saveDrivers(drivers: Driver[]) {
 
 export function getDriverByTelegramId(telegramId: string): Driver | undefined {
   const drivers = getDrivers();
-  return drivers.find((d) => String(d.telegramId) === String(telegramId));
+  return drivers.find((d) => String(d.telegramId).trim() === String(telegramId).trim());
 }
 
 export function getDriverById(id: string): Driver | undefined {
@@ -175,6 +189,89 @@ export function saveWalletTransactions(transactions: WalletTransaction[]) {
     ensureDataDir();
     fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify(inMemoryTransactions, null, 2), "utf-8");
   } catch (e) {}
+}
+
+/**
+ * Quản lý phiên đăng ký tài xế trên Telegram
+ */
+export function getRegistrationSession(telegramId: string): DriverRegistrationSession | null {
+  try {
+    if (inMemorySessions[telegramId]) {
+      return inMemorySessions[telegramId];
+    }
+    ensureDataDir();
+    if (fs.existsSync(SESSIONS_FILE)) {
+      const data = JSON.parse(fs.readFileSync(SESSIONS_FILE, "utf-8"));
+      return data[telegramId] || null;
+    }
+  } catch (e) {}
+  return inMemorySessions[telegramId] || null;
+}
+
+export function setRegistrationSession(session: DriverRegistrationSession) {
+  inMemorySessions[session.telegramId] = session;
+  try {
+    ensureDataDir();
+    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(inMemorySessions, null, 2), "utf-8");
+  } catch (e) {}
+}
+
+export function clearRegistrationSession(telegramId: string) {
+  delete inMemorySessions[telegramId];
+  try {
+    ensureDataDir();
+    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(inMemorySessions, null, 2), "utf-8");
+  } catch (e) {}
+}
+
+/**
+ * Đăng ký tài xế mới trực tiếp từ Telegram
+ */
+export function registerDriverFromTelegram(params: {
+  name: string;
+  phone: string;
+  plateNumber: string;
+  carType: CarType;
+  region?: string;
+  telegramId: string;
+  telegramUsername?: string;
+}): Driver {
+  const drivers = getDrivers();
+  
+  // Kiểm tra nếu đã tồn tại thì cập nhật
+  const existingIndex = drivers.findIndex((d) => String(d.telegramId) === String(params.telegramId));
+  if (existingIndex !== -1) {
+    const d = drivers[existingIndex];
+    d.name = params.name;
+    d.phone = params.phone;
+    d.plateNumber = params.plateNumber.toUpperCase();
+    d.carType = params.carType;
+    d.telegramUsername = params.telegramUsername || d.telegramUsername;
+    drivers[existingIndex] = d;
+    saveDrivers(drivers);
+    return d;
+  }
+
+  const newDriver: Driver = {
+    id: `DRV-${Date.now().toString().slice(-4)}`,
+    name: params.name.trim(),
+    phone: params.phone.trim(),
+    plateNumber: params.plateNumber.trim().toUpperCase(),
+    carType: params.carType,
+    region: params.region || "Quảng Trị - Quảng Bình",
+    telegramId: String(params.telegramId).trim(),
+    telegramUsername: params.telegramUsername ? params.telegramUsername.replace("@", "").trim() : undefined,
+    walletBalance: 0, // Bắt đầu từ 0đ và hướng dẫn nạp cọc
+    status: "active",
+    totalTripsCompleted: 0,
+    totalEarnings: 0,
+    totalCommissionPaid: 0,
+    registeredAt: new Date().toISOString(),
+  };
+
+  drivers.unshift(newDriver);
+  saveDrivers(drivers);
+  return newDriver;
 }
 
 /**
@@ -241,11 +338,10 @@ export function validateDriverForBooking(
   booking: BookingRecord
 ): { allowed: boolean; reason?: string } {
   if (driver.status !== "active") {
-    return { allowed: false, reason: "Tài khoản tài xế của bạn đang bị khóa hoặc chưa được duyệt!" };
+    return { allowed: false, reason: "Tài khoản tài xế của bạn đang bị khóa hoặc chưa được kích hoạt!" };
   }
 
   // Kiểm tra loại xe tương thích
-  // Nếu khách đặt 6-seats mà tài xế xe 4-seats -> không được nhận
   if (booking.carType === "6-seats" && driver.carType === "4-seats") {
     return { allowed: false, reason: "Cuốc xe này yêu cầu Xe 6-7 Chỗ, xe của bạn là 4 chỗ không đủ chỗ!" };
   }
@@ -260,7 +356,7 @@ export function validateDriverForBooking(
   if (driver.walletBalance < commissionAmount) {
     return {
       allowed: false,
-      reason: `Số dư ví của bạn còn ${driver.walletBalance.toLocaleString("vi-VN")}đ, không đủ để trừ phí chiết khấu 15% (${commissionAmount.toLocaleString("vi-VN")}đ). Vui lòng nạp thêm tiền cọc để tiếp tục nhận cuốc!`,
+      reason: `Số dư ví của bạn còn ${driver.walletBalance.toLocaleString("vi-VN")}đ, không đủ để trừ phí chiết khấu 15% (${commissionAmount.toLocaleString("vi-VN")}đ). Vui lòng nạp thêm tiền cọc vào ví để tiếp tục nhận cuốc!`,
     };
   }
 
