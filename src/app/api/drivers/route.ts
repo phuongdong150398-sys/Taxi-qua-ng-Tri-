@@ -7,11 +7,16 @@ import {
   saveFleetSettings,
   adjustDriverWallet,
   getDriverById,
+  loadFleetStateFromTelegramCloud,
+  syncFleetStateToTelegramCloud,
 } from "@/lib/drivers";
 import { Driver } from "@/types";
 
 export async function GET() {
   try {
+    // Tải dữ liệu mới nhất từ Telegram Cloud Storage
+    await loadFleetStateFromTelegramCloud();
+
     const drivers = getDrivers();
     const transactions = getWalletTransactions();
     const settings = getFleetSettings();
@@ -34,6 +39,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await loadFleetStateFromTelegramCloud();
+
     const body = await request.json();
     const { name, phone, plateNumber, carType, region, telegramId, telegramUsername, initialDeposit } = body;
 
@@ -87,6 +94,9 @@ export async function POST(request: Request) {
       );
     }
 
+    // Đồng bộ lên Telegram Cloud
+    await syncFleetStateToTelegramCloud();
+
     return NextResponse.json({
       success: true,
       message: "Thêm tài xế thành công!",
@@ -102,12 +112,15 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    await loadFleetStateFromTelegramCloud();
+
     const body = await request.json();
     const { action, driverId, amount, description, status, settings } = body;
 
     // 1. Cập nhật cài đặt hệ thống đội xe
     if (action === "update_settings" && settings) {
       const updatedSettings = saveFleetSettings(settings);
+      await syncFleetStateToTelegramCloud();
       return NextResponse.json({
         success: true,
         message: "Cập nhật cài đặt chiết khấu và hệ thống thành công!",
@@ -123,6 +136,7 @@ export async function PATCH(request: Request) {
         "deposit",
         description || "Nạp tiền cọc tạm ứng qua ngân hàng / tiền mặt"
       );
+      await syncFleetStateToTelegramCloud();
       return NextResponse.json(result);
     }
 
@@ -135,6 +149,7 @@ export async function PATCH(request: Request) {
         "refund",
         description || "Rút tiền / Hoàn trả tiền cọc cho tài xế"
       );
+      await syncFleetStateToTelegramCloud();
       return NextResponse.json(result);
     }
 
@@ -147,6 +162,7 @@ export async function PATCH(request: Request) {
       }
       drivers[index].status = status;
       saveDrivers(drivers);
+      await syncFleetStateToTelegramCloud();
       return NextResponse.json({ success: true, message: "Cập nhật trạng thái tài xế thành công!", driver: drivers[index] });
     }
 

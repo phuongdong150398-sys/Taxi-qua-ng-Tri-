@@ -1,6 +1,7 @@
 /**
  * Taxi Quảng Trị - Driver Fleet & Wallet Management Module
  * Quản lý đội ngũ tài xế, Ví cọc tạm ứng, Lịch sử giao dịch và Cấu hình chiết khấu
+ * Tích hợp Telegram Cloud Storage Sync Bridge để lưu trữ vĩnh viễn và đồng bộ thời gian thực
  */
 
 import { Driver, WalletTransaction, FleetSystemSettings, BookingRecord, CarType } from "@/types";
@@ -13,6 +14,16 @@ const DRIVERS_FILE = path.join(DATA_DIR, "drivers.json");
 const TRANSACTIONS_FILE = path.join(DATA_DIR, "wallet_transactions.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "fleet_settings.json");
 const SESSIONS_FILE = path.join(DATA_DIR, "driver_reg_sessions.json");
+
+const TELEGRAM_BOT_TOKEN =
+  process.env.TELEGRAM_BOT_TOKEN ||
+  process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN ||
+  "8888405865:AAG0tj-prAYFngu4qlcRYBtF2T_13xHZQo4";
+
+const OWNER_CHAT_ID =
+  process.env.TELEGRAM_CHAT_ID ||
+  process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID ||
+  "1499064181";
 
 // Default Fleet Settings
 export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
@@ -33,7 +44,7 @@ const INITIAL_DRIVERS: Driver[] = [
     plateNumber: "74A-123.45",
     carType: "4-seats",
     region: "TP. Đông Hà & TX. Quảng Trị",
-    telegramId: "1499064181", // Khớp với ID Telegram của chủ xe để test ngay
+    telegramId: "1499064181",
     telegramUsername: "hung_taxi74",
     walletBalance: 500000,
     status: "active",
@@ -109,12 +120,130 @@ let inMemoryTransactions: WalletTransaction[] = [];
 let inMemorySettings: FleetSystemSettings = { ...DEFAULT_FLEET_SETTINGS };
 let inMemorySessions: Record<string, DriverRegistrationSession> = {};
 
+let lastCloudFetchTime = 0;
+let cachedStateMessageId: number | null = null;
+
 function ensureDataDir() {
   try {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
   } catch (e) {}
+}
+
+/**
+ * Tải dữ liệu Đội Xe & Số Dư từ Telegram Cloud Storage về bộ nhớ
+ */
+export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
+  // Tránh gọi API dồn dập nếu vừa fetch trong vòng 2 giây
+  if (Date.now() - lastCloudFetchTime < 2000 && inMemoryDrivers.length > INITIAL_DRIVERS.length) {
+    return true;
+  }
+
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat?chat_id=${OWNER_CHAT_ID}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (!data.ok || !data.result?.pinned_message) return false;
+
+    const pinned = data.result.pinned_message;
+    cachedStateMessageId = pinned.message_id;
+
+    if (pinned.text && pinned.text.startsWith("#FLEET_STATE#")) {
+      const rawJson = pinned.text.replace("#FLEET_STATE#", "").trim();
+      const parsed = JSON.parse(rawJson);
+      if (parsed.drivers && Array.isArray(parsed.drivers)) {
+        inMemoryDrivers = parsed.drivers;
+        if (parsed.transactions && Array.isArray(parsed.transactions)) {
+          inMemoryTransactions = parsed.transactions;
+        }
+        if (parsed.settings) {
+          inMemorySettings = { ...DEFAULT_FLEET_SETTINGS, ...parsed.settings };
+        }
+
+        // Lưu bản sao dự phòng vào /tmp
+        ensureDataDir();
+        try {
+          fs.writeFileSync(DRIVERS_FILE, JSON.stringify(inMemoryDrivers, null, 2), "utf-8");
+          fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify(inMemoryTransactions, null, 2), "utf-8");
+          fs.writeFileSync(SETTINGS_FILE, JSON.stringify(inMemorySettings, null, 2), "utf-8");
+        } catch (e) {}
+
+        lastCloudFetchTime = Date.now();
+        console.log(`[TELEGRAM CLOUD] Loaded ${inMemoryDrivers.length} drivers from Telegram Cloud!`);
+        return true;
+      }
+    }
+  } catch (err) {
+    console.error("Error loading fleet state from Telegram Cloud:", err);
+  }
+  return false;
+}
+
+/**
+ * Đồng bộ toàn bộ dữ liệu Đội Xe & Ví Cọc lên Telegram Cloud Storage
+ */
+export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
+  try {
+    const payload = {
+      drivers: inMemoryDrivers,
+      transactions: inMemoryTransactions.slice(0, 100),
+      settings: inMemorySettings,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const textPayload = `#FLEET_STATE#\n${JSON.stringify(payload)}`;
+
+    // 1. Thử cập nhật tin nhắn ghim đã có
+    if (cachedStateMessageId) {
+      const editUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`;
+      const editRes = await fetch(editUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: OWNER_CHAT_ID,
+          message_id: cachedStateMessageId,
+          text: textPayload,
+        }),
+      });
+      const editData = await editRes.json();
+      if (editData.ok) {
+        return true;
+      }
+    }
+
+    // 2. Nếu chưa có hoặc tin nhắn cũ bị xóa -> Gửi tin nhắn mới & Ghim lại
+    const sendUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const sendRes = await fetch(sendUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: OWNER_CHAT_ID,
+        text: textPayload,
+      }),
+    });
+    const sendData = await sendRes.json();
+    if (sendData.ok && sendData.result?.message_id) {
+      cachedStateMessageId = sendData.result.message_id;
+
+      // Ghim tin nhắn âm thầm không làm phiền
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/pinChatMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: OWNER_CHAT_ID,
+          message_id: cachedStateMessageId,
+          disable_notification: true,
+        }),
+      });
+
+      return true;
+    }
+  } catch (err) {
+    console.error("Error syncing fleet state to Telegram Cloud:", err);
+  }
+  return false;
 }
 
 export function getFleetSettings(): FleetSystemSettings {
@@ -134,6 +263,9 @@ export function saveFleetSettings(settings: Partial<FleetSystemSettings>): Fleet
     ensureDataDir();
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(inMemorySettings, null, 2), "utf-8");
   } catch (e) {}
+
+  // Đồng bộ Telegram Cloud
+  syncFleetStateToTelegramCloud().catch(() => {});
   return inMemorySettings;
 }
 
@@ -157,6 +289,9 @@ export function saveDrivers(drivers: Driver[]) {
     ensureDataDir();
     fs.writeFileSync(DRIVERS_FILE, JSON.stringify(drivers, null, 2), "utf-8");
   } catch (e) {}
+
+  // Đồng bộ Telegram Cloud
+  syncFleetStateToTelegramCloud().catch(() => {});
 }
 
 export function getDriverByTelegramId(telegramId: string): Driver | undefined {
@@ -184,11 +319,14 @@ export function getWalletTransactions(): WalletTransaction[] {
 }
 
 export function saveWalletTransactions(transactions: WalletTransaction[]) {
-  inMemoryTransactions = transactions.slice(0, 500); // Lưu 500 giao dịch gần nhất
+  inMemoryTransactions = transactions.slice(0, 500);
   try {
     ensureDataDir();
     fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify(inMemoryTransactions, null, 2), "utf-8");
   } catch (e) {}
+
+  // Đồng bộ Telegram Cloud
+  syncFleetStateToTelegramCloud().catch(() => {});
 }
 
 /**
@@ -225,7 +363,7 @@ export function clearRegistrationSession(telegramId: string) {
 }
 
 /**
- * Đăng ký tài xế mới trực tiếp từ Telegram
+ * Đăng ký tài xế mới trực tiếp từ Telegram & Đồng bộ ngay lên Telegram Cloud
  */
 export function registerDriverFromTelegram(params: {
   name: string;
@@ -261,7 +399,7 @@ export function registerDriverFromTelegram(params: {
     region: params.region || "Quảng Trị - Quảng Bình",
     telegramId: String(params.telegramId).trim(),
     telegramUsername: params.telegramUsername ? params.telegramUsername.replace("@", "").trim() : undefined,
-    walletBalance: 0, // Bắt đầu từ 0đ và hướng dẫn nạp cọc
+    walletBalance: 0,
     status: "active",
     totalTripsCompleted: 0,
     totalEarnings: 0,

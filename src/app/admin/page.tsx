@@ -282,18 +282,38 @@ export default function AdminPage() {
 
   const fetchDriversData = async () => {
     setLoadingDrivers(true);
+    let serverDrivers: Driver[] = [];
+    let serverTransactions: WalletTransaction[] = [];
+
     try {
-      const res = await fetch("/api/drivers");
+      const res = await fetch("/api/drivers", { cache: "no-store" });
       const data = await res.json();
       if (data.success && data.data) {
-        setDrivers(data.data.drivers || []);
-        setTransactions(data.data.transactions || []);
+        serverDrivers = data.data.drivers || [];
+        serverTransactions = data.data.transactions || [];
         if (data.data.settings) {
           setFleetSettings(data.data.settings);
         }
       }
     } catch (error) {
       console.error("Error fetching drivers data:", error);
+    }
+
+    // Merge với bộ nhớ đệm trình duyệt để đảm bảo luôn hiển thị ngay lập tức
+    try {
+      const localDrivers: Driver[] = JSON.parse(localStorage.getItem("admin_drivers_cache") || "[]");
+      const driverMap = new Map<string, Driver>();
+
+      localDrivers.forEach((d) => d.id && driverMap.set(d.id, d));
+      serverDrivers.forEach((d) => d.id && driverMap.set(d.id, d));
+
+      const mergedDrivers = Array.from(driverMap.values());
+      setDrivers(mergedDrivers);
+      localStorage.setItem("admin_drivers_cache", JSON.stringify(mergedDrivers));
+      setTransactions(serverTransactions);
+    } catch (e) {
+      setDrivers(serverDrivers);
+      setTransactions(serverTransactions);
     } finally {
       setLoadingDrivers(false);
     }

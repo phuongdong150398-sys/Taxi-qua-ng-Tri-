@@ -12,6 +12,8 @@ import {
   clearRegistrationSession,
   registerDriverFromTelegram,
   getDriverById,
+  loadFleetStateFromTelegramCloud,
+  syncFleetStateToTelegramCloud,
 } from "@/lib/drivers";
 import { BookingRecord, CarType } from "@/types";
 import { isValidVietnamesePhone } from "@/lib/security";
@@ -78,6 +80,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // Tải dữ liệu tài xế & số dư mới nhất từ Telegram Cloud
+    await loadFleetStateFromTelegramCloud();
+
     const update = await request.json();
     const settings = getFleetSettings();
 
