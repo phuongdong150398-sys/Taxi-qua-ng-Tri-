@@ -24,7 +24,7 @@ export interface BookingFormInput {
 export interface BookingRecord extends BookingFormInput {
   id: string;
   createdAt: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
   estimatedPrice?: string;
   // Điều phối tài xế & Chiết khấu
   driverId?: string;
@@ -37,6 +37,9 @@ export interface BookingRecord extends BookingFormInput {
   commissionAmount?: number; // Tiền chiết khấu trừ ví (VD: 90000)
   driverNetEarning?: number; // Tiền tài xế thực nhận (VD: 510000)
   claimedAt?: string;
+  onWayAt?: string;
+  pickedUpAt?: string;
+  completedAt?: string;
   groupMessageId?: number;
 }
 

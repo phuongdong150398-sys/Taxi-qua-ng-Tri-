@@ -540,6 +540,12 @@ export default function AdminPage() {
             🚕 Bác tài đã nhận
           </span>
         );
+      case "in_progress":
+        return (
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40 animate-pulse">
+            🚗 Đang đón / Chở khách
+          </span>
+        );
       case "completed":
         return (
           <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
@@ -894,6 +900,7 @@ export default function AdminPage() {
                   { id: "all", label: "Tất cả" },
                   { id: "pending", label: "Chờ nhận cuốc" },
                   { id: "confirmed", label: "Đã nhận" },
+                  { id: "in_progress", label: "Đang đón / Chở" },
                   { id: "completed", label: "Hoàn thành" },
                   { id: "cancelled", label: "Đã hủy" },
                 ].map((f) => (
@@ -1025,14 +1032,39 @@ export default function AdminPage() {
                           </div>
 
                           {b.driverName ? (
-                            <div className="mt-2 pt-2 border-t border-[#133863] flex items-center justify-between text-xs">
-                              <span className="text-slate-300 font-bold flex items-center gap-1.5">
-                                <UserCheck className="w-3.5 h-3.5 text-blue-400" />
-                                <span>Tài xế nhận: {b.driverName} ({b.driverPlate || b.driverPhone})</span>
-                              </span>
-                              <span className="text-slate-400 text-[11px]">
-                                {b.claimedAt ? new Date(b.claimedAt).toLocaleTimeString("vi-VN") : "Đã nhận"}
-                              </span>
+                            <div className="mt-2 pt-2 border-t border-[#133863] space-y-1.5 text-xs">
+                              <div className="flex items-center justify-between">
+                                <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                                  <UserCheck className="w-3.5 h-3.5 text-blue-400" />
+                                  <span>Tài xế: {b.driverName} ({b.driverPlate || b.driverPhone})</span>
+                                </span>
+                                <span className="text-slate-400 text-[11px]">
+                                  {b.claimedAt ? new Date(b.claimedAt).toLocaleTimeString("vi-VN") : "Đã nhận"}
+                                </span>
+                              </div>
+
+                              {/* Progression Timeline */}
+                              <div className="bg-[#040E1C] p-2 rounded-lg text-[11px] text-slate-400 space-y-1 border border-[#133863]/60">
+                                <div className="font-semibold text-slate-300 flex items-center gap-1">
+                                  <Activity className="w-3 h-3 text-amber-400" />
+                                  <span>Tiến độ thực tế:</span>
+                                </div>
+                                {b.onWayAt && (
+                                  <div className="text-blue-300">
+                                    🚗 Đang đến điểm đón: <strong>{new Date(b.onWayAt).toLocaleTimeString("vi-VN")}</strong>
+                                  </div>
+                                )}
+                                {b.pickedUpAt && (
+                                  <div className="text-purple-300">
+                                    🙋‍♂️ Đã đón khách lên xe: <strong>{new Date(b.pickedUpAt).toLocaleTimeString("vi-VN")}</strong>
+                                  </div>
+                                )}
+                                {b.completedAt && (
+                                  <div className="text-emerald-300">
+                                    🏁 Hoàn thành cuốc xe: <strong>{new Date(b.completedAt).toLocaleTimeString("vi-VN")}</strong>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           ) : (
                             <div className="mt-2 pt-2 border-t border-[#133863] text-[11px] text-amber-400/80 italic flex items-center gap-1">
@@ -1055,28 +1087,44 @@ export default function AdminPage() {
                           <button
                             onClick={() => updateStatus(b.id, "confirmed")}
                             disabled={updatingId === b.id}
-                            className="py-2 px-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/40 text-blue-300 hover:text-white text-xs font-bold transition text-center cursor-pointer"
+                            className={`py-2 px-2 rounded-xl text-xs font-bold transition text-center cursor-pointer ${
+                              b.status === "confirmed"
+                                ? "bg-blue-500 text-white"
+                                : "bg-blue-600/20 hover:bg-blue-600 border border-blue-500/40 text-blue-300 hover:text-white"
+                            }`}
                           >
                             Đã nhận
                           </button>
                           <button
+                            onClick={() => updateStatus(b.id, "in_progress")}
+                            disabled={updatingId === b.id}
+                            className={`py-2 px-2 rounded-xl text-xs font-bold transition text-center cursor-pointer ${
+                              b.status === "in_progress"
+                                ? "bg-purple-500 text-white"
+                                : "bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 text-purple-300 hover:text-white"
+                            }`}
+                          >
+                            Đang chở
+                          </button>
+                          <button
                             onClick={() => updateStatus(b.id, "completed")}
                             disabled={updatingId === b.id}
-                            className="py-2 px-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold transition text-center cursor-pointer"
+                            className={`py-2 px-2 rounded-xl text-xs font-bold transition text-center cursor-pointer ${
+                              b.status === "completed"
+                                ? "bg-emerald-500 text-white"
+                                : "bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/40 text-emerald-300 hover:text-white"
+                            }`}
                           >
                             Hoàn thành
                           </button>
                           <button
-                            onClick={() => updateStatus(b.id, "pending")}
-                            disabled={updatingId === b.id}
-                            className="py-2 px-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600 border border-amber-500/40 text-amber-300 hover:text-white text-xs font-bold transition text-center cursor-pointer"
-                          >
-                            Chờ nhận
-                          </button>
-                          <button
                             onClick={() => updateStatus(b.id, "cancelled")}
                             disabled={updatingId === b.id}
-                            className="py-2 px-2.5 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white text-xs font-bold transition text-center cursor-pointer"
+                            className={`py-2 px-2 rounded-xl text-xs font-bold transition text-center cursor-pointer ${
+                              b.status === "cancelled"
+                                ? "bg-red-500 text-white"
+                                : "bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white"
+                            }`}
                           >
                             Hủy đơn
                           </button>

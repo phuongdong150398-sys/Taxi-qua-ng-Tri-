@@ -12,6 +12,7 @@ import {
   clearRegistrationSession,
   registerDriverFromTelegram,
   getDriverById,
+  saveFleetSettings,
   loadFleetStateFromTelegramCloud,
   syncFleetStateToTelegramCloud,
 } from "@/lib/drivers";
@@ -210,15 +211,18 @@ export async function POST(request: Request) {
           });
         }
 
-        // Gửi tin nhắn riêng (Private Message) cho tài xế với SĐT & Tên khách
+        // Gửi tin nhắn riêng (Private Message) cho tài xế với SĐT, Tên khách, Google Maps & Cập nhật tiến độ
         const cleanPhone = (booking.phone || "").replace(/\D/g, "");
+        const mapPickupUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.pickupLocation)}`;
+        const zaloUrl = cleanPhone ? `https://zalo.me/${cleanPhone}` : "https://zalo.me";
+
         const driverPrivateMsg = `
 🚖 <b>THÔNG TIN KHÁCH HÀNG CUỐC #${booking.id}</b>
 ━━━━━━━━━━━━━━━━━━━━
 👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b>
 📞 <b>Số điện thoại:</b> <code>${booking.phone}</code> <i>(Chạm số để gọi)</i>
-📍 <b>Điểm đón:</b> ${booking.pickupLocation}
-🏁 <b>Điểm đến:</b> ${booking.dropoffLocation}
+📍 <b>Điểm đón:</b> <b>${booking.pickupLocation}</b>
+🏁 <b>Điểm đến:</b> <b>${booking.dropoffLocation}</b>
 🚘 <b>Loại xe:</b> ${booking.carType === "6-seats" ? "Xe 6-7 Chỗ" : "Xe 4-5 Chỗ"}
 ⏰ <b>Thời gian đón:</b> ${booking.pickupTime} (Ngày ${booking.pickupDate})
 ━━━━━━━━━━━━━━━━━━━━
@@ -226,7 +230,7 @@ export async function POST(request: Request) {
 💵 <b>Phí 15% đã tự trừ ví:</b> -${commissionAmount.toLocaleString("vi-VN")} VNĐ
 💼 <b>Số dư ví còn lại của bạn:</b> <b>${walletResult.balanceAfter?.toLocaleString("vi-VN")} VNĐ</b>
 ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Bác tài hãy bấm nút gọi hoặc nhắn Zalo cho khách ngay nhé:</i>
+⚡ <b>TIỆN ÍCH CHỈ ĐƯỜNG & CẬP NHẬT TIẾN ĐỘ CUỐC XE:</b>
 `;
 
         await sendTelegramApi("sendMessage", {
@@ -236,8 +240,15 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
           reply_markup: {
             inline_keyboard: [
               [
-                { text: `💬 Nhắn Zalo Khách`, url: `https://zalo.me/${cleanPhone}` },
-                { text: `💼 Kiểm Tra Ví Cọc`, callback_data: "check_wallet" },
+                { text: `🧭 Google Maps Chỉ Đường`, url: mapPickupUrl },
+                { text: `💬 Nhắn Zalo Khách`, url: zaloUrl },
+              ],
+              [
+                { text: `🚗 Báo Đang Đến Điểm Đón`, callback_data: `trip_onway_${booking.id}` },
+                { text: `🙋‍♂️ Báo Đã Đón Được Khách`, callback_data: `trip_pickedup_${booking.id}` },
+              ],
+              [
+                { text: `🏁 BÁO HOÀN THÀNH CUỐC XE`, callback_data: `trip_completed_${booking.id}` },
               ],
             ],
           },
@@ -261,6 +272,202 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
           });
         }
 
+        return NextResponse.json({ ok: true });
+      }
+
+      // =======================================================================
+      // B. TÀI XẾ BÁO: ĐANG TRÊN ĐƯỜNG ĐẾN ĐÓN KHÁCH (trip_onway_<bookingId>)
+      // =======================================================================
+      if (data.startsWith("trip_onway_")) {
+        const bookingId = data.replace("trip_onway_", "");
+        const bookings = getBookings();
+        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+
+        if (bookingIndex !== -1) {
+          const booking = bookings[bookingIndex];
+          booking.onWayAt = new Date().toISOString();
+          bookings[bookingIndex] = booking;
+          saveBookings(bookings);
+
+          const mapPickupUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.pickupLocation)}`;
+          const cleanPhone = (booking.phone || "").replace(/\D/g, "");
+
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: `🚗 Đã ghi nhận Bác tài đang trên đường đến đón khách cuốc #${booking.id}!`,
+            show_alert: true,
+          });
+
+          if (chatId && messageId) {
+            await sendTelegramApi("editMessageText", {
+              chat_id: chatId,
+              message_id: messageId,
+              text: `
+🚖 <b>CUỐC #${booking.id} - ĐANG TRÊN ĐƯỜNG ĐẾN ĐÓN KHÁCH</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b> (<code>${booking.phone}</code>)
+📍 <b>Điểm đón:</b> <b>${booking.pickupLocation}</b>
+🏁 <b>Điểm đến:</b> ${booking.dropoffLocation}
+💰 <b>Thu khách:</b> <b>${(booking.grossFare || 450000).toLocaleString("vi-VN")} VNĐ</b>
+⏰ <b>Thời gian báo xuất phát:</b> ${new Date().toLocaleTimeString("vi-VN")}
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Khi đã đón được khách lên xe, Bác tài hãy bấm nút bên dưới:</i>
+`.trim(),
+              parse_mode: "HTML",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    { text: `🧭 Google Maps Chỉ Đường`, url: mapPickupUrl },
+                    { text: `💬 Nhắn Zalo Khách`, url: `https://zalo.me/${cleanPhone}` },
+                  ],
+                  [
+                    { text: `🙋‍♂️ BÁO ĐÃ ĐÓN ĐƯỢC KHÁCH`, callback_data: `trip_pickedup_${booking.id}` },
+                  ],
+                  [
+                    { text: `🏁 Báo Hoàn Thành Cuốc Xe`, callback_data: `trip_completed_${booking.id}` },
+                  ],
+                ],
+              },
+            });
+          }
+
+          // Báo cho Admin
+          if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
+            await sendTelegramApi("sendMessage", {
+              chat_id: OWNER_CHAT_ID,
+              text: `🚗 <b>TÀI XẾ ĐANG ĐẾN ĐÓN KHÁCH CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName} (<code>${booking.phone}</code>)\n📍 Đang đến đón tại: <b>${booking.pickupLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
+              parse_mode: "HTML",
+            });
+          }
+        }
+        return NextResponse.json({ ok: true });
+      }
+
+      // =======================================================================
+      // C. TÀI XẾ BÁO: ĐÃ ĐÓN ĐƯỢC KHÁCH LÊN XE (trip_pickedup_<bookingId>)
+      // =======================================================================
+      if (data.startsWith("trip_pickedup_")) {
+        const bookingId = data.replace("trip_pickedup_", "");
+        const bookings = getBookings();
+        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+
+        if (bookingIndex !== -1) {
+          const booking = bookings[bookingIndex];
+          booking.status = "in_progress";
+          booking.pickedUpAt = new Date().toISOString();
+          bookings[bookingIndex] = booking;
+          saveBookings(bookings);
+
+          const mapDropoffUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.dropoffLocation)}`;
+
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: `🙋‍♂️ ĐÃ GHI NHẬN ĐÓN KHÁCH THÀNH CÔNG! Chúc Bác tài lái xe an toàn và chu đáo.`,
+            show_alert: true,
+          });
+
+          if (chatId && messageId) {
+            await sendTelegramApi("editMessageText", {
+              chat_id: chatId,
+              message_id: messageId,
+              text: `
+🚖 <b>CUỐC #${booking.id} - ĐÃ ĐÓN KHÁCH LÊN XE</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b>
+📍 <b>Điểm đón:</b> ${booking.pickupLocation}
+🏁 <b>Điểm đến:</b> <b>${booking.dropoffLocation}</b>
+💰 <b>SỐ TIỀN CẦN THU KHÁCH:</b> <b>${(booking.grossFare || 450000).toLocaleString("vi-VN")} VNĐ</b>
+⏰ <b>Thời gian đón khách:</b> ${new Date().toLocaleTimeString("vi-VN")}
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Khi đưa khách đến nơi an toàn và thu cước xong, Bác tài bấm nút bên dưới:</i>
+`.trim(),
+              parse_mode: "HTML",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    { text: `🧭 Google Maps Đến Điểm Trả`, url: mapDropoffUrl },
+                  ],
+                  [
+                    { text: `🏁 BÁO HOÀN THÀNH CUỐC XE`, callback_data: `trip_completed_${booking.id}` },
+                  ],
+                ],
+              },
+            });
+          }
+
+          // Báo cho Admin
+          if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
+            await sendTelegramApi("sendMessage", {
+              chat_id: OWNER_CHAT_ID,
+              text: `🙋‍♂️ <b>TÀI XẾ ĐÃ ĐÓN KHÁCH LÊN XE CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName}\n🏁 Đang di chuyển đến: <b>${booking.dropoffLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
+              parse_mode: "HTML",
+            });
+          }
+        }
+        return NextResponse.json({ ok: true });
+      }
+
+      // =======================================================================
+      // D. TÀI XẾ BÁO: HOÀN THÀNH CUỐC XE (trip_completed_<bookingId>)
+      // =======================================================================
+      if (data.startsWith("trip_completed_")) {
+        const bookingId = data.replace("trip_completed_", "");
+        const bookings = getBookings();
+        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+
+        if (bookingIndex !== -1) {
+          const booking = bookings[bookingIndex];
+          booking.status = "completed";
+          booking.completedAt = new Date().toISOString();
+          bookings[bookingIndex] = booking;
+          saveBookings(bookings);
+
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: `🎉 CHÚC MỪNG BÁC TÀI ĐÃ HOÀN THÀNH XUẤT SẮC CUỐC XE #${booking.id}!`,
+            show_alert: true,
+          });
+
+          const grossFare = booking.grossFare || 450000;
+          const commissionAmount = booking.commissionAmount || Math.round(grossFare * 0.15);
+          const driverNetEarning = booking.driverNetEarning || grossFare - commissionAmount;
+
+          if (chatId && messageId) {
+            await sendTelegramApi("editMessageText", {
+              chat_id: chatId,
+              message_id: messageId,
+              text: `
+🎉 <b>CUỐC XE #${booking.id} ĐÃ HOÀN THÀNH THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Khách hàng:</b> ${booking.fullName || "Khách đặt xe"}
+📍 <b>Lộ trình:</b> ${booking.pickupLocation} ➔ ${booking.dropoffLocation}
+💰 <b>Tổng tiền cước đã thu khách:</b> <b>${grossFare.toLocaleString("vi-VN")} VNĐ</b>
+💵 <b>Phí chiết khấu 15% đã trừ:</b> -${commissionAmount.toLocaleString("vi-VN")} VNĐ
+👉 <b>TIỀN THỰC NHẬN CỦA BÁC TÀI:</b> <b>+${driverNetEarning.toLocaleString("vi-VN")} VNĐ</b>
+⏰ <b>Thời gian hoàn thành:</b> ${new Date().toLocaleTimeString("vi-VN")}
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Cảm ơn Bác tài đã phục vụ chu đáo & lái xe an toàn!</i>
+`.trim(),
+              parse_mode: "HTML",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    { text: `💼 Kiểm Tra Số Dư Ví Cọc`, callback_data: `check_wallet` },
+                  ],
+                ],
+              },
+            });
+          }
+
+          // Báo cho Admin
+          if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
+            await sendTelegramApi("sendMessage", {
+              chat_id: OWNER_CHAT_ID,
+              text: `🎉 <b>CUỐC XE #${booking.id} ĐÃ HOÀN THÀNH XUẤT SẮC!</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName} (<code>${booking.phone}</code>)\n📍 Lộ trình: ${booking.pickupLocation} ➔ ${booking.dropoffLocation}\n💰 Cước thu khách: <b>${grossFare.toLocaleString("vi-VN")}đ</b> | Phí 15%: <b>${commissionAmount.toLocaleString("vi-VN")}đ</b>\n⏰ Hoàn thành lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
+              parse_mode: "HTML",
+            });
+          }
+        }
         return NextResponse.json({ ok: true });
       }
 
@@ -563,9 +770,38 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
 
       // -----------------------------------------------------------------------
       // A. NẾU LÀ TIN NHẮN TRONG NHÓM (GROUP / SUPERGROUP):
-      //    TUYỆT ĐỐI KHÔNG HỎI ĐÁP THÔNG TIN CÁ NHÂN TRONG NHÓM.
+      //    TỰ ĐỘNG LIÊN KẾT NHÓM NHẬN CUỐC & BẢO VỆ THÔNG TIN CÁ NHÂN.
       // -----------------------------------------------------------------------
       if (!isPrivate) {
+        const chatIdStr = String(chatId);
+
+        // Tự động lưu và cập nhật ID nhóm làm nhóm nhận cuốc chính nếu chưa có
+        if (!settings.telegramGroupId || settings.telegramGroupId !== chatIdStr) {
+          saveFleetSettings({ telegramGroupId: chatIdStr });
+        }
+
+        // Lệnh /setgroup hoặc /kichhoat để kết nối nhóm nhận cuốc
+        if (
+          text.startsWith("/setgroup") ||
+          text.startsWith("/kichhoat") ||
+          text.startsWith("/nhan_cuoc") ||
+          text === "/start group"
+        ) {
+          saveFleetSettings({ telegramGroupId: chatIdStr });
+          await sendTelegramApi("sendMessage", {
+            chat_id: chatId,
+            text: `
+✅ <b>ĐÃ KÍCH HOẠT NHÓM NHẬN CUỐC THÀNH CÔNG!</b>
+━━━━━━━━━━━━━━━━━━━━
+🆔 <b>ID Nhóm:</b> <code>${chatIdStr}</code>
+🚕 Kể từ bây giờ, tất cả các chuyến xe khách đặt trên website sẽ được tự động bắn vào nhóm này kèm nút <b>[ 🚕 BẤM NHẬN CUỐC NÀY ]</b> để các Bác tài nhận khách!
+⚡ Mức chiết khấu tự động trừ ví: <b>${Math.round((settings.commissionRate || 0.15) * 100)}%</b>/cuốc.
+`.trim(),
+            parse_mode: "HTML",
+          });
+          return NextResponse.json({ ok: true });
+        }
+
         // Nếu bác tài gõ lệnh đăng ký trong nhóm
         if (text.startsWith("/start") || text.startsWith("/dangky") || text.toLowerCase().includes("đăng ký")) {
           await sendTelegramApi("sendMessage", {
@@ -617,7 +853,7 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
         if (text === "/myid") {
           await sendTelegramApi("sendMessage", {
             chat_id: chatId,
-            text: `🆔 <b>Mã Telegram ID của bạn là:</b> <code>${telegramId}</code>`,
+            text: `🆔 <b>Mã Telegram ID của bạn là:</b> <code>${telegramId}</code>\n🆔 <b>ID Nhóm hiện tại:</b> <code>${chatIdStr}</code>`,
             parse_mode: "HTML",
           });
           return NextResponse.json({ ok: true });
