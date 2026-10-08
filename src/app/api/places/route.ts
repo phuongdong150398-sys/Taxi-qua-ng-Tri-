@@ -56,15 +56,168 @@ function removeVietnameseTones(str: string) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const latStr = searchParams.get("lat");
+  const lngStr = searchParams.get("lng");
   const query = searchParams.get("q") || "";
 
+  // =========================================================================
+  // 1. REVERSE GEOCODING (LẤY ĐỊA CHỈ CHI TIẾT TỪ TỌA ĐỘ GPS)
+  // =========================================================================
+  if (latStr && lngStr) {
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          {
+            headers: {
+              "User-Agent": "TaxiQuangTriApp/1.0 (contact@taxiquangtri.com.vn)",
+            },
+            next: { revalidate: 3600 },
+          }
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.address) {
+            const addr = data.address;
+            const parts: string[] = [];
+
+            // 1. Số nhà & Tên đường
+            const house = addr.house_number || addr.building || addr.amenity || addr.shop;
+            const road = addr.road || addr.pedestrian || addr.footway || addr.street;
+            if (house && road) {
+              parts.push(`Số ${house}, Đường ${road}`);
+            } else if (road) {
+              parts.push(road.startsWith("Đường") ? road : `Đường ${road}`);
+            } else if (house) {
+              parts.push(house);
+            }
+
+            // 2. Thôn / Tổ dân phố / Khóm
+            const neighbourhood = addr.neighbourhood || addr.suburb || addr.quarter;
+            if (neighbourhood && !parts.some((p) => p.includes(neighbourhood))) {
+              parts.push(neighbourhood);
+            }
+
+            // 3. Phường / Xã / Thị trấn
+            const village = addr.village || addr.hamlet || addr.town;
+            if (village && !parts.some((p) => p.includes(village))) {
+              parts.push(village);
+            }
+
+            // 4. Thành phố / Quận / Huyện / Thị xã
+            const city = addr.city || addr.county || addr.district;
+            if (city && !parts.some((p) => p.includes(city))) {
+              parts.push(city);
+            }
+
+            // 5. Tỉnh
+            const state = addr.state;
+            if (state && !parts.some((p) => p.includes(state))) {
+              parts.push(state.replace("Tỉnh ", ""));
+            }
+
+            const detailedAddress = parts.length >= 2 ? parts.join(", ") : data.display_name;
+            const shortName = parts.length > 0 ? parts.slice(0, 2).join(", ") : detailedAddress;
+
+            return NextResponse.json({
+              success: true,
+              place: {
+                name: detailedAddress,
+                address: detailedAddress,
+                shortName,
+                lat,
+                lng,
+              },
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Reverse Geocoding error:", e);
+      }
+
+      // Fallback
+      return NextResponse.json({
+        success: true,
+        place: {
+          name: `Vị trí GPS (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+          address: `Tọa độ GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+          lat,
+          lng,
+        },
+      });
+    }
+  }
+
+  // =========================================================================
+  // 2. FORWARD SEARCH (TÌM KIẾM THEO TÊN ĐƯỜNG, SỐ NHÀ, ĐỊA CHỈ CHI TIẾT)
+  // =========================================================================
   if (!query || query.trim().length < 2) {
     return NextResponse.json({ suggestions: KNOWN_PLACES.slice(0, 8) });
   }
 
   const cleanQuery = removeVietnameseTones(query);
 
-  // 1. Search in our curated local places list
+  // 1. Search OpenStreetMap Nominatim for exact real-world street & house addresses
+  let osmMatches: any[] = [];
+  try {
+    // Ưu tiên tìm kiếm trong phạm vi Việt Nam & khu vực Quảng Trị / Quảng Bình
+    const encoded = encodeURIComponent(query.trim() + ", Việt Nam");
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&countrycodes=vn&limit=8&addressdetails=1`,
+      {
+        headers: {
+          "User-Agent": "TaxiQuangTriApp/1.0 (contact@taxiquangtri.com.vn)",
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        osmMatches = data.map((item: any) => {
+          const addr = item.address || {};
+          const parts: string[] = [];
+
+          const house = addr.house_number || addr.building || addr.amenity || addr.shop;
+          const road = addr.road || addr.pedestrian || addr.street;
+          if (house && road) {
+            parts.push(`Số ${house}, ${road}`);
+          } else if (item.name) {
+            parts.push(item.name);
+          } else if (road) {
+            parts.push(road);
+          }
+
+          const sub = addr.suburb || addr.quarter || addr.neighbourhood || addr.village;
+          if (sub && !parts.some((p) => p.includes(sub))) parts.push(sub);
+
+          const city = addr.city || addr.town || addr.county || addr.district;
+          if (city && !parts.some((p) => p.includes(city))) parts.push(city);
+
+          const state = addr.state;
+          if (state && !parts.some((p) => p.includes(state))) parts.push(state.replace("Tỉnh ", ""));
+
+          const fullAddr = parts.length > 0 ? parts.join(", ") : item.display_name;
+
+          return {
+            name: fullAddr,
+            address: item.display_name || fullAddr,
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lon),
+          };
+        });
+      }
+    }
+  } catch (err) {
+    // Ignore external geocoding errors
+  }
+
+  // 2. Search in our curated local places list
   const localMatches = KNOWN_PLACES.filter((p) => {
     const cleanName = removeVietnameseTones(p.name);
     const cleanAddress = removeVietnameseTones(p.address);
@@ -72,35 +225,9 @@ export async function GET(request: Request) {
     return cleanName.includes(cleanQuery) || cleanAddress.includes(cleanQuery) || tagMatch;
   });
 
-  // 2. Search OpenStreetMap Nominatim for Vietnam locations
-  let osmMatches: any[] = [];
-  try {
-    const encoded = encodeURIComponent(query + ", Việt Nam");
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&countrycodes=vn&limit=5&addressdetails=1`,
-      {
-        headers: {
-          "User-Agent": "TaxiQuangTriApp/1.0",
-        },
-        next: { revalidate: 3600 },
-      }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      osmMatches = data.map((item: any) => ({
-        name: item.name || item.display_name.split(",")[0],
-        address: item.display_name,
-        lat: parseFloat(item.lat),
-        lng: parseFloat(item.lon),
-      }));
-    }
-  } catch (err) {
-    // Ignore external geocoding errors
-  }
-
-  // Combine and deduplicate
-  const combined = [...localMatches, ...osmMatches];
-  const unique = Array.from(new Map(combined.map((item) => [item.name + item.lat, item])).values());
+  // Combine: OSM Real-world addresses first (if available), then local landmarks
+  const combined = [...osmMatches, ...localMatches];
+  const unique = Array.from(new Map(combined.map((item) => [item.name + (item.lat || ""), item])).values());
 
   return NextResponse.json({
     suggestions: unique.slice(0, 8),

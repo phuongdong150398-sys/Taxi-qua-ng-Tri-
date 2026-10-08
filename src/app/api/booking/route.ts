@@ -8,7 +8,7 @@ import {
   containsSpamContent,
   sanitizeInput,
 } from "@/lib/security";
-import { getFleetSettings } from "@/lib/drivers";
+import { getFleetSettings, loadFleetStateFromTelegramCloud } from "@/lib/drivers";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -182,7 +182,7 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
   // A. Gửi vào Nhóm Telegram Đội Tài Xế (nếu có cấu hình)
   if (driverGroupId) {
     try {
-      await fetch(url, {
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -201,9 +201,13 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
           },
         }),
       });
+      const data = await res.json();
+      console.log(`[DISPATCH TO GROUP ${driverGroupId}]:`, data?.ok ? "SUCCESS" : data);
     } catch (err) {
       console.error("Error sending to driver group:", err);
     }
+  } else {
+    console.warn("[DISPATCH WARNING] No telegramGroupId configured in Fleet Settings. Trips cannot be sent to group yet.");
   }
 
   // B. Gửi tin nhắn về Telegram của Chủ xe
@@ -245,6 +249,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // 0. Tải cấu hình Đội xe & ID Nhóm mới nhất từ Telegram Cloud
+    await loadFleetStateFromTelegramCloud();
+
     // 1. Thu thập IP client để Rate Limit
     const forwardedFor = request.headers.get("x-forwarded-for");
     const realIp = request.headers.get("x-real-ip");

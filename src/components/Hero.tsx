@@ -495,29 +495,31 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
                 {/* Pickup & Dropoff Locations with Google Maps / Smart Autocomplete */}
                 <div className="space-y-2.5">
                   <div>
-                    <label className="text-[11px] text-slate-300 font-bold block mb-1">
-                      Điểm đón khách (Gợi ý tự động bản đồ):
+                    <label className="text-[11px] text-slate-300 font-bold flex items-center justify-between mb-1">
+                      <span>Điểm đón khách (Số nhà / Đường / GPS):</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">📍 Bấm &quot;Vị trí&quot; để tự động lấy GPS</span>
                     </label>
                     <AddressAutocompleteInput
                       required
                       value={pickupLocation}
                       onChange={setPickupLocation}
                       onSelectPlace={handleSelectPickup}
-                      placeholder="Nhập điểm đón (VD: Đồng Hới, Ga, Sân bay, Đông Hà...)"
+                      placeholder="Nhập số nhà, tên đường, thôn, phường, khách sạn, ga, sân bay..."
                       labelIconColor="text-emerald-400"
+                      showGpsButton={true}
                     />
                   </div>
 
                   <div>
                     <label className="text-[11px] text-slate-300 font-bold block mb-1">
-                      Điểm đến / Tham quan:
+                      Điểm đến / Địa chỉ trả khách:
                     </label>
                     <AddressAutocompleteInput
                       required
                       value={dropoffLocation}
                       onChange={setDropoffLocation}
                       onSelectPlace={handleSelectDropoff}
-                      placeholder="Nhập điểm đến (VD: Động Phong Nha, Thiên Đường, Suối Moọc...)"
+                      placeholder="Nhập điểm đến (VD: Động Phong Nha, Thiên Đường, Số 45 Lê Lợi...)"
                       labelIconColor="text-amber-400"
                     />
                   </div>
