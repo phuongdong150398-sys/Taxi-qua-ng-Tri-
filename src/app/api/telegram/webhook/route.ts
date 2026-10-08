@@ -522,11 +522,11 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
 ━━━━━━━━━━━━━━━━━━━━
 🚕 Để tham gia nhận các chuyến xe tự động đổ về nhóm với mức <b>chiết khấu 15%</b>, Bác tài vui lòng:
 
-1️⃣ Bấm nút <b>[ 📝 ĐĂNG KÝ TÀI XẾ ]</b> bên dưới.
-2️⃣ Nhập Họ tên, Số điện thoại & Biển số xe.
-3️⃣ Nạp tiền cọc tạm ứng tối thiểu <b>50.000 VNĐ</b> để nhận cuốc.
+1️⃣ Bấm nút <b>[ 💬 MỞ CHAT RIÊNG ĐĂNG KÝ ]</b> bên dưới.
+2️⃣ Nhập Họ tên, Số điện thoại & Biển số xe trong tin nhắn riêng với Bot.
+3️⃣ Nạp tiền cọc tạm ứng tối thiểu <b>50.000 VNĐ</b> để sẵn sàng nhận cuốc.
 ━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Bấm nút bên dưới để mở tin nhắn riêng với Bot và kích hoạt tài khoản:</i>
+⚡ <i>Bấm nút bên dưới để mở tin nhắn riêng 1-1 với Bot (bảo mật thông tin):</i>
 `;
 
         await sendTelegramApi("sendMessage", {
@@ -537,7 +537,7 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
             inline_keyboard: [
               [
                 {
-                  text: "📝 [ BẤM ĐĂNG KÝ TÀI XẾ NGAY ]",
+                  text: "💬 [ BẤM ĐĂNG KÝ RIÊNG VỚI BOT ]",
                   url: "https://t.me/Dolysmart_Bot?start=dangky",
                 },
               ],
@@ -555,26 +555,100 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
       const msg = update.message;
       const text = (msg.text || "").trim();
       const chatId = msg.chat.id;
-      const telegramId = String(msg.from.id);
-      const telegramUsername = msg.from.username;
-      const userName = msg.from.first_name || "Bác tài";
+      const chatType = msg.chat.type || "private";
+      const isPrivate = chatType === "private";
+      const telegramId = String(msg.from?.id || "");
+      const telegramUsername = msg.from?.username;
+      const userName = msg.from?.first_name || "Bác tài";
 
-      // Lệnh /myid
+      // -----------------------------------------------------------------------
+      // A. NẾU LÀ TIN NHẮN TRONG NHÓM (GROUP / SUPERGROUP):
+      //    TUYỆT ĐỐI KHÔNG HỎI ĐÁP THÔNG TIN CÁ NHÂN TRONG NHÓM.
+      // -----------------------------------------------------------------------
+      if (!isPrivate) {
+        // Nếu bác tài gõ lệnh đăng ký trong nhóm
+        if (text.startsWith("/start") || text.startsWith("/dangky") || text.toLowerCase().includes("đăng ký")) {
+          await sendTelegramApi("sendMessage", {
+            chat_id: chatId,
+            text: `👋 Chào Bác tài <b>${userName}</b>! Để bảo mật thông tin cá nhân (SĐT, Biển số xe, Ví cọc), Bác tài vui lòng bấm nút bên dưới để nhắn tin riêng với Bot nhé:`,
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "💬 [ MỞ TIN NHẮN RIÊNG VỚI BOT ]",
+                    url: "https://t.me/Dolysmart_Bot?start=dangky",
+                  },
+                ],
+              ],
+            },
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        // Nếu bác tài gõ lệnh kiểm tra ví trong nhóm
+        if (
+          text === "/vi" ||
+          text === "/sodu" ||
+          text === "/napvi" ||
+          text === "/naptien" ||
+          text.toLowerCase().includes("nạp ví") ||
+          text.toLowerCase().includes("số dư")
+        ) {
+          await sendTelegramApi("sendMessage", {
+            chat_id: chatId,
+            text: `💼 Bác tài <b>${userName}</b> vui lòng kiểm tra số dư ví và thông tin chuyển khoản nạp cọc trong tin nhắn riêng với Bot để bảo mật:`,
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "💼 [ MỞ VÍ TRONG CHAT RIÊNG ]",
+                    url: "https://t.me/Dolysmart_Bot?start=vi",
+                  },
+                ],
+              ],
+            },
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        // Lệnh /myid trong nhóm
+        if (text === "/myid") {
+          await sendTelegramApi("sendMessage", {
+            chat_id: chatId,
+            text: `🆔 <b>Mã Telegram ID của bạn là:</b> <code>${telegramId}</code>`,
+            parse_mode: "HTML",
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        // Với mọi tin nhắn text thông thường khác trong nhóm -> BỎ QUA HOÀN TOÀN để nhóm không bị loãng
+        return NextResponse.json({ ok: true });
+      }
+
+      // -----------------------------------------------------------------------
+      // B. NẾU LÀ TIN NHẮN RIÊNG 1-1 VỚI BOT (PRIVATE CHAT):
+      //    XỬ LÝ ĐẦY ĐỦ QUY TRÌNH ĐĂNG KÝ, TRA CỨU VÍ VÀ NẠP TIỀN BẢO MẬT.
+      // -----------------------------------------------------------------------
+
+      // Lệnh /myid trong chat riêng
       if (text === "/myid") {
         await sendTelegramApi("sendMessage", {
-          chat_id: chatId,
+          chat_id: telegramId,
           text: `🆔 <b>Mã Telegram ID của bạn là:</b> <code>${telegramId}</code>\n\nHãy gửi mã số này cho tổng đài để kích hoạt tài khoản tài xế nhé!`,
           parse_mode: "HTML",
         });
         return NextResponse.json({ ok: true });
       }
 
-      // Lệnh /vi, /sodu, /napvi, /naptien
+      // Lệnh /vi, /sodu, /napvi, /naptien trong chat riêng
       if (
         text === "/vi" ||
         text === "/sodu" ||
         text === "/napvi" ||
         text === "/naptien" ||
+        text === "/start vi" ||
         text.toLowerCase().includes("nạp ví") ||
         text.toLowerCase().includes("số dư")
       ) {
@@ -584,7 +658,7 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
           const isEligible = driver.walletBalance >= (settings.minWalletBalance || 50000);
 
           await sendTelegramApi("sendPhoto", {
-            chat_id: chatId,
+            chat_id: telegramId,
             photo: qrUrl,
             caption: `
 💼 <b>THÔNG TIN VÍ CỌC TÀI XẾ</b>
@@ -619,7 +693,7 @@ ${
           });
         } else {
           await sendTelegramApi("sendMessage", {
-            chat_id: chatId,
+            chat_id: telegramId,
             text: `⚠️ Bạn chưa đăng ký tài xế trên hệ thống. Bấm nút dưới đây để đăng ký tài khoản & nạp ví nhé:`,
             reply_markup: {
               inline_keyboard: [[{ text: "📝 Đăng Ký Tài Xế Mới", callback_data: "start_reg" }]],
@@ -629,13 +703,13 @@ ${
         return NextResponse.json({ ok: true });
       }
 
-      // Lệnh /start hoặc /dangky
+      // Lệnh /start hoặc /dangky trong chat riêng
       if (text.startsWith("/start") || text.startsWith("/dangky")) {
         const driver = getDriverByTelegramId(telegramId);
         if (driver) {
           const qrUrl = generateDepositVietQRUrl(driver, 500000);
           await sendTelegramApi("sendMessage", {
-            chat_id: chatId,
+            chat_id: telegramId,
             text: `
 👋 Chào Bác tài <b>${driver.name}</b>!
 ━━━━━━━━━━━━━━━━━━━━
@@ -668,7 +742,7 @@ ${
         });
 
         await sendTelegramApi("sendMessage", {
-          chat_id: chatId,
+          chat_id: telegramId,
           text: `
 🚖 <b>ĐĂNG KÝ TÀI XẾ - ${siteConfig.name.toUpperCase()}</b>
 ━━━━━━━━━━━━━━━━━━━━
@@ -682,7 +756,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
       }
 
       // =======================================================================
-      // 4. XỬ LÝ CÁC BƯỚC ĐIỀN FORM ĐĂNG KÝ QUA CHAT
+      // 4. XỬ LÝ CÁC BƯỚC ĐIỀN FORM ĐĂNG KÝ TRONG CHAT RIÊNG
       // =======================================================================
       const session = getRegistrationSession(telegramId);
       if (session) {
@@ -691,7 +765,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           const name = text.replace(/[\n\r]/g, " ").trim();
           if (name.length < 2) {
             await sendTelegramApi("sendMessage", {
-              chat_id: chatId,
+              chat_id: telegramId,
               text: "⚠️ Vui lòng nhập Họ và Tên đầy đủ (ít nhất 2 ký tự):",
             });
             return NextResponse.json({ ok: true });
@@ -703,7 +777,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           setRegistrationSession(session);
 
           await sendTelegramApi("sendMessage", {
-            chat_id: chatId,
+            chat_id: telegramId,
             text: `
 ✅ <b>Họ và tên:</b> <b>${name}</b>
 ━━━━━━━━━━━━━━━━━━━━
@@ -724,7 +798,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           const validation = isValidVietnamesePhone(phone);
           if (!validation.valid && phone.length < 9) {
             await sendTelegramApi("sendMessage", {
-              chat_id: chatId,
+              chat_id: telegramId,
               text: `⚠️ Số điện thoại không hợp lệ. Vui lòng nhập lại số điện thoại 10 số (Ví dụ: 0912345678):`,
             });
             return NextResponse.json({ ok: true });
@@ -736,7 +810,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           setRegistrationSession(session);
 
           await sendTelegramApi("sendMessage", {
-            chat_id: chatId,
+            chat_id: telegramId,
             text: `
 ✅ <b>Số điện thoại:</b> <code>${phone}</code>
 ━━━━━━━━━━━━━━━━━━━━
@@ -752,7 +826,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           const plate = text.replace(/[\s]/g, "").toUpperCase();
           if (plate.length < 5) {
             await sendTelegramApi("sendMessage", {
-              chat_id: chatId,
+              chat_id: telegramId,
               text: `⚠️ Biển số xe không hợp lệ. Vui lòng nhập biển số xe (Ví dụ: 74A-123.45):`,
             });
             return NextResponse.json({ ok: true });
@@ -764,7 +838,7 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           setRegistrationSession(session);
 
           await sendTelegramApi("sendMessage", {
-            chat_id: chatId,
+            chat_id: telegramId,
             text: `
 ✅ <b>Biển số xe:</b> <code>${plate}</code>
 ━━━━━━━━━━━━━━━━━━━━
