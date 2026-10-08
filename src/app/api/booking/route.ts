@@ -8,6 +8,7 @@ import {
   containsSpamContent,
   sanitizeInput,
 } from "@/lib/security";
+import { getFleetSettings } from "@/lib/drivers";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -68,21 +69,50 @@ function escapeHtml(text: string) {
     .replace(/"/g, "&quot;");
 }
 
-// Hàm gửi thông báo đơn đặt xe về Telegram của tài xế / chủ xe
+function calculateFareAndCommission(body: BookingFormInput) {
+  let grossFare = 450000;
+  if (body.estimatedPrice) {
+    const numericStr = body.estimatedPrice.replace(/\D/g, "");
+    const parsed = parseInt(numericStr, 10);
+    if (!isNaN(parsed) && parsed >= 30000) {
+      grossFare = parsed;
+    }
+  } else {
+    // Ước lượng chuẩn theo dòng xe
+    if (body.carType === "4-seats") grossFare = 350000;
+    else if (body.carType === "6-seats") grossFare = 450000;
+    else if (body.carType === "16-seats") grossFare = 900000;
+    else if (body.carType === "32-seats") grossFare = 1600000;
+    else if (body.carType === "vip-limousine") grossFare = 1200000;
+    if (body.tripType === "round-trip") grossFare = Math.round(grossFare * 1.7);
+  }
+
+  const settings = getFleetSettings();
+  const commissionRate = settings.commissionRate || 0.15; // 15%
+  const commissionAmount = Math.round(grossFare * commissionRate);
+  const driverNetEarning = grossFare - commissionAmount;
+
+  return { grossFare, commissionRate, commissionAmount, driverNetEarning };
+}
+
+// Hàm gửi thông báo đơn đặt xe về Telegram (Nhóm Đội Xe & Chủ Xe)
 async function sendTelegramNotification(booking: BookingRecord) {
   const token =
     process.env.TELEGRAM_BOT_TOKEN ||
     process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN ||
     "8888405865:AAG0tj-prAYFngu4qlcRYBtF2T_13xHZQo4";
-  const chatId =
+  const ownerChatId =
     process.env.TELEGRAM_CHAT_ID ||
     process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID ||
     "1499064181";
 
-  if (!token || !chatId) {
-    console.log("Telegram not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in environment variables.");
+  if (!token) {
+    console.log("Telegram token not configured.");
     return;
   }
+
+  const settings = getFleetSettings();
+  const driverGroupId = settings.telegramGroupId || process.env.TELEGRAM_GROUP_ID;
 
   const getCarLabel = (type: string) => {
     switch (type) {
@@ -102,51 +132,109 @@ async function sendTelegramNotification(booking: BookingRecord) {
   };
 
   const cleanPhone = (booking.phone || "").replace(/\D/g, "");
+  const maskedPhone =
+    cleanPhone.length >= 7
+      ? cleanPhone.slice(0, 4) + "***" + cleanPhone.slice(-3)
+      : "0988***456";
   const zaloUrl = cleanPhone ? `https://zalo.me/${cleanPhone}` : "https://zalo.me";
 
-  const message = `
+  const grossFareStr = (booking.grossFare || 450000).toLocaleString("vi-VN");
+  const commissionStr = (booking.commissionAmount || 67500).toLocaleString("vi-VN");
+  const netEarningStr = (booking.driverNetEarning || 382500).toLocaleString("vi-VN");
+
+  // 1. NỘI DUNG GỬI VÀO NHÓM TELEGRAM TÀI XẾ (Ẩn SĐT khách, có nút nhận cuốc)
+  const groupMessage = `
+🚖 <b>ĐƠN TAXI MỚI CHỜ NHẬN - ${siteConfig.name.toUpperCase()}</b>
+━━━━━━━━━━━━━━━━━━━━
+🆔 <b>Mã đơn:</b> <code>#${booking.id}</code>
+📍 <b>Điểm đón:</b> <b>${escapeHtml(booking.pickupLocation)}</b>
+🏁 <b>Điểm đến:</b> <b>${escapeHtml(booking.dropoffLocation)}</b>
+🚘 <b>Loại xe:</b> ${getCarLabel(booking.carType)} • ${booking.tripType === "round-trip" ? "Khứ hồi 2 chiều" : "1 Chiều"}
+⏰ <b>Thời gian đón:</b> ${booking.pickupTime} (Ngày ${booking.pickupDate})
+━━━━━━━━━━━━━━━━━━━━
+💰 <b>Tổng cước thu khách:</b> <b>${grossFareStr} VNĐ</b>
+💵 <b>Phí chiết khấu (15% trừ ví):</b> <b>-${commissionStr} VNĐ</b>
+👉 <b>BÁC TÀI THỰC NHẬN:</b> <b>+${netEarningStr} VNĐ</b>
+📞 <b>SĐT Khách:</b> <code>${maskedPhone}</code> <i>(Bấm nút dưới để nhận SĐT & Zalo khách)</i>
+${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Bác tài nào gần khu vực đón hãy bấm nút dưới đây để nhận chuyến ngay:</i>
+`;
+
+  // 2. NỘI DUNG GỬI CHO CHỦ XE / ADMIN (Đầy đủ SĐT, link gọi & admin)
+  const ownerMessage = `
 🚖 <b>ĐƠN ĐẶT TAXI MỚI - ${siteConfig.name.toUpperCase()}</b>
 ━━━━━━━━━━━━━━━━━━━━
 🆔 <b>Mã đơn:</b> <code>#${booking.id}</code>
 👤 <b>Khách hàng:</b> <b>${escapeHtml(booking.fullName || "Khách đặt xe")}</b>
-📞 <b>Số điện thoại:</b> <code>${booking.phone}</code> <i>(Chạm để sao chép)</i>
+📞 <b>Số điện thoại:</b> <code>${booking.phone}</code> <i>(Chạm để sao chép / gọi)</i>
 📍 <b>Điểm đón:</b> ${escapeHtml(booking.pickupLocation)}
 🏁 <b>Điểm đến:</b> ${escapeHtml(booking.dropoffLocation)}
 🚘 <b>Loại xe:</b> ${getCarLabel(booking.carType)}
 🔄 <b>Loại chuyến:</b> ${booking.tripType === "round-trip" ? "Khứ hồi 2 chiều" : "1 chiều"}
 ⏰ <b>Thời gian đón:</b> ${booking.pickupTime} (Ngày ${booking.pickupDate})
-${booking.estimatedPrice ? `💰 <b>Giá ước tính:</b> <b>${booking.estimatedPrice}</b>\n` : ""}${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Chạm vào số điện thoại hoặc bấm nút bên dưới để liên hệ ngay:</i>
+💰 <b>Cước khách:</b> ${grossFareStr}đ | <b>Phí 15%:</b> ${commissionStr}đ | <b>Tài xế nhận:</b> ${netEarningStr}đ
+${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Chạm vào số điện thoại hoặc bấm nút bên dưới:</i>
 `;
 
-  try {
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message.trim(),
-        parse_mode: "HTML",
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: "💬 Nhắn Zalo Khách", url: zaloUrl },
-              { text: "📊 Xem Đơn / Quản Trị", url: "https://taxiquangtri.com.vn/admin" },
-            ],
-          ],
-        },
-      }),
-    });
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("Telegram API Error:", errText);
-    } else {
-      console.log("Telegram notification sent successfully for booking:", booking.id);
+  // A. Gửi vào Nhóm Telegram Đội Tài Xế (nếu có cấu hình)
+  if (driverGroupId) {
+    try {
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: driverGroupId,
+          text: groupMessage.trim(),
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "🚕 [ BẤM NHẬN CUỐC NÀY ]",
+                  callback_data: `claim_${booking.id}`,
+                },
+              ],
+            ],
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("Error sending to driver group:", err);
     }
-  } catch (error) {
-    console.error("Failed to send Telegram notification:", error);
+  }
+
+  // B. Gửi tin nhắn về Telegram của Chủ xe
+  if (ownerChatId) {
+    try {
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: ownerChatId,
+          text: ownerMessage.trim(),
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "🚕 Bấm Nhận Cuốc Này",
+                  callback_data: `claim_${booking.id}`,
+                },
+              ],
+              [
+                { text: "💬 Nhắn Zalo Khách", url: zaloUrl },
+                { text: "📊 Xem Đơn / Quản Trị", url: "https://taxiquangtri.com.vn/admin" },
+              ],
+            ],
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("Error sending to owner Telegram:", err);
+    }
   }
 }
 
@@ -165,10 +253,8 @@ export async function POST(request: Request) {
     const body: BookingFormInput = await request.json();
 
     // 2. HONEYPOT CHECK (Bẫy Bot Spam)
-    // Nếu trường ẩn hp_website có dữ liệu -> chắc chắn là bot tự động điền form
     if (body.hp_website && body.hp_website.trim().length > 0) {
       console.warn(`[SPAM DETECTED] Honeypot triggered from IP: ${clientIp}`);
-      // Trả về thành công giả lập để bot không thử lại, nhưng KHÔNG lưu và KHÔNG gửi Telegram
       return NextResponse.json({
         success: true,
         message: "Đặt xe thành công! Tổng đài sẽ gọi lại quý khách sau 1-3 phút.",
@@ -240,7 +326,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // 9. LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU ĐẦU VÀO (XSS SANITIZATION)
+    // 9. TÍNH TOÁN CƯỚC VÀ CHIẾT KHẤU 15%
+    const fareDetails = calculateFareAndCommission(body);
+
+    // 10. LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU ĐẦU VÀO (XSS SANITIZATION)
     const sanitizedBooking: BookingRecord = {
       id: `TX-${Date.now().toString().slice(-6)}`,
       fullName: sanitizeInput(body.fullName || "Khách hàng", 60),
@@ -252,17 +341,23 @@ export async function POST(request: Request) {
       carType: body.carType,
       tripType: body.tripType,
       serviceType: body.serviceType || "tour",
-      estimatedPrice: body.estimatedPrice ? sanitizeInput(body.estimatedPrice, 80) : undefined,
+      estimatedPrice: body.estimatedPrice
+        ? sanitizeInput(body.estimatedPrice, 80)
+        : `${fareDetails.grossFare.toLocaleString("vi-VN")} VNĐ`,
       notes: body.notes ? sanitizeInput(body.notes, 300) : undefined,
       createdAt: new Date().toISOString(),
       status: "pending",
+      grossFare: fareDetails.grossFare,
+      commissionRate: fareDetails.commissionRate,
+      commissionAmount: fareDetails.commissionAmount,
+      driverNetEarning: fareDetails.driverNetEarning,
     };
 
     const bookings = getBookings();
     bookings.unshift(sanitizedBooking);
     saveBookings(bookings);
 
-    // 10. GỬI THÔNG BÁO TỨC THỜI VỀ TELEGRAM CHỦ XE
+    // 11. GỬI THÔNG BÁO TỨC THỜI VỀ TELEGRAM (NHÓM TÀI XẾ & CHỦ XE)
     await sendTelegramNotification(sanitizedBooking);
 
     return NextResponse.json({
