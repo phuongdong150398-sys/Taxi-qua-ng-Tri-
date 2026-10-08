@@ -20,8 +20,8 @@ export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
   minWalletBalance: 50000, // Tối thiểu 50.000đ trong ví để nhận cuốc
   telegramGroupId: process.env.TELEGRAM_GROUP_ID || "",
   bankName: "MBBank",
-  bankAccount: "0398567070",
-  bankAccountName: "TAXI QUANG TRI 24H",
+  bankAccount: "1736668888173",
+  bankAccountName: "NGUYEN PHUONG DONG",
 };
 
 // Initial Driver Fleet data
@@ -369,7 +369,8 @@ export function validateDriverForBooking(
 export function generateDepositVietQRUrl(driver: Driver, amount = 500000): string {
   const settings = getFleetSettings();
   const bank = settings.bankName || "MBBank";
-  const acc = settings.bankAccount || "0398567070";
+  const acc = settings.bankAccount || "1736668888173";
+  const accountName = settings.bankAccountName || "NGUYEN PHUONG DONG";
   const desc = encodeURIComponent(`NAP VI ${driver.phone} ${driver.name}`);
-  return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${desc}&accountName=${encodeURIComponent(settings.bankAccountName)}`;
+  return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${desc}&accountName=${encodeURIComponent(accountName)}`;
 }

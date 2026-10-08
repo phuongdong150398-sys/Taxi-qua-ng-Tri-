@@ -117,8 +117,8 @@ export default function AdminPage() {
     minWalletBalance: 50000,
     telegramGroupId: "",
     bankName: "MBBank",
-    bankAccount: "0398567070",
-    bankAccountName: "TAXI QUANG TRI 24H",
+    bankAccount: "1736668888173",
+    bankAccountName: "NGUYEN PHUONG DONG",
   });
   const [loadingDrivers, setLoadingDrivers] = useState(false);
   const [driverSearch, setDriverSearch] = useState("");
@@ -1171,7 +1171,7 @@ export default function AdminPage() {
               ) : (
                 filteredDrivers.map((driver) => {
                   const isLowBalance = driver.walletBalance < (fleetSettings.minWalletBalance || 50000);
-                  const qrUrl = `https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "0398567070"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${driver.phone} ${driver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "TAXI QUANG TRI 24H")}`;
+                  const qrUrl = `https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "1736668888173"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${driver.phone} ${driver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "NGUYEN PHUONG DONG")}`;
 
                   return (
                     <div
@@ -1722,7 +1722,7 @@ export default function AdminPage() {
                 <div className="mt-3 p-3 bg-white rounded-2xl inline-block shadow-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "0398567070"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${selectedDriver.phone} ${selectedDriver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "TAXI QUANG TRI 24H")}`}
+                    src={`https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "1736668888173"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${selectedDriver.phone} ${selectedDriver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "NGUYEN PHUONG DONG")}`}
                     alt="VietQR Deposit"
                     className="w-56 h-auto mx-auto rounded-lg"
                   />
@@ -1738,7 +1738,7 @@ export default function AdminPage() {
 
               <button
                 onClick={() => {
-                  const qrLink = `https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "0398567070"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${selectedDriver.phone} ${selectedDriver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "TAXI QUANG TRI 24H")}`;
+                  const qrLink = `https://img.vietqr.io/image/${fleetSettings.bankName || "MBBank"}-${fleetSettings.bankAccount || "1736668888173"}-compact2.png?amount=500000&addInfo=${encodeURIComponent(`NAP VI ${selectedDriver.phone} ${selectedDriver.name}`)}&accountName=${encodeURIComponent(fleetSettings.bankAccountName || "NGUYEN PHUONG DONG")}`;
                   copyToClipboard(qrLink, "qr_link");
                 }}
                 className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase cursor-pointer flex items-center justify-center gap-1.5"
