@@ -197,7 +197,7 @@ export default function AdminPage() {
   });
   const [configSaveMsg, setConfigSaveMsg] = useState("");
 
-  // Check login state from sessionStorage on mount
+  // Check login state from sessionStorage on mount & start live polling
   useEffect(() => {
     try {
       const auth = sessionStorage.getItem("admin_auth_status");
@@ -214,6 +214,16 @@ export default function AdminPage() {
       setLoading(false);
     }
   }, []);
+
+  // Tự động làm mới dữ liệu thời gian thực mỗi 6 giây khi đang đăng nhập Admin
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const interval = setInterval(() => {
+      fetchBookings(true);
+      fetchDriversData();
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
 
   const getSavedPin = () => {
     if (typeof window === "undefined") return "8888";
@@ -279,11 +289,14 @@ export default function AdminPage() {
     setTimeout(() => setConfigSaveMsg(""), 4000);
   };
 
-  const fetchBookings = async () => {
-    setLoading(true);
+  const fetchBookings = async (silent = false) => {
+    if (!silent) setLoading(true);
     let serverBookings: BookingRecord[] = [];
     try {
-      const res = await fetch("/api/booking");
+      const res = await fetch(`/api/booking?t=${Date.now()}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+      });
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) {
         serverBookings = data.data;
@@ -292,17 +305,25 @@ export default function AdminPage() {
       console.error("Error fetching bookings from server:", error);
     }
 
-    // Merge with local cache to ensure no orders are ever lost on serverless
+    // Merge với cache trình duyệt (Dữ liệu máy chủ Firebase luôn ưu tiên cập nhật trạng thái mới nhất)
     try {
-      const localData = JSON.parse(localStorage.getItem("admin_bookings_cache") || "[]");
-      const combined = [...serverBookings, ...localData];
-      const uniqueMap = new Map<string, BookingRecord>();
-      combined.forEach((b) => {
-        if (b.id && !uniqueMap.has(b.id)) {
-          uniqueMap.set(b.id, b);
+      const localData: BookingRecord[] = JSON.parse(localStorage.getItem("admin_bookings_cache") || "[]");
+      const map = new Map<string, BookingRecord>();
+
+      // 1. Nạp cache local trước
+      localData.forEach((b) => {
+        if (b && b.id) map.set(b.id, b);
+      });
+
+      // 2. Server bookings đè lên để cập nhật trạng thái đã nhận, tài xế, tiến độ từ Telegram/Firebase
+      serverBookings.forEach((b) => {
+        if (b && b.id) {
+          const existing = map.get(b.id);
+          map.set(b.id, { ...existing, ...b });
         }
       });
-      const mergedList = Array.from(uniqueMap.values()).sort(
+
+      const mergedList = Array.from(map.values()).sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setBookings(mergedList);
@@ -310,7 +331,7 @@ export default function AdminPage() {
     } catch (e) {
       setBookings(serverBookings);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 

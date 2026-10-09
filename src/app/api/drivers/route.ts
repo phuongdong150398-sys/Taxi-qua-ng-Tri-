@@ -13,6 +13,9 @@ import {
 } from "@/lib/drivers";
 import { Driver } from "@/types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   try {
     // Tải dữ liệu mới nhất từ Telegram Cloud Storage

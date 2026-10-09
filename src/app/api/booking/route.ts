@@ -14,6 +14,9 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // On Vercel serverless, /tmp is the only writable directory
 const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "bookings.json");
