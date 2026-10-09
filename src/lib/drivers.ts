@@ -44,6 +44,7 @@ export const DEFAULT_FLEET_SETTINGS: FleetSystemSettings = {
   bankName: "MBBank",
   bankAccount: "1736668888173",
   bankAccountName: "NGUYEN PHUONG DONG",
+  adminPin: "8888",
 };
 
 // Initial Driver Fleet data (Empty - Only Real Drivers!)
@@ -292,6 +293,36 @@ export function clearRegistrationSession(telegramId: string) {
   } catch (e) {}
 }
 
+export interface DepositPromptSession {
+  telegramId: string;
+  driverId: string;
+  updatedAt: number;
+}
+
+let inMemoryDepositSessions: Record<string, DepositPromptSession> = {};
+
+export function setDepositPromptSession(telegramId: string, driverId: string) {
+  inMemoryDepositSessions[telegramId] = {
+    telegramId,
+    driverId,
+    updatedAt: Date.now(),
+  };
+}
+
+export function getDepositPromptSession(telegramId: string): DepositPromptSession | null {
+  const s = inMemoryDepositSessions[telegramId];
+  if (!s) return null;
+  if (Date.now() - s.updatedAt > 10 * 60 * 1000) {
+    delete inMemoryDepositSessions[telegramId];
+    return null;
+  }
+  return s;
+}
+
+export function clearDepositPromptSession(telegramId: string) {
+  delete inMemoryDepositSessions[telegramId];
+}
+
 /**
  * Đăng ký tài xế mới trực tiếp từ Telegram & Đồng bộ ngay lên Telegram Cloud
  */
@@ -441,4 +472,54 @@ export function generateDepositVietQRUrl(driver: Driver, amount = 500000): strin
   const accountName = settings.bankAccountName || "NGUYEN PHUONG DONG";
   const desc = encodeURIComponent(`NAP VI ${driver.phone} ${driver.name}`);
   return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${desc}&accountName=${encodeURIComponent(accountName)}`;
+}
+
+/**
+ * Phân tích số tiền nạp từ tin nhắn chat của tài xế (ví dụ: 150k, 300000, 1.5tr, 50, 1tr5)
+ */
+export function parseMoneyInput(text: string): number | null {
+  if (!text) return null;
+  const raw = text.toLowerCase().trim();
+
+  // 1. Dạng triệu: "1.5tr", "1,5tr", "1 triệu", "2tr"
+  const trMatch1 = raw.match(/(\d+(?:[.,]\d+)?)\s*(?:tr|trieu|triệu)/);
+  if (trMatch1) {
+    const val = parseFloat(trMatch1[1].replace(",", "."));
+    if (!isNaN(val) && val > 0) return Math.round(val * 1000000);
+  }
+
+  // 2. Dạng "1tr5", "2tr2"
+  const trMatch2 = raw.match(/(\d+)\s*tr\s*(\d+)/);
+  if (trMatch2) {
+    const main = parseInt(trMatch2[1], 10);
+    let sub = trMatch2[2];
+    if (sub.length === 1) sub = sub + "00000";
+    else if (sub.length === 2) sub = sub + "0000";
+    else if (sub.length === 3) sub = sub + "000";
+    const subVal = parseInt(sub, 10);
+    return main * 1000000 + subVal;
+  }
+
+  // 3. Dạng nghìn: "50k", "150k", "200.5k", "100 nghin", "100k"
+  const kMatch = raw.match(/(\d+(?:[.,]\d+)?)\s*(?:k|nghin|nghìn|ngan|ngàn)/);
+  if (kMatch) {
+    const val = parseFloat(kMatch[1].replace(",", "."));
+    if (!isNaN(val) && val > 0) return Math.round(val * 1000);
+  }
+
+  // 4. Số nguyên: "50000", "50.000", "100,000đ", "500 000" hoặc số tắt "50", "100", "200"
+  const cleanDigits = raw.replace(/[^\d]/g, "");
+  if (cleanDigits.length > 0) {
+    const val = parseInt(cleanDigits, 10);
+    if (!isNaN(val)) {
+      if (val >= 10 && val <= 999) {
+        return val * 1000;
+      }
+      if (val >= 10000 && val <= 100000000) {
+        return val;
+      }
+    }
+  }
+
+  return null;
 }

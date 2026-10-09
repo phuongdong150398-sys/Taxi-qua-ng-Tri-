@@ -10,12 +10,17 @@ import {
   getRegistrationSession,
   setRegistrationSession,
   clearRegistrationSession,
+  getDepositPromptSession,
+  setDepositPromptSession,
+  clearDepositPromptSession,
+  parseMoneyInput,
   registerDriverFromTelegram,
   getDriverById,
   saveFleetSettings,
   loadFleetStateFromTelegramCloud,
   syncFleetStateToTelegramCloud,
 } from "@/lib/drivers";
+import { createPayOSDepositPayment } from "@/lib/payos";
 import { BookingRecord, CarType } from "@/types";
 import { isValidVietnamesePhone } from "@/lib/security";
 import {
@@ -692,27 +697,21 @@ Chào bạn! Để tham gia nhận cuốc xe trong đội xe với mức chiết
 ⚠️ <b>BƯỚC TIẾP THEO ĐỂ NHẬN CUỐC:</b>
 Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví cọc tạm ứng khi Bác tài bấm nhận chuyến.
 
-👉 Bác tài hãy <b>Nạp tiền cọc tạm ứng (Tối thiểu 50.000 VNĐ)</b> để đủ điều kiện nhận các chuyến xe mới nhất nhé!
-
-📲 <b>THÔNG TIN CHUYỂN KHOẢN NẠP CỌC:</b>
-🏦 <b>Ngân hàng:</b> <b>${settings.bankName}</b>
-💳 <b>Số tài khoản:</b> <code>${settings.bankAccount}</code> <i>(Chạm để sao chép)</i>
-👤 <b>Chủ tài khoản:</b> <b>${settings.bankAccountName}</b>
-📝 <b>Nội dung CK:</b> <code>NAP VI ${newDriver.phone} ${newDriver.name}</code>
-━━━━━━━━━━━━━━━━━━━━
-⚡ <i>Quét mã VietQR được gửi kèm hoặc chuyển khoản, tổng đài sẽ duyệt cộng tiền vào ví trong 1 - 3 phút!</i>
+👉 Bác tài hãy bấm <b>[ 💳 NẠP TIỀN VÀO VÍ ]</b> bên dưới để nạp cọc (tối thiểu 50.000 VNĐ) và bắt đầu nhận cuốc nhé!
 `;
 
-        await sendTelegramApi("sendPhoto", {
+        await sendTelegramApi("sendMessage", {
           chat_id: telegramId,
-          photo: qrUrl,
-          caption: successMsg.trim(),
+          text: successMsg.trim(),
           parse_mode: "HTML",
           reply_markup: {
             inline_keyboard: [
               [
-                { text: "💼 Kiểm Tra Số Dư Ví", callback_data: "check_wallet" },
-                { text: "📞 Hỗ Trợ Nạp Cọc (Zalo)", url: "https://zalo.me/0398567070" },
+                { text: "💳 NẠP TIỀN VÀO VÍ", callback_data: "prompt_deposit" },
+              ],
+              [
+                { text: "💼 Xem Số Dư Ví", callback_data: "check_wallet" },
+                { text: "📞 Hỗ Trợ Zalo", url: "https://zalo.me/0398567070" },
               ],
             ],
           },
@@ -755,11 +754,10 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
         return NextResponse.json({ ok: true });
       }
 
-      // D. BẤM NÚT XEM VÍ & MÃ NẠP CỌC: check_wallet / nap_vi
+      // D. BẤM NÚT XEM VÍ: check_wallet / nap_vi
       if (data === "check_wallet" || data === "nap_vi") {
         const driver = getDriverByTelegramId(telegramId);
         if (driver) {
-          const qrUrl = generateDepositVietQRUrl(driver, 500000);
           const isEligible = driver.walletBalance >= (settings.minWalletBalance || 50000);
 
           const walletMsg = `
@@ -776,20 +774,22 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
               : "⚠️ <b>CẦN NẠP THÊM CỌC (Tối thiểu 50.000đ)</b>"
           }
 
-📲 <b>THÔNG TIN NẠP TIỀN CỌC TẠM ỨNG:</b>
+📲 <b>THÔNG TIN TÀI KHOẢN CÔNG TY:</b>
 🏦 Ngân hàng: <b>${settings.bankName}</b>
-💳 STK: <code>${settings.bankAccount}</code>
+💳 STK: <code>${settings.bankAccount}</code> <i>(Chạm để sao chép)</i>
 👤 Chủ TK: <b>${settings.bankAccountName}</b>
-📝 Nội dung: <code>NAP VI ${driver.phone} ${driver.name}</code>
+📝 Nội dung CK: <code>NAP VI ${driver.phone} ${driver.name}</code>
 `;
 
-          await sendTelegramApi("sendPhoto", {
+          await sendTelegramApi("sendMessage", {
             chat_id: telegramId,
-            photo: qrUrl,
-            caption: walletMsg.trim(),
+            text: walletMsg.trim(),
             parse_mode: "HTML",
             reply_markup: {
               inline_keyboard: [
+                [
+                  { text: "💳 NẠP TIỀN VÀO VÍ", callback_data: "prompt_deposit" },
+                ],
                 [
                   { text: "🔄 Làm Mới Số Dư", callback_data: "check_wallet" },
                   { text: "📞 Nhắn Zalo Tổng Đài", url: "https://zalo.me/0398567070" },
@@ -806,6 +806,149 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
             },
           });
         }
+
+        await sendTelegramApi("answerCallbackQuery", { callback_query_id: callbackId });
+        return NextResponse.json({ ok: true });
+      }
+
+      // E. BẤM NÚT NẠP TIỀN VÀO VÍ -> HIỂN THỊ CÁC MỨC TIỀN HOẶC NHẬP TỰ DO: prompt_deposit
+      if (data === "prompt_deposit") {
+        const driver = getDriverByTelegramId(telegramId);
+        if (!driver) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bạn chưa đăng ký tài khoản tài xế!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        const promptText = `
+💳 <b>NẠP TIỀN VÀO VÍ CỌC - BÁC TÀI ${driver.name.toUpperCase()}</b>
+━━━━━━━━━━━━━━━━━━━━
+💰 <b>Số dư ví hiện tại:</b> <b>${driver.walletBalance.toLocaleString("vi-VN")} VNĐ</b>
+
+👉 Vui lòng <b>chọn số tiền muốn nạp</b> bên dưới hoặc bấm <b>[ ✍️ Tự nhập số tiền khác ]</b> để nhận mã QR chuyển khoản đúng số tiền đó:
+`;
+
+        await sendTelegramApi("sendMessage", {
+          chat_id: telegramId,
+          text: promptText.trim(),
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "💵 50.000đ", callback_data: "deposit_amount_50000" },
+                { text: "💵 100.000đ", callback_data: "deposit_amount_100000" },
+              ],
+              [
+                { text: "💵 200.000đ", callback_data: "deposit_amount_200000" },
+                { text: "💵 500.000đ", callback_data: "deposit_amount_500000" },
+              ],
+              [
+                { text: "💵 1.000.000đ", callback_data: "deposit_amount_1000000" },
+                { text: "💵 2.000.000đ", callback_data: "deposit_amount_2000000" },
+              ],
+              [
+                { text: "✍️ Tự Nhập Số Tiền Khác", callback_data: "input_custom_deposit" },
+              ],
+              [
+                { text: "⬅️ Quay Lại Ví", callback_data: "check_wallet" },
+              ],
+            ],
+          },
+        });
+
+        await sendTelegramApi("answerCallbackQuery", { callback_query_id: callbackId });
+        return NextResponse.json({ ok: true });
+      }
+
+      // F. TÀI XẾ CHỌN MỨC TIỀN CÓ SẴN: deposit_amount_<amount>
+      if (data.startsWith("deposit_amount_")) {
+        const amountStr = data.replace("deposit_amount_", "");
+        const amount = parseInt(amountStr, 10) || 500000;
+        const driver = getDriverByTelegramId(telegramId);
+
+        if (!driver) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bạn chưa đăng ký tài khoản tài xế!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        clearDepositPromptSession(telegramId);
+        const payRes = await createPayOSDepositPayment(driver, amount);
+
+        const qrCaption = `
+📲 <b>MÃ VIETQR NẠP CỌC ${amount.toLocaleString("vi-VN")} VNĐ</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Bác tài:</b> <b>${driver.name}</b> (<code>${driver.phone}</code>)
+💰 <b>Số tiền nạp:</b> <b>${amount.toLocaleString("vi-VN")} VNĐ</b>
+🏦 <b>Ngân hàng:</b> <b>${payRes.bankName}</b>
+💳 <b>Số tài khoản:</b> <code>${payRes.accountNumber}</code> <i>(Chạm để copy)</i>
+👤 <b>Chủ tài khoản:</b> <b>${payRes.accountName}</b>
+📝 <b>Nội dung CK:</b> <code>${payRes.description}</code> <i>(Chạm để copy)</i>
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Quét mã QR bằng App Ngân hàng hoặc chuyển khoản đúng cú pháp. Hệ thống sẽ <b>TỰ ĐỘNG CỘNG TIỀN VÀO VÍ VÀ BÁO TIN NGAY</b> trong 1 - 3 giây!</i>
+`;
+
+        await sendTelegramApi("sendPhoto", {
+          chat_id: telegramId,
+          photo: payRes.qrUrl,
+          caption: qrCaption.trim(),
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "💳 Chọn Số Tiền Khác", callback_data: "prompt_deposit" },
+                { text: "🔄 Xem Số Dư Ví", callback_data: "check_wallet" },
+              ],
+              [
+                { text: "📞 Hỗ Trợ Zalo (0398.567.070)", url: "https://zalo.me/0398567070" },
+              ],
+            ],
+          },
+        });
+
+        await sendTelegramApi("answerCallbackQuery", { callback_query_id: callbackId });
+        return NextResponse.json({ ok: true });
+      }
+
+      // G. TÀI XẾ BẤM TỰ NHẬP SỐ TIỀN KHÁC: input_custom_deposit
+      if (data === "input_custom_deposit") {
+        const driver = getDriverByTelegramId(telegramId);
+        if (!driver) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bạn chưa đăng ký tài khoản tài xế!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        setDepositPromptSession(telegramId, driver.id);
+
+        await sendTelegramApi("sendMessage", {
+          chat_id: telegramId,
+          text: `
+✍️ <b>NHẬP SỐ TIỀN BÁC TÀI MUỐN NẠP VÀO VÍ:</b>
+━━━━━━━━━━━━━━━━━━━━
+👉 Bác tài hãy <b>nhập số tiền muốn nạp</b> vào tin nhắn bên dưới:
+<i>(Ví dụ: <code>150k</code>, <code>300000</code>, <code>1.5tr</code>, <code>250k</code>, <code>350.000đ</code>)</i>
+
+Hệ thống sẽ tạo ngay mã VietQR chính xác với số tiền Bác tài vừa nhập!
+`.trim(),
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "⬅️ Quay Lại Chọn Mệnh Giá", callback_data: "prompt_deposit" },
+              ],
+            ],
+          },
+        });
 
         await sendTelegramApi("answerCallbackQuery", { callback_query_id: callbackId });
         return NextResponse.json({ ok: true });
@@ -1024,6 +1167,65 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
         return NextResponse.json({ ok: true });
       }
 
+      // 1. KIỂM TRA NẾU ĐANG TRONG PHIÊN TỰ NHẬP TIỀN NẠP VÍ
+      const depositSession = getDepositPromptSession(telegramId);
+      if (depositSession) {
+        const parsedAmount = parseMoneyInput(text);
+        const driver = getDriverByTelegramId(telegramId) || getDriverById(depositSession.driverId);
+
+        if (parsedAmount && parsedAmount >= 10000 && driver) {
+          clearDepositPromptSession(telegramId);
+          const payRes = await createPayOSDepositPayment(driver, parsedAmount);
+
+          const qrCaption = `
+📲 <b>MÃ VIETQR NẠP CỌC ${parsedAmount.toLocaleString("vi-VN")} VNĐ</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Bác tài:</b> <b>${driver.name}</b> (<code>${driver.phone}</code>)
+💰 <b>Số tiền nạp:</b> <b>${parsedAmount.toLocaleString("vi-VN")} VNĐ</b>
+🏦 <b>Ngân hàng:</b> <b>${payRes.bankName}</b>
+💳 <b>Số tài khoản:</b> <code>${payRes.accountNumber}</code> <i>(Chạm để copy)</i>
+👤 <b>Chủ tài khoản:</b> <b>${payRes.accountName}</b>
+📝 <b>Nội dung CK:</b> <code>${payRes.description}</code> <i>(Chạm để copy)</i>
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Quét mã QR bằng App Ngân hàng hoặc chuyển khoản đúng cú pháp. Hệ thống sẽ <b>TỰ ĐỘNG CỘNG TIỀN VÀO VÍ VÀ BÁO TIN NGAY</b> trong 1 - 3 giây!</i>
+`;
+
+          await sendTelegramApi("sendPhoto", {
+            chat_id: telegramId,
+            photo: payRes.qrUrl,
+            caption: qrCaption.trim(),
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: "💳 Chọn Số Tiền Khác", callback_data: "prompt_deposit" },
+                  { text: "🔄 Xem Số Dư Ví", callback_data: "check_wallet" },
+                ],
+                [
+                  { text: "📞 Hỗ Trợ Zalo (0398.567.070)", url: "https://zalo.me/0398567070" },
+                ],
+              ],
+            },
+          });
+          return NextResponse.json({ ok: true });
+        } else if (driver) {
+          await sendTelegramApi("sendMessage", {
+            chat_id: telegramId,
+            text: `⚠️ Số tiền không hợp lệ hoặc dưới 10.000đ. Bác tài vui lòng nhập số tiền từ 10.000 VNĐ trở lên (Ví dụ: <code>150k</code>, <code>300000</code>, <code>1.5tr</code>) hoặc bấm nút dưới đây:`,
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: "⬅️ Quay Lại Chọn Mức Tiền", callback_data: "prompt_deposit" },
+                  { text: "💼 Quay Lại Ví", callback_data: "check_wallet" },
+                ],
+              ],
+            },
+          });
+          return NextResponse.json({ ok: true });
+        }
+      }
+
       // Lệnh /vi, /sodu, /napvi, /naptien trong chat riêng
       if (
         text === "/vi" ||
@@ -1036,16 +1238,14 @@ Hệ thống sẽ tự động trừ <b>phí chiết khấu 15%</b> vào ví c�
       ) {
         const driver = getDriverByTelegramId(telegramId);
         if (driver) {
-          const qrUrl = generateDepositVietQRUrl(driver, 500000);
           const isEligible = driver.walletBalance >= (settings.minWalletBalance || 50000);
 
-          await sendTelegramApi("sendPhoto", {
+          await sendTelegramApi("sendMessage", {
             chat_id: telegramId,
-            photo: qrUrl,
-            caption: `
+            text: `
 💼 <b>THÔNG TIN VÍ CỌC TÀI XẾ</b>
 ━━━━━━━━━━━━━━━━━━━━
-👤 <b>Bác tài:</b> ${driver.name}
+👤 <b>Bác tài:</b> <b>${driver.name}</b>
 🚘 <b>Xe:</b> <code>${driver.plateNumber}</code> (${driver.carType === "6-seats" ? "6-7 Chỗ" : "4-5 Chỗ"})
 💰 <b>Số dư ví hiện tại:</b> <b>${driver.walletBalance.toLocaleString("vi-VN")} VNĐ</b>
 📊 <b>Tổng cuốc đã nhận:</b> ${driver.totalTripsCompleted} chuyến
@@ -1057,15 +1257,18 @@ ${
     : "⚠️ <b>Trạng thái:</b> Số dư thấp, hãy nạp thêm để không bỏ lỡ cuốc mới!"
 }
 
-📲 <b>Cú pháp chuyển khoản nạp cọc:</b>
+📲 <b>Thông tin chuyển khoản nạp cọc:</b>
 🏦 Ngân hàng: <b>${settings.bankName}</b>
-💳 STK: <code>${settings.bankAccount}</code>
+💳 STK: <code>${settings.bankAccount}</code> <i>(Chạm để sao chép)</i>
 👤 Chủ TK: <b>${settings.bankAccountName}</b>
 📝 Nội dung: <code>NAP VI ${driver.phone} ${driver.name}</code>
 `.trim(),
             parse_mode: "HTML",
             reply_markup: {
               inline_keyboard: [
+                [
+                  { text: "💳 NẠP TIỀN VÀO VÍ", callback_data: "prompt_deposit" },
+                ],
                 [
                   { text: "🔄 Làm Mới Số Dư", callback_data: "check_wallet" },
                   { text: "💬 Nhắn Zalo Hỗ Trợ", url: "https://zalo.me/0398567070" },
@@ -1089,7 +1292,6 @@ ${
       if (text.startsWith("/start") || text.startsWith("/dangky")) {
         const driver = getDriverByTelegramId(telegramId);
         if (driver) {
-          const qrUrl = generateDepositVietQRUrl(driver, 500000);
           await sendTelegramApi("sendMessage", {
             chat_id: telegramId,
             text: `
@@ -1100,14 +1302,14 @@ ${
 📊 <b>Tổng cuốc đã chạy:</b> ${driver.totalTripsCompleted} chuyến
 ━━━━━━━━━━━━━━━━━━━━
 👉 Khi có đơn mới bắn vào nhóm Telegram, hãy bấm <b>[ 🚕 BẤM NHẬN CUỐC NÀY ]</b> để nhận khách.
-👉 Gõ <code>/vi</code> bất cứ lúc nào để kiểm tra số dư và lấy mã VietQR nạp cọc.
+👉 Bấm <b>[ 💳 Nạp Tiền Vào Ví ]</b> hoặc gõ <code>/vi</code> để nạp tiền cọc & kiểm tra số dư.
 `.trim(),
             parse_mode: "HTML",
             reply_markup: {
               inline_keyboard: [
                 [
-                  { text: "💳 Nạp Tiền Cọc Ví", callback_data: "check_wallet" },
-                  { text: "📊 Xem Số Dư Ví", callback_data: "check_wallet" },
+                  { text: "💳 Nạp Tiền Vào Ví", callback_data: "prompt_deposit" },
+                  { text: "💼 Xem Số Dư Ví", callback_data: "check_wallet" },
                 ],
               ],
             },
@@ -1135,6 +1337,45 @@ Chào Bác tài <b>${userName}</b>! Để tham gia nhận các chuyến xe tự 
           parse_mode: "HTML",
         });
         return NextResponse.json({ ok: true });
+      }
+
+      // NẾU TÀI XẾ GÕ TRỰC TIẾP SỐ TIỀN VÀO CHAT (Ví dụ: 150k, 200k, 500k, 1tr, 300000)
+      const directAmount = parseMoneyInput(text);
+      if (directAmount && directAmount >= 10000) {
+        const driver = getDriverByTelegramId(telegramId);
+        if (driver) {
+          const payRes = await createPayOSDepositPayment(driver, directAmount);
+          const qrCaption = `
+📲 <b>MÃ VIETQR NẠP CỌC ${directAmount.toLocaleString("vi-VN")} VNĐ</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>Bác tài:</b> <b>${driver.name}</b> (<code>${driver.phone}</code>)
+💰 <b>Số tiền nạp:</b> <b>${directAmount.toLocaleString("vi-VN")} VNĐ</b>
+🏦 <b>Ngân hàng:</b> <b>${payRes.bankName}</b>
+💳 <b>Số tài khoản:</b> <code>${payRes.accountNumber}</code> <i>(Chạm để copy)</i>
+👤 <b>Chủ tài khoản:</b> <b>${payRes.accountName}</b>
+📝 <b>Nội dung CK:</b> <code>${payRes.description}</code> <i>(Chạm để copy)</i>
+━━━━━━━━━━━━━━━━━━━━
+⚡ <i>Quét mã QR bằng App Ngân hàng hoặc chuyển khoản đúng cú pháp. Hệ thống sẽ <b>TỰ ĐỘNG CỘNG TIỀN VÀO VÍ VÀ BÁO TIN NGAY</b> trong 1 - 3 giây!</i>
+`;
+          await sendTelegramApi("sendPhoto", {
+            chat_id: telegramId,
+            photo: payRes.qrUrl,
+            caption: qrCaption.trim(),
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: "💳 Chọn Số Tiền Khác", callback_data: "prompt_deposit" },
+                  { text: "🔄 Xem Số Dư Ví", callback_data: "check_wallet" },
+                ],
+                [
+                  { text: "📞 Hỗ Trợ Zalo (0398.567.070)", url: "https://zalo.me/0398567070" },
+                ],
+              ],
+            },
+          });
+          return NextResponse.json({ ok: true });
+        }
       }
 
       // =======================================================================

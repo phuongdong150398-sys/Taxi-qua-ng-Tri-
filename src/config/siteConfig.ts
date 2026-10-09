@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "TAXI Quảng Trị 24h",
   logo: "/logo.png",
-  slogan: "Dịch Vụ Taxi Quảng Trị - Quảng Bình 24H • Giá Rẻ - Uy Tín - An Toàn",
+  slogan: "Dịch Vụ Taxi Giá Rẻ Từ 12.000đ/km • Đón Nhanh Sau 5 Phút 24/7",
   description:
-    "Chuyên dịch vụ taxi gia đình, tour du lịch khám phá Quảng Bình - Quảng Trị (Phong Nha, Thiên Đường, Ozo, Hava, Suối Moọc, Vũng Chùa Đảo Yến, Đá Nhảy, La Vang, Lao Bảo). Uy tín, an toàn, giá cước tiết kiệm, phục vụ chu đáo 24/7.",
+    "Dịch vụ Taxi Quảng Trị 24H giá rẻ nhất chỉ từ 12.000đ/km. Đón nhanh sau 5 phút tại Đông Hà, TX Quảng Trị, Phong Nha, Đồng Hới, Lao Bảo, La Vang, Sân bay Phú Bài. Xe 4-7-16 chỗ đời mới, phục vụ chu đáo 24/7. Hotline: 0877.669.555 - Zalo: 0398.567.070.",
   hotline: "0877.669.555",
   hotlineFormatted: "0877669555",
   zalo: "0398.567.070",
@@ -15,7 +15,7 @@ export const siteConfig = {
   // Cam kết vàng
   commitments: [
     {
-      title: "Giá cước niêm yết siêu rẻ",
+      title: "Giá cước siêu rẻ từ 12.000đ/km",
       desc: "Xe 4 chỗ chỉ 12.000đ/km, xe 6 chỗ chỉ 15.000đ/km, giá mở cửa 20.000đ. Không phát sinh chi phí phụ trội.",
       icon: "BadgePercent",
     },

@@ -225,28 +225,49 @@ export default function AdminPage() {
     return () => clearInterval(interval);
   }, [isAuthenticated]);
 
-  const getSavedPin = () => {
-    if (typeof window === "undefined") return "8888";
-    return localStorage.getItem("admin_security_pin") || "8888";
-  };
+  const [authLoading, setAuthLoading] = useState(false);
 
-  const handleLogin = (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setPinError("");
-    const correctPin = getSavedPin();
+    setAuthLoading(true);
 
-    if (pinInput.trim() === correctPin) {
-      setIsAuthenticated(true);
-      try {
-        sessionStorage.setItem("admin_auth_status", "verified");
-      } catch (err) {}
-      fetchBookings();
-      fetchDriversData();
-      fetchAnalytics();
-      setTrackingConfig(getAnalyticsConfig());
-    } else {
-      setPinError("Mã PIN không chính xác! Vui lòng thử lại.");
-      setPinInput("");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify", pin: pinInput.trim() }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setIsAuthenticated(true);
+        try {
+          sessionStorage.setItem("admin_auth_status", "verified");
+          localStorage.setItem("admin_security_pin", pinInput.trim());
+        } catch (err) {}
+        fetchBookings();
+        fetchDriversData();
+        fetchAnalytics();
+        setTrackingConfig(getAnalyticsConfig());
+      } else {
+        setPinError(data.message || "Mã PIN không chính xác! Vui lòng thử lại.");
+        setPinInput("");
+      }
+    } catch (err) {
+      // Fallback kiểm tra cục bộ nếu mất kết nối mạng
+      const localPin = typeof window !== "undefined" ? localStorage.getItem("admin_security_pin") || "8888" : "8888";
+      if (pinInput.trim() === localPin) {
+        setIsAuthenticated(true);
+        try { sessionStorage.setItem("admin_auth_status", "verified"); } catch (e) {}
+        fetchBookings();
+        fetchDriversData();
+      } else {
+        setPinError("Mã PIN không chính xác! Vui lòng thử lại.");
+        setPinInput("");
+      }
+    } finally {
+      setAuthLoading(false);
     }
   };
 
@@ -258,7 +279,7 @@ export default function AdminPage() {
     } catch (err) {}
   };
 
-  const handleChangePin = (e: React.FormEvent) => {
+  const handleChangePin = async (e: React.FormEvent) => {
     e.preventDefault();
     setChangePinMsg("");
 
@@ -272,14 +293,41 @@ export default function AdminPage() {
       return;
     }
 
-    localStorage.setItem("admin_security_pin", newPin);
-    setChangePinMsg("✓ Đổi mã PIN thành công!");
-    setTimeout(() => {
-      setShowChangePin(false);
-      setNewPin("");
-      setConfirmPin("");
-      setChangePinMsg("");
-    }, 1200);
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "change_pin",
+          newPin: newPin.trim(),
+        }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        try {
+          localStorage.setItem("admin_security_pin", newPin.trim());
+        } catch (e) {}
+        setChangePinMsg("✓ Đổi mã PIN thành công! Mã PIN mới đã đồng bộ lên toàn bộ thiết bị (Điện thoại & Máy tính).");
+        setTimeout(() => {
+          setShowChangePin(false);
+          setNewPin("");
+          setConfirmPin("");
+          setChangePinMsg("");
+        }, 1500);
+      } else {
+        setChangePinMsg(data.message || "Có lỗi xảy ra khi đổi mã PIN!");
+      }
+    } catch (err: any) {
+      try { localStorage.setItem("admin_security_pin", newPin.trim()); } catch (e) {}
+      setChangePinMsg("✓ Đã cập nhật mã PIN!");
+      setTimeout(() => {
+        setShowChangePin(false);
+        setNewPin("");
+        setConfirmPin("");
+        setChangePinMsg("");
+      }, 1500);
+    }
   };
 
   const handleSaveTrackingConfig = (e: React.FormEvent) => {

@@ -84,4 +84,5 @@ export interface FleetSystemSettings {
   bankName: string; // Tên ngân hàng nhận cọc (VD: MBBank, Vietcombank)
   bankAccount: string; // Số tài khoản nhận cọc
   bankAccountName: string; // Tên chủ tài khoản
+  adminPin?: string; // Mã PIN quản trị đồng bộ Cloud (Mặc định: 8888)
 }

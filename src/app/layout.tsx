@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.taxiquangtri.com.vn"),
-  title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn | Đón Nhanh 24/7`,
+  title: "TAXI Quảng Trị 24H - Giá Rẻ Từ 12.000đ/km | Đón Nhanh Sau 5 Phút",
   description: siteConfig.description,
   icons: {
     icon: "/favicon.png",
@@ -39,12 +39,13 @@ export const metadata: Metadata = {
     "taxi giá rẻ quảng trị",
     "taxi đồng hới",
     "taxi phong nha",
+    "taxi 12k km",
   ],
   verification: {
     google: "Wpdr4voiDswJPHNhkVnwSxjzzLKlPB_iGlRITgjjIJs",
   },
   openGraph: {
-    title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn`,
+    title: "TAXI Quảng Trị 24H - Giá Rẻ Từ 12.000đ/km | Đón Nhanh 24/7",
     description: siteConfig.description,
     type: "website",
     locale: "vi_VN",
@@ -62,6 +63,47 @@ export const metadata: Metadata = {
 
 import AnalyticsScripts from "@/components/AnalyticsScripts";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TaxiService",
+  name: "TAXI Quảng Trị 24H - Dịch Vụ Taxi Giá Rẻ Từ 12.000đ/km",
+  url: "https://www.taxiquangtri.com.vn",
+  logo: "https://www.taxiquangtri.com.vn/logo.png",
+  image: "https://www.taxiquangtri.com.vn/logo.png",
+  description: siteConfig.description,
+  telephone: "0877.669.555",
+  priceRange: "12.000đ/km - 15.000đ/km",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Đông Hà",
+    addressRegion: "Quảng Trị",
+    addressCountry: "VN",
+  },
+  areaServed: [
+    "Quảng Trị",
+    "Đông Hà",
+    "Thị xã Quảng Trị",
+    "Lao Bảo",
+    "Quảng Bình",
+    "Đồng Hới",
+    "Phong Nha",
+  ],
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    opens: "00:00",
+    closes: "23:59",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -69,6 +111,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" className={`scroll-smooth ${montserrat.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${montserrat.className} bg-[#040E1C] text-slate-100 antialiased selection:bg-amber-400 selection:text-[#040E1C]`}>
         <AnalyticsScripts />
         {children}

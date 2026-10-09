@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@payos/node": "^2.0.5",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "firebase": "^13.0.0",
