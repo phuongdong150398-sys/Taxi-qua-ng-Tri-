@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BookingRecord, Driver, WalletTransaction, FleetSystemSettings, CarType } from "@/types";
 import { siteConfig } from "@/config/siteConfig";
 import { getAnalyticsConfig, saveAnalyticsConfig, AnalyticsConfig } from "@/lib/analytics";
+import ArticlesManagementTab from "@/components/admin/ArticlesManagementTab";
 import {
   Car,
   Phone,
@@ -55,8 +56,15 @@ import {
   CreditCard,
   Building2,
   ChevronRight,
+  ChevronLeft,
   UserPlus,
   Trash2,
+  Download,
+  FileSpreadsheet,
+  CalendarDays,
+  BadgePercent,
+  Award,
+  BookOpen,
 } from "lucide-react";
 
 interface AnalyticsData {
@@ -94,7 +102,7 @@ interface AnalyticsData {
 
 export default function AdminPage() {
   // Navigation & Security States
-  const [activeTab, setActiveTab] = useState<"orders" | "drivers" | "analytics" | "settings">("orders");
+  const [activeTab, setActiveTab] = useState<"orders" | "drivers" | "reports" | "analytics" | "articles" | "settings">("orders");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
@@ -102,6 +110,31 @@ export default function AdminPage() {
   const [newPin, setNewPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [changePinMsg, setChangePinMsg] = useState("");
+
+  // Revenue & Commission Date Filtering State
+  type RevenueDatePreset = "today" | "yesterday" | "last7days" | "this_month" | "last_month" | "all" | "custom";
+  const [revenuePreset, setRevenuePreset] = useState<RevenueDatePreset>("today");
+  const [customStartDate, setCustomStartDate] = useState<string>(() => {
+    const d = new Date();
+    d.setDate(1);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
+  const [customEndDate, setCustomEndDate] = useState<string>(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
+
+  // Report View / Breakdown State
+  const [reportYear, setReportYear] = useState<number>(() => new Date().getFullYear());
+  const [reportMonth, setReportMonth] = useState<number>(() => new Date().getMonth() + 1);
+  const [reportSubTab, setReportSubTab] = useState<"daily" | "monthly" | "drivers">("daily");
+  const [selectedDayDetail, setSelectedDayDetail] = useState<{ date: string; trips: BookingRecord[] } | null>(null);
 
   // Orders Data State
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
@@ -526,6 +559,202 @@ export default function AdminPage() {
   const totalCommissionEarned = drivers.reduce((sum, d) => sum + (d.totalCommissionPaid || 0), 0);
   const totalFleetTrips = drivers.reduce((sum, d) => sum + (d.totalTripsCompleted || 0), 0);
 
+  // Date Helpers
+  const getLocalDateStr = (d: Date = new Date()) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const extractDateStr = (isoOrDateStr?: string) => {
+    if (!isoOrDateStr) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(isoOrDateStr)) return isoOrDateStr;
+    try {
+      const d = new Date(isoOrDateStr);
+      if (isNaN(d.getTime())) return "";
+      return getLocalDateStr(d);
+    } catch (e) {
+      return "";
+    }
+  };
+
+  const getBookingDate = (b: BookingRecord) => {
+    if (b.completedAt) return extractDateStr(b.completedAt);
+    if (b.claimedAt) return extractDateStr(b.claimedAt);
+    if (b.createdAt) return extractDateStr(b.createdAt);
+    if (b.pickupDate) return extractDateStr(b.pickupDate);
+    return "";
+  };
+
+  const isDateInRange = (dateStr: string, preset: RevenueDatePreset, start?: string, end?: string): boolean => {
+    if (!dateStr) return false;
+    const targetDate = dateStr.slice(0, 10);
+    const now = new Date();
+    const todayStr = getLocalDateStr(now);
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = getLocalDateStr(yesterday);
+
+    if (preset === "today") return targetDate === todayStr;
+    if (preset === "yesterday") return targetDate === yesterdayStr;
+    if (preset === "last7days") {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      const sevenDaysAgoStr = getLocalDateStr(sevenDaysAgo);
+      return targetDate >= sevenDaysAgoStr && targetDate <= todayStr;
+    }
+    if (preset === "this_month") {
+      const currentMonthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      return targetDate.startsWith(currentMonthPrefix);
+    }
+    if (preset === "last_month") {
+      const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthPrefix = `${lastMonthDate.getFullYear()}-${String(lastMonthDate.getMonth() + 1).padStart(2, "0")}`;
+      return targetDate.startsWith(lastMonthPrefix);
+    }
+    if (preset === "custom") {
+      if (start && end) return targetDate >= start && targetDate <= end;
+      if (start) return targetDate >= start;
+      if (end) return targetDate <= end;
+      return true;
+    }
+    return true; // "all"
+  };
+
+  // Completed & Valid Bookings
+  const completedBookings = bookings.filter((b) => b.status === "completed");
+
+  // Filtered by revenuePreset
+  const filteredRevenueBookings = completedBookings.filter((b) => {
+    const d = getBookingDate(b);
+    return isDateInRange(d, revenuePreset, customStartDate, customEndDate);
+  });
+
+  // Dynamic values based on selected date filter
+  const rawRangeGross = filteredRevenueBookings.reduce((sum, b) => sum + (b.grossFare || 450000), 0);
+  const rawRangeCommission = filteredRevenueBookings.reduce(
+    (sum, b) => sum + (b.commissionAmount || Math.round((b.grossFare || 450000) * 0.15)),
+    0
+  );
+  
+  // When 'all' is selected, fallback to driver aggregate totals if larger
+  const rangeGrossFare = revenuePreset === "all" ? Math.max(rawRangeGross, totalCommissionEarned / 0.15) : rawRangeGross;
+  const rangeCommission = revenuePreset === "all" ? Math.max(rawRangeCommission, totalCommissionEarned) : rawRangeCommission;
+  const rangeDriverNet = rangeGrossFare - rangeCommission;
+  const rangeTripCount = revenuePreset === "all" ? Math.max(filteredRevenueBookings.length, totalFleetTrips) : filteredRevenueBookings.length;
+
+  // Preset Display Label
+  const revenuePresetLabels: Record<RevenueDatePreset, string> = {
+    today: "Hôm nay",
+    yesterday: "Hôm qua",
+    last7days: "7 ngày qua",
+    this_month: "Tháng này",
+    last_month: "Tháng trước",
+    all: "Toàn bộ",
+    custom: "Tùy chỉnh",
+  };
+
+  // Detailed Daily Breakdown for Report Month & Year
+  const daysInSelectedMonth = new Date(reportYear, reportMonth, 0).getDate();
+  const selectedMonthPrefix = `${reportYear}-${String(reportMonth).padStart(2, "0")}`;
+
+  interface DailyStatItem {
+    date: string;
+    dayNum: number;
+    dayName: string;
+    tripsCount: number;
+    grossRevenue: number;
+    commission: number;
+    driverEarnings: number;
+    trips: BookingRecord[];
+  }
+
+  const dailyStatsList: DailyStatItem[] = Array.from({ length: daysInSelectedMonth }, (_, idx) => {
+    const day = idx + 1;
+    const dateStr = `${selectedMonthPrefix}-${String(day).padStart(2, "0")}`;
+    const dateObj = new Date(reportYear, reportMonth - 1, day);
+    const dayOfWeek = ["CN", "Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7"][dateObj.getDay()];
+    const dayTrips = completedBookings.filter((b) => getBookingDate(b) === dateStr);
+    const gross = dayTrips.reduce((sum, b) => sum + (b.grossFare || 450000), 0);
+    const comm = dayTrips.reduce(
+      (sum, b) => sum + (b.commissionAmount || Math.round((b.grossFare || 450000) * 0.15)),
+      0
+    );
+
+    return {
+      date: dateStr,
+      dayNum: day,
+      dayName: dayOfWeek,
+      tripsCount: dayTrips.length,
+      grossRevenue: gross,
+      commission: comm,
+      driverEarnings: gross - comm,
+      trips: dayTrips,
+    };
+  });
+
+  const monthTotalGross = dailyStatsList.reduce((sum, d) => sum + d.grossRevenue, 0);
+  const monthTotalCommission = dailyStatsList.reduce((sum, d) => sum + d.commission, 0);
+  const monthTotalDriverEarnings = dailyStatsList.reduce((sum, d) => sum + d.driverEarnings, 0);
+  const monthTotalTrips = dailyStatsList.reduce((sum, d) => sum + d.tripsCount, 0);
+
+  // Detailed Monthly Breakdown for Report Year
+  const monthlyStatsList = Array.from({ length: 12 }, (_, idx) => {
+    const m = idx + 1;
+    const mPrefix = `${reportYear}-${String(m).padStart(2, "0")}`;
+    const monthTrips = completedBookings.filter((b) => getBookingDate(b).startsWith(mPrefix));
+    const gross = monthTrips.reduce((sum, b) => sum + (b.grossFare || 450000), 0);
+    const comm = monthTrips.reduce(
+      (sum, b) => sum + (b.commissionAmount || Math.round((b.grossFare || 450000) * 0.15)),
+      0
+    );
+    return {
+      month: m,
+      monthName: `Tháng ${m}`,
+      tripsCount: monthTrips.length,
+      grossRevenue: gross,
+      commission: comm,
+      driverEarnings: gross - comm,
+    };
+  });
+
+  const yearTotalGross = monthlyStatsList.reduce((sum, m) => sum + m.grossRevenue, 0);
+  const yearTotalCommission = monthlyStatsList.reduce((sum, m) => sum + m.commission, 0);
+  const yearTotalTrips = monthlyStatsList.reduce((sum, m) => sum + m.tripsCount, 0);
+
+  // Export CSV
+  const exportCsvReport = (type: "daily" | "monthly") => {
+    let csvContent = "\uFEFF"; // UTF-8 BOM for Excel Vietnamese font
+    if (type === "daily") {
+      csvContent += `BÁO CÁO DOANH SỐ & CHIẾT KHẤU THEO NGÀY - THÁNG ${reportMonth}/${reportYear}\n`;
+      csvContent += `Đơn vị: ${siteConfig.name} | Ngày xuất: ${new Date().toLocaleString("vi-VN")}\n\n`;
+      csvContent += `Ngày,Thứ,Số Chuyến Hoàn Thành,Tổng Cước Khách (VNĐ),Chiết Khấu 15% (Lợi Nhuận VNĐ),Bác Tài Thực Nhận (VNĐ)\n`;
+      dailyStatsList.forEach((row) => {
+        csvContent += `"${row.date}","${row.dayName}",${row.tripsCount},${row.grossRevenue},${row.commission},${row.driverEarnings}\n`;
+      });
+      csvContent += `"TỔNG CỘNG THÁNG ${reportMonth}","--",${monthTotalTrips},${monthTotalGross},${monthTotalCommission},${monthTotalDriverEarnings}\n`;
+    } else {
+      csvContent += `BÁO CÁO DOANH SỐ & CHIẾT KHẤU THEO THÁNG - NĂM ${reportYear}\n`;
+      csvContent += `Đơn vị: ${siteConfig.name} | Ngày xuất: ${new Date().toLocaleString("vi-VN")}\n\n`;
+      csvContent += `Tháng,Số Chuyến Hoàn Thành,Tổng Cước Khách (VNĐ),Chiết Khấu 15% (Lợi Nhuận VNĐ),Bác Tài Thực Nhận (VNĐ)\n`;
+      monthlyStatsList.forEach((row) => {
+        csvContent += `"${row.monthName}",${row.tripsCount},${row.grossRevenue},${row.commission},${row.driverEarnings}\n`;
+      });
+      csvContent += `"TỔNG CỘNG NĂM ${reportYear}",${yearTotalTrips},${yearTotalGross},${yearTotalCommission},${yearTotalGross - yearTotalCommission}\n`;
+    }
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Bao_Cao_Doanh_So_${type}_${reportYear}_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const getStatusBadge = (status: BookingRecord["status"]) => {
     switch (status) {
       case "pending":
@@ -730,6 +959,18 @@ export default function AdminPage() {
           </button>
 
           <button
+            onClick={() => setActiveTab("reports")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap cursor-pointer ${
+              activeTab === "reports"
+                ? "bg-gradient-to-r from-amber-400 to-yellow-400 text-[#040E1C] font-black shadow-lg shadow-amber-500/20"
+                : "bg-[#040E1C] text-amber-400/90 hover:text-amber-300 border border-amber-500/40 hover:border-amber-400"
+            }`}
+          >
+            <TrendingUp className="w-4 h-4 text-amber-400" />
+            <span>📈 Báo Cáo Doanh Số & Chiết Khấu</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab("analytics")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap cursor-pointer ${
               activeTab === "analytics"
@@ -739,6 +980,18 @@ export default function AdminPage() {
           >
             <BarChart3 className="w-4 h-4 text-blue-400" />
             <span>📊 Đo Lường Chuyển Đổi</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("articles")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap cursor-pointer ${
+              activeTab === "articles"
+                ? "bg-amber-400 text-[#040E1C] font-black shadow-md"
+                : "bg-[#040E1C] text-slate-400 hover:text-white border border-[#133863]"
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-amber-400" />
+            <span>📚 Cẩm Nang &amp; Bài Viết SEO</span>
           </button>
 
           <button
@@ -1143,7 +1396,68 @@ export default function AdminPage() {
         {/* ======================================================== */}
         {activeTab === "drivers" && (
           <div className="space-y-6">
-            {/* Top Metrics Cards */}
+            {/* Quick Revenue & Date Range Filter Bar */}
+            <div className="bg-gradient-to-r from-[#07172C] via-[#0B2240] to-[#07172C] border border-amber-500/30 rounded-2xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-black text-amber-400 mr-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>LỌC DOANH SỐ:</span>
+                </div>
+
+                {(
+                  [
+                    { id: "today", label: "Hôm nay" },
+                    { id: "yesterday", label: "Hôm qua" },
+                    { id: "last7days", label: "7 ngày qua" },
+                    { id: "this_month", label: "Tháng này" },
+                    { id: "last_month", label: "Tháng trước" },
+                    { id: "all", label: "Toàn bộ" },
+                    { id: "custom", label: "Tùy chọn ngày" },
+                  ] as const
+                ).map((preset) => (
+                  <button
+                    key={preset.id}
+                    onClick={() => setRevenuePreset(preset.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                      revenuePreset === preset.id
+                        ? "bg-amber-400 text-[#040E1C] shadow-md font-black"
+                        : "bg-[#040E1C]/80 text-slate-300 hover:text-white border border-[#133863] hover:border-slate-500"
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom Date Inputs if custom is chosen */}
+              {revenuePreset === "custom" && (
+                <div className="flex items-center gap-2 bg-[#040E1C] p-1.5 rounded-xl border border-[#133863]">
+                  <input
+                    type="date"
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
+                    className="bg-transparent text-xs text-slate-200 border-none outline-none px-1"
+                  />
+                  <span className="text-slate-500 text-xs">➔</span>
+                  <input
+                    type="date"
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
+                    className="bg-transparent text-xs text-slate-200 border-none outline-none px-1"
+                  />
+                </div>
+              )}
+
+              <button
+                onClick={() => setActiveTab("reports")}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-[#040E1C] font-black text-xs shadow-md transition cursor-pointer self-end md:self-auto"
+              >
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>Xem Báo Cáo Chi Tiết ➔</span>
+              </button>
+            </div>
+
+            {/* Top Metrics Cards - Dynamically computed by Date Filter */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <div className="bg-[#07172C] border border-[#133863] rounded-2xl p-4 shadow">
                 <div className="text-xs text-slate-400 font-medium flex items-center justify-between">
@@ -1153,42 +1467,44 @@ export default function AdminPage() {
                 <div className="text-2xl sm:text-3xl font-black text-white mt-1">
                   {drivers.length} <span className="text-xs font-normal text-slate-400">bác tài</span>
                 </div>
-                <div className="text-[11px] text-emerald-400 mt-1">
-                  ✓ {drivers.filter((d) => d.status === "active").length} đang hoạt động
+                <div className="text-[11px] text-emerald-400 mt-1 flex items-center justify-between">
+                  <span>✓ {drivers.filter((d) => d.status === "active").length} đang hoạt động</span>
                 </div>
               </div>
 
-              <div className="bg-[#07172C] border border-[#133863] rounded-2xl p-4 shadow">
-                <div className="text-xs text-emerald-400 font-medium flex items-center justify-between">
-                  <span>Tổng Tiền Cọc Trong Ví:</span>
-                  <Wallet className="w-4 h-4 text-emerald-400" />
+              <div className="bg-[#07172C] border border-amber-500/30 rounded-2xl p-4 shadow">
+                <div className="text-xs text-amber-400 font-medium flex items-center justify-between">
+                  <span>Doanh Số ({revenuePresetLabels[revenuePreset]}):</span>
+                  <DollarSign className="w-4 h-4 text-amber-400" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 font-mono">
-                  {totalSystemWalletBalance.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                <div className="text-2xl sm:text-3xl font-black text-amber-400 mt-1 font-mono">
+                  {rangeGrossFare.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">Tiền tài xế gửi tạm ứng</div>
+                <div className="text-[11px] text-slate-400 mt-1">Tổng cước khách trả</div>
               </div>
 
-              <div className="bg-[#07172C] border border-[#133863] rounded-2xl p-4 shadow">
+              <div className="bg-[#07172C] border border-blue-500/30 rounded-2xl p-4 shadow">
                 <div className="text-xs text-blue-400 font-medium flex items-center justify-between">
                   <span>Chiết Khấu Đã Thu (15%):</span>
                   <TrendingUp className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-blue-400 mt-1 font-mono">
-                  {totalCommissionEarned.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                  {rangeCommission.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">Lợi nhuận từ cuốc xe</div>
+                <div className="text-[11px] text-emerald-400 mt-1">Lợi nhuận thực tế ({revenuePresetLabels[revenuePreset]})</div>
               </div>
 
-              <div className="bg-[#07172C] border border-[#133863] rounded-2xl p-4 shadow">
+              <div className="bg-[#07172C] border border-purple-500/30 rounded-2xl p-4 shadow">
                 <div className="text-xs text-purple-400 font-medium flex items-center justify-between">
-                  <span>Tổng Cuốc Đã Hoàn Thành:</span>
+                  <span>Cuốc Hoàn Thành:</span>
                   <Car className="w-4 h-4 text-purple-400" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-purple-400 mt-1">
-                  {totalFleetTrips} <span className="text-xs font-normal text-slate-400">chuyến</span>
+                  {rangeTripCount} <span className="text-xs font-normal text-slate-400">chuyến</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">Đã chạy qua hệ thống</div>
+                <div className="text-[11px] text-slate-300 mt-1 font-mono">
+                  Tài xế nhận: <span className="text-emerald-400 font-bold">+{rangeDriverNet.toLocaleString("vi-VN")}đ</span>
+                </div>
               </div>
             </div>
 
@@ -1546,6 +1862,589 @@ export default function AdminPage() {
         )}
 
         {/* ======================================================== */}
+        {/* TAB 3: BÁO CÁO DOANH SỐ & CHIẾT KHẤU THEO NGÀY / THÁNG */}
+        {/* ======================================================== */}
+        {activeTab === "reports" && (
+          <div className="space-y-6">
+            {/* Header Controls & Filter Bar */}
+            <div className="bg-gradient-to-r from-[#07172C] via-[#0B2240] to-[#07172C] border border-amber-500/40 rounded-3xl p-5 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg sm:text-xl font-black text-white flex items-center gap-2 uppercase tracking-wide">
+                  <TrendingUp className="w-5 h-5 text-amber-400" />
+                  <span>BÁO CÁO DOANH SỐ & LỢI NHUẬN CHIẾT KHẤU</span>
+                </h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  Thống kê doanh số cước thu khách, lợi nhuận chiết khấu 15% và thu nhập bác tài theo từng ngày, tháng, năm.
+                </p>
+              </div>
+
+              {/* Selectors & Sub-tabs */}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                {/* Sub Tab Switcher */}
+                <div className="bg-[#040E1C] p-1 rounded-xl border border-[#133863] flex items-center gap-1">
+                  <button
+                    onClick={() => setReportSubTab("daily")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      reportSubTab === "daily"
+                        ? "bg-amber-400 text-[#040E1C] font-black"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    📅 Theo Ngày (Tháng {reportMonth})
+                  </button>
+                  <button
+                    onClick={() => setReportSubTab("monthly")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      reportSubTab === "monthly"
+                        ? "bg-amber-400 text-[#040E1C] font-black"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    📈 Theo Tháng (Năm {reportYear})
+                  </button>
+                  <button
+                    onClick={() => setReportSubTab("drivers")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      reportSubTab === "drivers"
+                        ? "bg-amber-400 text-[#040E1C] font-black"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    🏆 Top Bác Tài
+                  </button>
+                </div>
+
+                {/* Month Picker (if in daily mode) */}
+                {reportSubTab === "daily" && (
+                  <select
+                    value={reportMonth}
+                    onChange={(e) => setReportMonth(Number(e.target.value))}
+                    className="bg-[#040E1C] border border-amber-500/40 text-amber-400 font-bold rounded-xl px-3 py-2 text-xs focus:outline-none cursor-pointer"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                      <option key={m} value={m}>
+                        Tháng {m}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                {/* Year Picker */}
+                <select
+                  value={reportYear}
+                  onChange={(e) => setReportYear(Number(e.target.value))}
+                  className="bg-[#040E1C] border border-[#133863] text-slate-200 font-bold rounded-xl px-3 py-2 text-xs focus:outline-none cursor-pointer"
+                >
+                  {[2025, 2026, 2027].map((y) => (
+                    <option key={y} value={y}>
+                      Năm {y}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Export Button */}
+                <button
+                  onClick={() => exportCsvReport(reportSubTab === "monthly" ? "monthly" : "daily")}
+                  className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Xuất Excel / CSV</span>
+                </button>
+              </div>
+            </div>
+
+            {/* SUB TAB 1: BÁO CÁO THEO NGÀY TRONG THÁNG */}
+            {reportSubTab === "daily" && (
+              <div className="space-y-6">
+                {/* Monthly KPI Overview */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="bg-[#07172C] border border-[#133863] rounded-2xl p-4 shadow">
+                    <div className="text-xs text-amber-400 font-medium flex items-center justify-between">
+                      <span>Tổng Doanh Số Tháng {reportMonth}:</span>
+                      <DollarSign className="w-4 h-4 text-amber-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-amber-400 mt-1 font-mono">
+                      {monthTotalGross.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">Cước thu từ toàn bộ khách</div>
+                  </div>
+
+                  <div className="bg-[#07172C] border border-emerald-500/30 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-emerald-400 font-medium flex items-center justify-between">
+                      <span>Lợi Nhuận Chiết Khấu (15%):</span>
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 font-mono">
+                      {monthTotalCommission.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                    </div>
+                    <div className="text-[11px] text-emerald-300/80 mt-1">Thực thu về ví quản trị</div>
+                  </div>
+
+                  <div className="bg-[#07172C] border border-blue-500/30 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-blue-400 font-medium flex items-center justify-between">
+                      <span>Bác Tài Thực Nhận (85%):</span>
+                      <Wallet className="w-4 h-4 text-blue-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-blue-400 mt-1 font-mono">
+                      {monthTotalDriverEarnings.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">Thu nhập chia sẻ đội xe</div>
+                  </div>
+
+                  <div className="bg-[#07172C] border border-purple-500/30 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-purple-400 font-medium flex items-center justify-between">
+                      <span>Tổng Số Chuyến Hoàn Thành:</span>
+                      <Car className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-purple-400 mt-1">
+                      {monthTotalTrips} <span className="text-xs font-normal text-slate-400">chuyến</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">Trong Tháng {reportMonth}/{reportYear}</div>
+                  </div>
+                </div>
+
+                {/* Daily Breakdown Table */}
+                <div className="bg-[#07172C] border border-[#133863] rounded-3xl p-5 shadow-xl space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h3 className="font-black text-base text-white flex items-center gap-2">
+                        <CalendarDays className="w-4 h-4 text-amber-400" />
+                        <span>CHI TIẾT DOANH SỐ TỪNG NGÀY TRONG THÁNG {reportMonth}/{reportYear}</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Bấm vào nút "Xem cuốc xe" ở ngày có chuyến để xem chi tiết từng lượt khách đặt xe.
+                      </p>
+                    </div>
+
+                    <div className="text-xs text-amber-400 font-bold bg-[#040E1C] px-3 py-1.5 rounded-xl border border-amber-500/30">
+                      Tổng {daysInSelectedMonth} ngày ({dailyStatsList.filter((d) => d.tripsCount > 0).length} ngày có chuyến)
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-[#040E1C] text-slate-400 uppercase font-semibold border-b border-[#133863]">
+                        <tr>
+                          <th className="p-3.5">Ngày</th>
+                          <th className="p-3.5">Thứ</th>
+                          <th className="p-3.5 text-center">Số chuyến</th>
+                          <th className="p-3.5 text-right">Tổng Cước Khách</th>
+                          <th className="p-3.5 text-right">Chiết Khấu (15%)</th>
+                          <th className="p-3.5 text-right">Bác Tài Nhận</th>
+                          <th className="p-3.5 text-center">Chi tiết</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#133863]/60 text-slate-200">
+                        {dailyStatsList.map((dayItem) => {
+                          const isToday = dayItem.date === getLocalDateStr();
+                          const hasTrips = dayItem.tripsCount > 0;
+                          return (
+                            <tr
+                              key={dayItem.date}
+                              className={`transition ${
+                                isToday
+                                  ? "bg-amber-500/10 hover:bg-amber-500/15 font-semibold"
+                                  : hasTrips
+                                  ? "hover:bg-[#0B2240]/40"
+                                  : "hover:bg-[#0B2240]/20 text-slate-400"
+                              }`}
+                            >
+                              <td className="p-3.5">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-mono font-bold text-white">
+                                    {String(dayItem.dayNum).padStart(2, "0")}/{String(reportMonth).padStart(2, "0")}/{reportYear}
+                                  </span>
+                                  {isToday && (
+                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-400 text-[#040E1C]">
+                                      HÔM NAY
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
+                              <td className="p-3.5 font-medium">
+                                <span className={dayItem.dayName === "CN" ? "text-red-400 font-bold" : "text-slate-300"}>
+                                  {dayItem.dayName}
+                                </span>
+                              </td>
+
+                              <td className="p-3.5 text-center">
+                                {hasTrips ? (
+                                  <span className="px-2.5 py-1 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                                    {dayItem.tripsCount} chuyến
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-600 font-mono">0</span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold">
+                                {hasTrips ? (
+                                  <span className="text-amber-400">{dayItem.grossRevenue.toLocaleString("vi-VN")} đ</span>
+                                ) : (
+                                  <span className="text-slate-600 font-mono">0 đ</span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold">
+                                {hasTrips ? (
+                                  <span className="text-emerald-400">+{dayItem.commission.toLocaleString("vi-VN")} đ</span>
+                                ) : (
+                                  <span className="text-slate-600 font-mono">0 đ</span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold">
+                                {hasTrips ? (
+                                  <span className="text-blue-300">{dayItem.driverEarnings.toLocaleString("vi-VN")} đ</span>
+                                ) : (
+                                  <span className="text-slate-600 font-mono">0 đ</span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5 text-center">
+                                {hasTrips ? (
+                                  <button
+                                    onClick={() => setSelectedDayDetail({ date: dayItem.date, trips: dayItem.trips })}
+                                    className="px-3 py-1.5 rounded-xl bg-amber-400/20 hover:bg-amber-400 hover:text-[#040E1C] border border-amber-500/40 text-amber-300 font-black text-xs transition cursor-pointer inline-flex items-center gap-1"
+                                  >
+                                    <Eye className="w-3.5 h-3.5" />
+                                    <span>Xem {dayItem.tripsCount} cuốc</span>
+                                  </button>
+                                ) : (
+                                  <span className="text-slate-600 text-[11px] italic">Không có cuốc</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+
+                      {/* Footer Summary Row */}
+                      <tfoot className="bg-[#040E1C] text-slate-100 font-black border-t-2 border-amber-500/40">
+                        <tr>
+                          <td colSpan={2} className="p-4 text-amber-400 uppercase text-xs">
+                            TỔNG CỘNG THÁNG {reportMonth}/{reportYear}:
+                          </td>
+                          <td className="p-4 text-center text-purple-300 font-mono">
+                            {monthTotalTrips} chuyến
+                          </td>
+                          <td className="p-4 text-right text-amber-400 font-mono text-sm">
+                            {monthTotalGross.toLocaleString("vi-VN")} đ
+                          </td>
+                          <td className="p-4 text-right text-emerald-400 font-mono text-sm">
+                            +{monthTotalCommission.toLocaleString("vi-VN")} đ
+                          </td>
+                          <td className="p-4 text-right text-blue-300 font-mono text-sm">
+                            +{monthTotalDriverEarnings.toLocaleString("vi-VN")} đ
+                          </td>
+                          <td className="p-4 text-center">
+                            <span className="text-xs text-emerald-400">✓ 100% Khớp Ví</span>
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SUB TAB 2: BÁO CÁO THEO 12 THÁNG TRONG NĂM */}
+            {reportSubTab === "monthly" && (
+              <div className="space-y-6">
+                {/* Yearly KPI Overview */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="bg-[#07172C] border border-amber-500/40 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-amber-400 font-medium flex items-center justify-between">
+                      <span>Tổng Doanh Số Cả Năm {reportYear}:</span>
+                      <DollarSign className="w-4 h-4 text-amber-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-amber-400 mt-1 font-mono">
+                      {yearTotalGross.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">Toàn bộ 12 tháng</div>
+                  </div>
+
+                  <div className="bg-[#07172C] border border-emerald-500/40 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-emerald-400 font-medium flex items-center justify-between">
+                      <span>Tổng Chiết Khấu Thu Về (15%):</span>
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 font-mono">
+                      {yearTotalCommission.toLocaleString("vi-VN")} <span className="text-xs font-normal">đ</span>
+                    </div>
+                    <div className="text-[11px] text-emerald-300 mt-1">Lợi nhuận ròng của hệ thống</div>
+                  </div>
+
+                  <div className="bg-[#07172C] border border-purple-500/40 rounded-2xl p-4 shadow">
+                    <div className="text-xs text-purple-400 font-medium flex items-center justify-between">
+                      <span>Tổng Chuyến Xe Hoàn Thành:</span>
+                      <Car className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-black text-purple-400 mt-1">
+                      {yearTotalTrips} <span className="text-xs font-normal text-slate-400">chuyến</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">Đã vận hành trong năm {reportYear}</div>
+                  </div>
+                </div>
+
+                {/* 12 Months Breakdown Table & Progress Bars */}
+                <div className="bg-[#07172C] border border-[#133863] rounded-3xl p-5 shadow-xl space-y-4">
+                  <h3 className="font-black text-base text-white flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-blue-400" />
+                    <span>BẢNG TỔNG HỢP 12 THÁNG TRONG NĂM {reportYear}</span>
+                  </h3>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-[#040E1C] text-slate-400 uppercase font-semibold border-b border-[#133863]">
+                        <tr>
+                          <th className="p-3.5">Tháng</th>
+                          <th className="p-3.5 text-center">Số Chuyến</th>
+                          <th className="p-3.5 text-right">Tổng Cước Khách</th>
+                          <th className="p-3.5 text-right">Chiết Khấu (15%)</th>
+                          <th className="p-3.5 text-right">Tài Xế Nhận</th>
+                          <th className="p-3.5 w-48">Tỷ trọng doanh số</th>
+                          <th className="p-3.5 text-center">Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#133863]/60 text-slate-200">
+                        {monthlyStatsList.map((mItem) => {
+                          const percentage = yearTotalGross > 0 ? Math.round((mItem.grossRevenue / yearTotalGross) * 100) : 0;
+                          return (
+                            <tr key={mItem.month} className="hover:bg-[#0B2240]/40 transition">
+                              <td className="p-3.5 font-bold text-white flex items-center gap-2">
+                                <span className="w-7 h-7 rounded-lg bg-[#040E1C] border border-[#133863] flex items-center justify-center text-amber-400 font-mono text-xs">
+                                  T{mItem.month}
+                                </span>
+                                <span>{mItem.monthName} / {reportYear}</span>
+                              </td>
+
+                              <td className="p-3.5 text-center font-bold">
+                                {mItem.tripsCount > 0 ? (
+                                  <span className="px-2.5 py-0.5 rounded-full text-xs bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                                    {mItem.tripsCount} chuyến
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-600 font-mono">0</span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold text-amber-400">
+                                {mItem.grossRevenue.toLocaleString("vi-VN")} đ
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold text-emerald-400">
+                                +{mItem.commission.toLocaleString("vi-VN")} đ
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold text-blue-300">
+                                {mItem.driverEarnings.toLocaleString("vi-VN")} đ
+                              </td>
+
+                              <td className="p-3.5">
+                                <div className="space-y-1">
+                                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                                    <span>{percentage}%</span>
+                                  </div>
+                                  <div className="w-full bg-[#040E1C] h-2 rounded-full overflow-hidden border border-[#133863]">
+                                    <div
+                                      className="bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-500"
+                                      style={{ width: `${Math.max(percentage, mItem.tripsCount > 0 ? 5 : 0)}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              </td>
+
+                              <td className="p-3.5 text-center">
+                                <button
+                                  onClick={() => {
+                                    setReportMonth(mItem.month);
+                                    setReportSubTab("daily");
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-[#0B2240] hover:bg-[#133863] border border-[#133863] text-xs font-bold text-amber-400 transition cursor-pointer"
+                                >
+                                  Xem từng ngày ➔
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SUB TAB 3: XẾP HẠNG DOANH SỐ BÁC TÀI */}
+            {reportSubTab === "drivers" && (
+              <div className="space-y-4">
+                <div className="bg-[#07172C] border border-[#133863] rounded-3xl p-5 shadow-xl space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-black text-base text-white flex items-center gap-2">
+                        <Award className="w-5 h-5 text-amber-400" />
+                        <span>BẢNG XẾP HẠNG DOANH SỐ ĐỘI TÀI XẾ</span>
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Xếp hạng theo số chuyến hoàn thành, doanh số cước và mức đóng góp chiết khấu của từng bác tài.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-[#040E1C] text-slate-400 uppercase font-semibold border-b border-[#133863]">
+                        <tr>
+                          <th className="p-3.5 text-center">Hạng</th>
+                          <th className="p-3.5">Bác tài</th>
+                          <th className="p-3.5">Số điện thoại</th>
+                          <th className="p-3.5">Biển số & Loại xe</th>
+                          <th className="p-3.5 text-center">Cuốc hoàn thành</th>
+                          <th className="p-3.5 text-right">Chiết khấu đã nộp</th>
+                          <th className="p-3.5 text-right">Số dư ví cọc</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#133863]/60 text-slate-200">
+                        {drivers
+                          .slice()
+                          .sort((a, b) => (b.totalCommissionPaid || 0) - (a.totalCommissionPaid || 0))
+                          .map((driver, idx) => (
+                            <tr key={driver.id} className="hover:bg-[#0B2240]/40 transition">
+                              <td className="p-3.5 text-center font-bold">
+                                {idx === 0 ? (
+                                  <span className="text-lg">🥇</span>
+                                ) : idx === 1 ? (
+                                  <span className="text-lg">🥈</span>
+                                ) : idx === 2 ? (
+                                  <span className="text-lg">🥉</span>
+                                ) : (
+                                  <span className="w-6 h-6 rounded-full bg-[#040E1C] border border-[#133863] inline-flex items-center justify-center font-mono text-slate-400">
+                                    {idx + 1}
+                                  </span>
+                                )}
+                              </td>
+
+                              <td className="p-3.5">
+                                <div className="font-black text-white text-sm">{driver.name}</div>
+                                <div className="text-[11px] text-slate-400 font-mono">{driver.id}</div>
+                              </td>
+
+                              <td className="p-3.5 font-mono font-bold text-slate-300">
+                                {driver.phone}
+                              </td>
+
+                              <td className="p-3.5">
+                                <span className="px-2 py-0.5 rounded bg-[#040E1C] border border-[#133863] text-amber-400 font-bold">
+                                  {driver.plateNumber}
+                                </span>
+                                <span className="ml-1 text-[11px] text-slate-400">
+                                  ({driver.carType === "6-seats" ? "6-7 Chỗ" : "4-5 Chỗ"})
+                                </span>
+                              </td>
+
+                              <td className="p-3.5 text-center font-bold">
+                                <span className="px-2.5 py-1 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                                  {driver.totalTripsCompleted || 0} chuyến
+                                </span>
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold text-emerald-400">
+                                {(driver.totalCommissionPaid || 0).toLocaleString("vi-VN")} đ
+                              </td>
+
+                              <td className="p-3.5 text-right font-mono font-bold text-amber-400">
+                                {(driver.walletBalance || 0).toLocaleString("vi-VN")} đ
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* MODAL: CHI TIẾT CUỐC XE TRONG NGÀY ĐÃ CHỌN */}
+        {/* ======================================================== */}
+        {selectedDayDetail && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div className="bg-[#07172C] border-2 border-amber-500/50 rounded-3xl max-w-3xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-[#133863] pb-3">
+                <div>
+                  <h3 className="font-black text-lg text-amber-400 flex items-center gap-2 uppercase">
+                    <CalendarDays className="w-5 h-5" />
+                    <span>DANH SÁCH CUỐC XE NGÀY {selectedDayDetail.date}</span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Tổng cộng {selectedDayDetail.trips.length} chuyến xe đã hoàn thành trong ngày này.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setSelectedDayDetail(null)}
+                  className="w-8 h-8 rounded-full bg-[#040E1C] border border-[#133863] text-slate-400 hover:text-white flex items-center justify-center text-sm cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {selectedDayDetail.trips.map((trip) => (
+                  <div
+                    key={trip.id}
+                    className="bg-[#040E1C] border border-[#133863] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-black text-amber-400 text-sm">#{trip.id}</span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                          ✓ Hoàn thành
+                        </span>
+                        <span className="text-xs text-slate-400">⏰ {trip.pickupTime}</span>
+                      </div>
+
+                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{trip.pickupLocation} ➔ {trip.dropoffLocation}</span>
+                      </div>
+
+                      <div className="text-xs text-slate-300 flex flex-wrap gap-x-4 gap-y-1 pt-1">
+                        <span>👤 Khách: <b>{trip.fullName}</b> ({trip.phone})</span>
+                        <span>🚕 Tài xế: <b>{trip.driverName || "Chưa gán"}</b> ({trip.driverPhone} - {trip.driverPlate})</span>
+                      </div>
+                    </div>
+
+                    <div className="text-right flex sm:flex-col justify-between sm:justify-center border-t sm:border-t-0 pt-2 sm:pt-0 border-[#133863]">
+                      <div className="text-xs text-slate-400">Cước thu khách:</div>
+                      <div className="text-base font-black font-mono text-amber-400">
+                        {(trip.grossFare || 450000).toLocaleString("vi-VN")} đ
+                      </div>
+                      <div className="text-xs text-emerald-400 font-mono font-bold">
+                        Phí 15%: +{(trip.commissionAmount || Math.round((trip.grossFare || 450000) * 0.15)).toLocaleString("vi-VN")} đ
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-end pt-3 border-t border-[#133863]">
+                <button
+                  onClick={() => setSelectedDayDetail(null)}
+                  className="px-5 py-2 rounded-xl bg-amber-400 text-[#040E1C] font-black text-xs hover:bg-amber-300 transition cursor-pointer"
+                >
+                  Đóng cửa sổ
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
         {/* MODAL 1: THÊM BÁC TÀI MỚI */}
         {/* ======================================================== */}
         {showAddDriverModal && (
@@ -1610,11 +2509,11 @@ export default function AdminPage() {
                       onChange={(e) => setNewDriverForm({ ...newDriverForm, carType: e.target.value as CarType })}
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                     >
-                      <option value="4-seats">🚗 4 - 5 Chỗ (Sedan / Hatchback)</option>
-                      <option value="6-seats">🚙 6 - 7 Chỗ (MPV / SUV Xpander)</option>
-                      <option value="16-seats">🚐 16 Chỗ Du Lịch</option>
-                      <option value="32-seats">🚌 32 Chỗ Đoàn</option>
-                      <option value="vip-limousine">👑 VIP Limousine 9 Chỗ</option>
+                      <option value="4-seats">🚗 4 - 5 Chỗ (VinFast VF5/VF6, Sedan Vios, Accent)</option>
+                      <option value="6-seats">🚙 6 - 7 Chỗ (VinFast VF7/VF8, MPV Xpander, Veloz)</option>
+                      <option value="16-seats">🚐 16 Chỗ Du Lịch (Transit, Solati)</option>
+                      <option value="32-seats">🚌 32 Chỗ Đoàn Lớn</option>
+                      <option value="vip-limousine">👑 VIP Limousine 9 Chỗ President</option>
                     </select>
                   </div>
                 </div>
@@ -2276,6 +3175,11 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* ======================================================== */}
+        {/* TAB 5: QUẢN LÝ CẨM NANG & BÀI VIẾT DU LỊCH SEO */}
+        {/* ======================================================== */}
+        {activeTab === "articles" && <ArticlesManagementTab />}
       </div>
     </div>
   );

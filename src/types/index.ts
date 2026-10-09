@@ -16,6 +16,11 @@ export interface BookingFormInput {
   serviceType: ServiceType;
   notes?: string;
   estimatedPrice?: string;
+  // GPS Coordinates
+  pickupLat?: number;
+  pickupLng?: number;
+  dropoffLat?: number;
+  dropoffLng?: number;
   // Security & Anti-spam honeypot / timestamps
   hp_website?: string;
   submitTimestamp?: number;

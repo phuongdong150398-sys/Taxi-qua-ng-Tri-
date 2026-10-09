@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-[#133863]">
           {/* Brand Col with Logo */}
           <div className="space-y-4">
-            <Link href="#hero" className="inline-block bg-white/95 rounded-2xl p-2 shadow-lg border border-amber-400/40">
+            <Link href="/#hero" className="inline-block bg-white/95 rounded-2xl p-2 shadow-lg border border-amber-400/40">
               <img
                 src={siteConfig.logo}
                 alt={siteConfig.name}
@@ -30,38 +30,38 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="space-y-3">
             <h4 className="text-sm font-black text-white uppercase tracking-wider">
-              Tuyến Xe Trọng Điểm
+              Cẩm Nang & Tuyến Du Lịch
             </h4>
             <ul className="space-y-2 text-xs font-medium">
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Taxi Đông Hà ⇄ TP. Đồng Hới (Quảng Bình)
-                </a>
+                <Link href="/cam-nang-du-lich" className="text-amber-400 hover:underline font-bold">
+                  ★ Cẩm nang du lịch Quảng Bình 2026
+                </Link>
               </li>
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Xe Đi Động Phong Nha - Động Thiên Đường
-                </a>
+                <Link href="/cam-nang-du-lich/kinh-nghiem-du-lich-dong-phong-nha" className="hover:text-amber-400 transition">
+                  • Cẩm nang & Vé Động Phong Nha
+                </Link>
               </li>
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Taxi Đi Cửa Khẩu Lao Bảo (QL9) - Khe Sanh
-                </a>
+                <Link href="/cam-nang-du-lich/kham-pha-dong-thien-duong-quang-binh" className="hover:text-amber-400 transition">
+                  • Kinh nghiệm Động Thiên Đường
+                </Link>
               </li>
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Xe Đi Hành Hương Đức Mẹ La Vang - Thành Cổ
-                </a>
+                <Link href="/cam-nang-du-lich/kinh-nghiem-suoi-nuoc-mooc-song-chay-hang-toi" className="hover:text-amber-400 transition">
+                  • Suối Nước Moọc & Sông Chày Hang Tối
+                </Link>
               </li>
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Xe Đi Mộ Đại Tướng (Vũng Chùa - Đảo Yến)
-                </a>
+                <Link href="/cam-nang-du-lich/vieng-mo-dai-tuong-vung-chua-dao-yen-da-nhay" className="hover:text-amber-400 transition">
+                  • Viếng Mộ Đại Tướng & Bãi Đá Nhảy
+                </Link>
               </li>
               <li>
-                <a href="#dat-xe" className="hover:text-amber-400 transition">
-                  • Đưa Đón Sân Bay Đồng Hới & Sân Bay Phú Bài
-                </a>
+                <Link href="/#dat-xe" className="hover:text-amber-400 transition">
+                  • Taxi Đông Hà ⇄ Đồng Hới / Sân Bay
+                </Link>
               </li>
             </ul>
           </div>

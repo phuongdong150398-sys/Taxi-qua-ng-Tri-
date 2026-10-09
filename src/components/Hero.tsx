@@ -216,6 +216,10 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
         phone: cleanPhone,
         pickupLocation,
         dropoffLocation,
+        pickupLat: pickupCoords.lat,
+        pickupLng: pickupCoords.lng,
+        dropoffLat: dropoffCoords.lat,
+        dropoffLng: dropoffCoords.lng,
         pickupDate,
         pickupTime,
         carType,
@@ -484,11 +488,11 @@ export default function Hero({ onBookingSuccess, initialFrom, initialTo, initial
                     onChange={(e) => setCarType(e.target.value as CarType)}
                     className="w-full bg-[#040E1C] border border-[#133863] text-white rounded-xl px-3 py-2 text-xs sm:text-sm font-bold focus:border-amber-400 focus:outline-none"
                   >
-                    <option value="4-seats">Xe 4 - 5 Chỗ (Sedan)</option>
-                    <option value="6-seats">Xe 6 - 7 Chỗ (MPV/SUV)</option>
-                    <option value="16-seats">Xe 16 Chỗ (Du Lịch)</option>
-                    <option value="32-seats">Xe 32 Chỗ (Đoàn Lớn)</option>
-                    <option value="vip-limousine">VIP Limousine 9 Chỗ</option>
+                    <option value="4-seats">🚗 Xe 4 - 5 Chỗ (VinFast VF5/VF6, Sedan Vios, Accent)</option>
+                    <option value="6-seats">🚙 Xe 6 - 7 Chỗ (VinFast VF7/VF8, MPV Xpander, Veloz)</option>
+                    <option value="16-seats">🚐 Xe 16 Chỗ (Transit, Solati Du Lịch)</option>
+                    <option value="32-seats">🚌 Xe 32 Chỗ (Đoàn Lớn Universe/Samco)</option>
+                    <option value="vip-limousine">👑 VIP Limousine 9 Chỗ President</option>
                   </select>
                 </div>
 

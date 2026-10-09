@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FleetSection from "@/components/FleetSection";
@@ -20,6 +20,38 @@ export default function HomePage() {
   const [selectedFrom, setSelectedFrom] = useState<string>("");
   const [selectedTo, setSelectedTo] = useState<string>("");
   const [selectedCar, setSelectedCar] = useState<any>("4-seats");
+
+  // Read URL query parameters (?to=...&from=...&car=...)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const toParam = urlParams.get("to");
+      const fromParam = urlParams.get("from");
+      const carParam = urlParams.get("car");
+
+      if (toParam) {
+        setSelectedTo(toParam);
+      }
+      if (fromParam) {
+        setSelectedFrom(fromParam);
+      }
+      if (carParam) {
+        setSelectedCar(carParam);
+      }
+
+      if (toParam || fromParam || window.location.hash === "#dat-xe") {
+        setTimeout(() => {
+          const bookingSection = document.getElementById("dat-xe");
+          if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   const handleBookingSuccess = (bookingData: any) => {
     setSuccessBooking(bookingData);

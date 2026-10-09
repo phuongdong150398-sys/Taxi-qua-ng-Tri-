@@ -9,6 +9,7 @@ import {
   sanitizeInput,
 } from "@/lib/security";
 import { getFleetSettings, loadFleetStateFromTelegramCloud } from "@/lib/drivers";
+import { getBookingsFromDb, saveBookingToDb, updateBookingInDb } from "@/lib/firebaseDb";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -210,6 +211,10 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
     console.warn("[DISPATCH WARNING] No telegramGroupId configured in Fleet Settings. Trips cannot be sent to group yet.");
   }
 
+  const mapPickupUrl = booking.pickupLat && booking.pickupLng
+    ? `https://www.google.com/maps/dir/?api=1&destination=${booking.pickupLat},${booking.pickupLng}`
+    : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.pickupLocation)}`;
+
   // B. Gửi tin nhắn về Telegram của Chủ xe
   if (ownerChatId) {
     try {
@@ -229,7 +234,10 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
                 },
               ],
               [
+                { text: "🧭 Bản Đồ Điểm Đón", url: mapPickupUrl },
                 { text: "💬 Nhắn Zalo Khách", url: zaloUrl },
+              ],
+              [
                 { text: "📊 Xem Đơn / Quản Trị", url: "https://taxiquangtri.com.vn/admin" },
               ],
             ],
@@ -243,8 +251,16 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
 }
 
 export async function GET() {
-  const bookings = getBookings();
-  return NextResponse.json({ success: true, data: bookings });
+  try {
+    let bookings = await getBookingsFromDb();
+    if (!bookings || bookings.length === 0) {
+      bookings = getBookings(); // fallback to local file
+    }
+    return NextResponse.json({ success: true, data: bookings });
+  } catch (e) {
+    const bookings = getBookings();
+    return NextResponse.json({ success: true, data: bookings });
+  }
 }
 
 export async function POST(request: Request) {
@@ -343,6 +359,10 @@ export async function POST(request: Request) {
       phone: body.phone.trim().slice(0, 15),
       pickupLocation: sanitizeInput(body.pickupLocation, 180),
       dropoffLocation: sanitizeInput(body.dropoffLocation, 180),
+      pickupLat: typeof body.pickupLat === "number" ? body.pickupLat : (body.pickupLat ? Number(body.pickupLat) : undefined),
+      pickupLng: typeof body.pickupLng === "number" ? body.pickupLng : (body.pickupLng ? Number(body.pickupLng) : undefined),
+      dropoffLat: typeof body.dropoffLat === "number" ? body.dropoffLat : (body.dropoffLat ? Number(body.dropoffLat) : undefined),
+      dropoffLng: typeof body.dropoffLng === "number" ? body.dropoffLng : (body.dropoffLng ? Number(body.dropoffLng) : undefined),
       pickupDate: sanitizeInput(body.pickupDate || new Date().toISOString().split("T")[0], 20),
       pickupTime: sanitizeInput(body.pickupTime || "Đón ngay", 40),
       carType: body.carType,
@@ -360,11 +380,17 @@ export async function POST(request: Request) {
       driverNetEarning: fareDetails.driverNetEarning,
     };
 
+    // 11. GHI VÀO GOOGLE FIRESTORE (LƯU TRỮ ĐÁM MÂY VĨNH VIỄN)
+    await saveBookingToDb(sanitizedBooking).catch((err) => {
+      console.error("Error saving booking to Firestore:", err);
+    });
+
+    // Lưu backup file cục bộ
     const bookings = getBookings();
     bookings.unshift(sanitizedBooking);
     saveBookings(bookings);
 
-    // 11. GỬI THÔNG BÁO TỨC THỜI VỀ TELEGRAM (NHÓM TÀI XẾ & CHỦ XE)
+    // 12. GỬI THÔNG BÁO TỨC THỜI VỀ TELEGRAM (NHÓM TÀI XẾ & CHỦ XE)
     await sendTelegramNotification(sanitizedBooking);
 
     return NextResponse.json({
@@ -383,18 +409,33 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const { id, status } = await request.json();
+    const { id, status, driverId, driverName, driverPhone, driverPlate } = await request.json();
+
+    // 1. Cập nhật trên Firestore
+    await updateBookingInDb(id, {
+      status,
+      ...(driverId ? { driverId, driverName, driverPhone, driverPlate } : {}),
+      ...(status === "confirmed" ? { claimedAt: new Date().toISOString() } : {}),
+      ...(status === "completed" ? { completedAt: new Date().toISOString() } : {}),
+    }).catch(() => {});
+
+    // 2. Cập nhật file cục bộ
     const bookings = getBookings();
     const index = bookings.findIndex((b) => b.id === id);
 
-    if (index === -1) {
-      return NextResponse.json({ success: false, message: "Không tìm thấy chuyến xe" }, { status: 404 });
+    if (index !== -1) {
+      bookings[index].status = status;
+      if (driverId) {
+        bookings[index].driverId = driverId;
+        bookings[index].driverName = driverName;
+        bookings[index].driverPhone = driverPhone;
+        bookings[index].driverPlate = driverPlate;
+      }
+      saveBookings(bookings);
+      return NextResponse.json({ success: true, booking: bookings[index] });
     }
 
-    bookings[index].status = status;
-    saveBookings(bookings);
-
-    return NextResponse.json({ success: true, booking: bookings[index] });
+    return NextResponse.json({ success: true, message: "Đã cập nhật trạng thái đơn" });
   } catch (error) {
     return NextResponse.json({ success: false, message: "Lỗi cập nhật trạng thái" }, { status: 500 });
   }

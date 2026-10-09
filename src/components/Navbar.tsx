@@ -34,14 +34,14 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: "Trang chủ", href: "#hero" },
-    { name: "Đặt xe", href: "#dat-xe" },
-    { name: "Bảng giá cước", href: "#bang-gia" },
-    { name: "Đội xe", href: "#doi-xe" },
-    { name: "Tuyến phổ biến", href: "#tuyen-duong" },
-    { name: "Ưu điểm", href: "#uu-diem" },
-    { name: "Đánh giá", href: "#danh-gia" },
-    { name: "Liên hệ", href: "#lien-he" },
+    { name: "Trang chủ", href: "/#hero" },
+    { name: "Đặt xe", href: "/#dat-xe" },
+    { name: "Cẩm nang du lịch", href: "/cam-nang-du-lich", highlight: true },
+    { name: "Bảng giá cước", href: "/#bang-gia" },
+    { name: "Đội xe", href: "/#doi-xe" },
+    { name: "Tuyến phổ biến", href: "/#tuyen-duong" },
+    { name: "Ưu điểm", href: "/#uu-diem" },
+    { name: "Liên hệ", href: "/#lien-he" },
   ];
 
   return (
@@ -87,7 +87,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo with Image */}
-          <Link href="#hero" className="flex items-center gap-3 group py-1">
+          <Link href="/#hero" className="flex items-center gap-3 group py-1">
             <div className="bg-white/95 rounded-2xl p-1.5 shadow-md shadow-amber-500/10 border border-amber-400/40 group-hover:scale-105 transition-transform flex items-center justify-center">
               <img
                 src={siteConfig.logo}
@@ -100,13 +100,17 @@ export default function Navbar() {
           {/* Desktop Navigation Links */}
           <nav className="hidden xl:flex items-center space-x-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
-                className="px-3 py-1.5 text-sm font-semibold text-slate-200 hover:text-amber-400 hover:bg-[#0B2240] rounded-xl transition-all"
+                className={`px-3 py-1.5 text-xs lg:text-sm font-bold rounded-xl transition-all ${
+                  link.highlight
+                    ? "bg-amber-400/15 text-amber-400 border border-amber-400/40 hover:bg-amber-400 hover:text-[#040E1C]"
+                    : "text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
+                }`}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -168,14 +172,18 @@ export default function Navbar() {
         <div className="xl:hidden bg-[#07172C] border-b border-[#133863] px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="grid grid-cols-2 gap-2 pb-2">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 text-xs sm:text-sm font-bold text-slate-200 hover:text-amber-400 hover:bg-[#0B2240] rounded-xl transition"
+                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-xl transition ${
+                  link.highlight
+                    ? "bg-amber-400/20 text-amber-400 border border-amber-400/40"
+                    : "text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
+                }`}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 

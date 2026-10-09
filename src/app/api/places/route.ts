@@ -61,21 +61,26 @@ export async function GET(request: Request) {
   const query = searchParams.get("q") || "";
 
   // =========================================================================
-  // 1. REVERSE GEOCODING (LẤY ĐỊA CHỈ CHI TIẾT TỪ TỌA ĐỘ GPS)
+  // 1. REVERSE GEOCODING (LẤY ĐỊA CHỈ CHI TIẾT TỪ TỌA ĐỘ GPS CHÍNH XÁC)
   // =========================================================================
   if (latStr && lngStr) {
     const lat = parseFloat(latStr);
     const lng = parseFloat(lngStr);
 
     if (!isNaN(lat) && !isNaN(lng)) {
+      let detailedAddress = "";
+      let shortName = "";
+
+      // Provider 1: OpenStreetMap Nominatim with zoom 18 (building/house level)
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
           {
             headers: {
               "User-Agent": "TaxiQuangTriApp/1.0 (contact@taxiquangtri.com.vn)",
+              "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.8",
             },
-            next: { revalidate: 3600 },
+            cache: "no-store",
           }
         );
 
@@ -85,19 +90,23 @@ export async function GET(request: Request) {
             const addr = data.address;
             const parts: string[] = [];
 
-            // 1. Số nhà & Tên đường
-            const house = addr.house_number || addr.building || addr.amenity || addr.shop;
+            // 1. Tên địa điểm / Tòa nhà / Quán xá / Số nhà
+            const amenity = addr.amenity || addr.building || addr.shop || addr.tourism || addr.office;
+            const house = addr.house_number;
             const road = addr.road || addr.pedestrian || addr.footway || addr.street;
-            if (house && road) {
+
+            if (amenity && road) {
+              parts.push(`${amenity}, Đường ${road}`);
+            } else if (house && road) {
               parts.push(`Số ${house}, Đường ${road}`);
             } else if (road) {
-              parts.push(road.startsWith("Đường") ? road : `Đường ${road}`);
-            } else if (house) {
-              parts.push(house);
+              parts.push(road.startsWith("Đường") || road.startsWith("QL") ? road : `Đường ${road}`);
+            } else if (amenity) {
+              parts.push(amenity);
             }
 
-            // 2. Thôn / Tổ dân phố / Khóm
-            const neighbourhood = addr.neighbourhood || addr.suburb || addr.quarter;
+            // 2. Thôn / Tổ dân phố / Khóm / Khu phố
+            const neighbourhood = addr.neighbourhood || addr.quarter || addr.suburb;
             if (neighbourhood && !parts.some((p) => p.includes(neighbourhood))) {
               parts.push(neighbourhood);
             }
@@ -120,31 +129,50 @@ export async function GET(request: Request) {
               parts.push(state.replace("Tỉnh ", ""));
             }
 
-            const detailedAddress = parts.length >= 2 ? parts.join(", ") : data.display_name;
-            const shortName = parts.length > 0 ? parts.slice(0, 2).join(", ") : detailedAddress;
-
-            return NextResponse.json({
-              success: true,
-              place: {
-                name: detailedAddress,
-                address: detailedAddress,
-                shortName,
-                lat,
-                lng,
-              },
-            });
+            if (parts.length >= 2) {
+              detailedAddress = parts.join(", ");
+              shortName = parts.slice(0, 2).join(", ");
+            }
           }
         }
       } catch (e) {
-        console.error("Reverse Geocoding error:", e);
+        console.error("OSM Reverse Geocoding error:", e);
       }
 
-      // Fallback
+      // Provider 2 (Fallback): BigDataCloud Reverse Geocode Client API
+      if (!detailedAddress) {
+        try {
+          const bdcRes = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=vi`,
+            { cache: "no-store" }
+          );
+          if (bdcRes.ok) {
+            const bdcData = await bdcRes.json();
+            const parts: string[] = [];
+            if (bdcData.locality) parts.push(bdcData.locality);
+            if (bdcData.city && bdcData.city !== bdcData.locality) parts.push(bdcData.city);
+            if (bdcData.principalSubdivision) parts.push(bdcData.principalSubdivision);
+            if (parts.length > 0) {
+              detailedAddress = parts.join(", ");
+              shortName = bdcData.locality || detailedAddress;
+            }
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
+
+      if (!detailedAddress) {
+        detailedAddress = `Vị trí GPS (${lat.toFixed(5)}, ${lng.toFixed(5)})`;
+        shortName = `GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      }
+
       return NextResponse.json({
         success: true,
         place: {
-          name: `Vị trí GPS (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-          address: `Tọa độ GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+          name: detailedAddress,
+          address: detailedAddress,
+          shortName,
           lat,
           lng,
         },

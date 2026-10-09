@@ -5,6 +5,14 @@
  */
 
 import { Driver, WalletTransaction, FleetSystemSettings, BookingRecord, CarType } from "@/types";
+import {
+  getDriversFromDb,
+  saveDriverToDb,
+  getFleetSettingsFromDb,
+  saveFleetSettingsToDb,
+  getWalletTransactionsFromDb,
+  saveWalletTransactionToDb,
+} from "./firebaseDb";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -83,6 +91,23 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
     return true;
   }
 
+  // 1. Thử tải từ Google Firestore trước
+  try {
+    const firestoreDrivers = await getDriversFromDb();
+    if (firestoreDrivers && firestoreDrivers.length > 0) {
+      inMemoryDrivers = cleanRealDrivers(firestoreDrivers);
+      const dbSettings = await getFleetSettingsFromDb();
+      if (dbSettings) inMemorySettings = { ...DEFAULT_FLEET_SETTINGS, ...dbSettings };
+      const dbTxs = await getWalletTransactionsFromDb();
+      if (dbTxs) inMemoryTransactions = dbTxs;
+      lastCloudFetchTime = Date.now();
+      return true;
+    }
+  } catch (e) {
+    console.error("Error loading fleet from Firestore:", e);
+  }
+
+  // 2. Dự phòng: Tải từ Telegram Cloud Storage
   try {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat?chat_id=${OWNER_CHAT_ID}`;
     const res = await fetch(url, { cache: "no-store" });
@@ -127,11 +152,25 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
 }
 
 /**
- * Đồng bộ toàn bộ dữ liệu Đội Xe & Ví Cọc lên Telegram Cloud Storage
+ * Đồng bộ toàn bộ dữ liệu Đội Xe & Ví Cọc lên Telegram Cloud Storage & Firestore
  */
 export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
   try {
     inMemoryDrivers = cleanRealDrivers(inMemoryDrivers);
+
+    // 1. Đồng bộ lên Google Firestore
+    try {
+      await saveFleetSettingsToDb(inMemorySettings);
+      for (const d of inMemoryDrivers) {
+        await saveDriverToDb(d);
+      }
+      for (const t of inMemoryTransactions.slice(0, 50)) {
+        await saveWalletTransactionToDb(t);
+      }
+    } catch (dbErr) {
+      console.error("Error syncing to Firestore:", dbErr);
+    }
+
     const payload = {
       drivers: inMemoryDrivers,
       transactions: inMemoryTransactions.slice(0, 100),
@@ -141,7 +180,7 @@ export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
 
     const textPayload = `#FLEET_STATE#\n${JSON.stringify(payload)}`;
 
-    // 1. Thử cập nhật tin nhắn ghim đã có
+    // 2. Thử cập nhật tin nhắn ghim đã có trên Telegram
     if (cachedStateMessageId) {
       const editUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`;
       const editRes = await fetch(editUrl, {

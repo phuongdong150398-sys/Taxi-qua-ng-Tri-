@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://taxiquangtri.com.vn"),
+  metadataBase: new URL("https://www.taxiquangtri.com.vn"),
   title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn | Đón Nhanh 24/7`,
   description: siteConfig.description,
   icons: {
@@ -40,7 +40,9 @@ export const metadata: Metadata = {
     "taxi đồng hới",
     "taxi phong nha",
   ],
-  authors: [{ name: siteConfig.name }],
+  verification: {
+    google: "Wpdr4voiDswJPHNhkVnwSxjzzLKlPB_iGlRITgjjIJs",
+  },
   openGraph: {
     title: `${siteConfig.name} - Giá Rẻ - Uy Tín - An Toàn`,
     description: siteConfig.description,
