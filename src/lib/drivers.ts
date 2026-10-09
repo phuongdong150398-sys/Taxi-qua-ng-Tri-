@@ -83,7 +83,7 @@ function cleanRealDrivers(drivers: Driver[]): Driver[] {
 }
 
 /**
- * Tải dữ liệu Đội Xe & Số Dư từ Telegram Cloud Storage về bộ nhớ
+ * Tải dữ liệu Đội Xe & Số Dư từ Google Cloud Firestore về bộ nhớ
  */
 export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
   // Tránh gọi API dồn dập nếu vừa fetch trong vòng 2 giây
@@ -91,7 +91,7 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
     return true;
   }
 
-  // 1. Thử tải từ Google Firestore trước
+  // 1. Tải trực tiếp từ Google Firestore
   try {
     const firestoreDrivers = await getDriversFromDb();
     if (firestoreDrivers && firestoreDrivers.length > 0) {
@@ -107,58 +107,35 @@ export async function loadFleetStateFromTelegramCloud(): Promise<boolean> {
     console.error("Error loading fleet from Firestore:", e);
   }
 
-  // 2. Dự phòng: Tải từ Telegram Cloud Storage
+  // 2. Fallback tải từ file cục bộ
   try {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat?chat_id=${OWNER_CHAT_ID}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) return false;
-    const data = await res.json();
-    if (!data.ok || !data.result?.pinned_message) return false;
-
-    const pinned = data.result.pinned_message;
-    cachedStateMessageId = pinned.message_id;
-
-    if (pinned.text && pinned.text.startsWith("#FLEET_STATE#")) {
-      const rawJson = pinned.text.replace("#FLEET_STATE#", "").trim();
-      const parsed = JSON.parse(rawJson);
-      if (parsed.drivers && Array.isArray(parsed.drivers)) {
-        inMemoryDrivers = cleanRealDrivers(parsed.drivers);
-        if (parsed.transactions && Array.isArray(parsed.transactions)) {
-          inMemoryTransactions = parsed.transactions.filter(
-            (t: WalletTransaction) => t && t.driverId && !MOCK_DRIVER_IDS.has(t.driverId)
-          );
-        }
-        if (parsed.settings) {
-          inMemorySettings = { ...DEFAULT_FLEET_SETTINGS, ...parsed.settings };
-        }
-
-        // Lưu bản sao dự phòng vào /tmp
-        ensureDataDir();
-        try {
-          fs.writeFileSync(DRIVERS_FILE, JSON.stringify(inMemoryDrivers, null, 2), "utf-8");
-          fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify(inMemoryTransactions, null, 2), "utf-8");
-          fs.writeFileSync(SETTINGS_FILE, JSON.stringify(inMemorySettings, null, 2), "utf-8");
-        } catch (e) {}
-
-        lastCloudFetchTime = Date.now();
-        console.log(`[TELEGRAM CLOUD] Loaded ${inMemoryDrivers.length} real drivers from Telegram Cloud!`);
-        return true;
-      }
+    ensureDataDir();
+    if (fs.existsSync(DRIVERS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(DRIVERS_FILE, "utf-8"));
+      if (Array.isArray(parsed)) inMemoryDrivers = cleanRealDrivers(parsed);
     }
-  } catch (err) {
-    console.error("Error loading fleet state from Telegram Cloud:", err);
-  }
-  return false;
+    if (fs.existsSync(SETTINGS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf-8"));
+      inMemorySettings = { ...DEFAULT_FLEET_SETTINGS, ...parsed };
+    }
+    if (fs.existsSync(TRANSACTIONS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(TRANSACTIONS_FILE, "utf-8"));
+      if (Array.isArray(parsed)) inMemoryTransactions = parsed;
+    }
+  } catch (e) {}
+
+  return true;
 }
 
 /**
- * Đồng bộ toàn bộ dữ liệu Đội Xe & Ví Cọc lên Telegram Cloud Storage & Firestore
+ * Đồng bộ toàn bộ dữ liệu Đội Xe & Ví Cọc lên Google Firestore & Bộ nhớ cục bộ
+ * ĐÃ TẮT HOÀN TOÀN VIỆC GỬI TIN NHẮN THÔ #FLEET_STATE# VÀO TELEGRAM
  */
 export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
   try {
     inMemoryDrivers = cleanRealDrivers(inMemoryDrivers);
 
-    // 1. Đồng bộ lên Google Firestore
+    // 1. Đồng bộ vĩnh viễn lên Google Firestore
     try {
       await saveFleetSettingsToDb(inMemorySettings);
       for (const d of inMemoryDrivers) {
@@ -171,64 +148,19 @@ export async function syncFleetStateToTelegramCloud(): Promise<boolean> {
       console.error("Error syncing to Firestore:", dbErr);
     }
 
-    const payload = {
-      drivers: inMemoryDrivers,
-      transactions: inMemoryTransactions.slice(0, 100),
-      settings: inMemorySettings,
-      updatedAt: new Date().toISOString(),
-    };
+    // 2. Lưu bản sao dự phòng vào /tmp
+    ensureDataDir();
+    try {
+      fs.writeFileSync(DRIVERS_FILE, JSON.stringify(inMemoryDrivers, null, 2), "utf-8");
+      fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify(inMemoryTransactions, null, 2), "utf-8");
+      fs.writeFileSync(SETTINGS_FILE, JSON.stringify(inMemorySettings, null, 2), "utf-8");
+    } catch (e) {}
 
-    const textPayload = `#FLEET_STATE#\n${JSON.stringify(payload)}`;
-
-    // 2. Thử cập nhật tin nhắn ghim đã có trên Telegram
-    if (cachedStateMessageId) {
-      const editUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`;
-      const editRes = await fetch(editUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: OWNER_CHAT_ID,
-          message_id: cachedStateMessageId,
-          text: textPayload,
-        }),
-      });
-      const editData = await editRes.json();
-      if (editData.ok) {
-        return true;
-      }
-    }
-
-    // 2. Nếu chưa có hoặc tin nhắn cũ bị xóa -> Gửi tin nhắn mới & Ghim lại
-    const sendUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    const sendRes = await fetch(sendUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: OWNER_CHAT_ID,
-        text: textPayload,
-      }),
-    });
-    const sendData = await sendRes.json();
-    if (sendData.ok && sendData.result?.message_id) {
-      cachedStateMessageId = sendData.result.message_id;
-
-      // Ghim tin nhắn âm thầm không làm phiền
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/pinChatMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: OWNER_CHAT_ID,
-          message_id: cachedStateMessageId,
-          disable_notification: true,
-        }),
-      });
-
-      return true;
-    }
+    return true;
   } catch (err) {
-    console.error("Error syncing fleet state to Telegram Cloud:", err);
+    console.error("Error syncing fleet state to Firestore:", err);
+    return false;
   }
-  return false;
 }
 
 export function getFleetSettings(): FleetSystemSettings {
