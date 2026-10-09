@@ -18,6 +18,12 @@ import {
 } from "@/lib/drivers";
 import { BookingRecord, CarType } from "@/types";
 import { isValidVietnamesePhone } from "@/lib/security";
+import {
+  getBookingsFromDb,
+  getBookingByIdFromDb,
+  saveBookingToDb,
+  updateBookingInDb,
+} from "@/lib/firebaseDb";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -44,6 +50,46 @@ function saveBookings(bookings: BookingRecord[]) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(DATA_FILE, JSON.stringify(bookings, null, 2), "utf-8");
+  } catch (e) {}
+}
+
+async function findBooking(bookingId: string): Promise<BookingRecord | null> {
+  // 1. Thử lấy từ Firebase Firestore trước
+  try {
+    const dbBooking = await getBookingByIdFromDb(bookingId);
+    if (dbBooking) return dbBooking;
+  } catch (e) {
+    console.error("Firestore findBooking error:", e);
+  }
+
+  // 2. Thử lấy từ file cục bộ /tmp
+  try {
+    const localBookings = getBookings();
+    const found = localBookings.find((b) => b.id === bookingId);
+    if (found) return found;
+  } catch (e) {}
+
+  return null;
+}
+
+async function persistBooking(booking: BookingRecord): Promise<void> {
+  // 1. Lưu vĩnh viễn vào Firebase Firestore
+  try {
+    await saveBookingToDb(booking);
+  } catch (e) {
+    console.error("Firestore persistBooking error:", e);
+  }
+
+  // 2. Lưu vào file /tmp dự phòng
+  try {
+    const bookings = getBookings();
+    const idx = bookings.findIndex((b) => b.id === booking.id);
+    if (idx >= 0) {
+      bookings[idx] = booking;
+    } else {
+      bookings.unshift(booking);
+    }
+    saveBookings(bookings);
   } catch (e) {}
 }
 
@@ -104,10 +150,9 @@ export async function POST(request: Request) {
       // A. BẤM NÚT NHẬN CUỐC: claim_<bookingId>
       if (data.startsWith("claim_")) {
         const bookingId = data.replace("claim_", "");
-        const bookings = getBookings();
-        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+        const booking = await findBooking(bookingId);
 
-        if (bookingIndex === -1) {
+        if (!booking) {
           await sendTelegramApi("answerCallbackQuery", {
             callback_query_id: callbackId,
             text: "❌ Không tìm thấy thông tin cuốc xe này trên hệ thống!",
@@ -115,8 +160,6 @@ export async function POST(request: Request) {
           });
           return NextResponse.json({ ok: true });
         }
-
-        const booking = bookings[bookingIndex];
 
         // Kiểm tra đơn đã có người nhận chưa
         if (booking.status !== "pending" || booking.driverId) {
@@ -171,8 +214,7 @@ export async function POST(request: Request) {
         booking.driverTelegramId = telegramId;
         booking.status = "confirmed";
         booking.claimedAt = new Date().toISOString();
-        bookings[bookingIndex] = booking;
-        saveBookings(bookings);
+        await persistBooking(booking);
 
         // Trả về thông báo thành công cho tài xế
         await sendTelegramApi("answerCallbackQuery", {
@@ -278,51 +320,55 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
       // =======================================================================
       if (data.startsWith("trip_onway_")) {
         const bookingId = data.replace("trip_onway_", "");
-        const bookings = getBookings();
-        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+        const booking = await findBooking(bookingId);
 
-        if (bookingIndex !== -1) {
-          const booking = bookings[bookingIndex];
-
-          // Xác thực chính chủ tài xế
-          if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          if (booking.status === "completed") {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "✅ Cuốc xe này đã hoàn thành!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          booking.onWayAt = new Date().toISOString();
-          bookings[bookingIndex] = booking;
-          saveBookings(bookings);
-
-          const mapPickupUrl = booking.pickupLat && booking.pickupLng
-            ? `https://www.google.com/maps/dir/?api=1&destination=${booking.pickupLat},${booking.pickupLng}`
-            : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.pickupLocation)}`;
-          const cleanPhone = (booking.phone || "").replace(/\D/g, "");
-
+        if (!booking) {
           await sendTelegramApi("answerCallbackQuery", {
             callback_query_id: callbackId,
-            text: `🚗 Đã ghi nhận Bác tài đang trên đường đến đón khách cuốc #${booking.id}!`,
+            text: "❌ Không tìm thấy thông tin cuốc xe này trên hệ thống!",
             show_alert: true,
           });
+          return NextResponse.json({ ok: true });
+        }
 
-          if (chatId && messageId) {
-            await sendTelegramApi("editMessageText", {
-              chat_id: chatId,
-              message_id: messageId,
-              text: `
+        // Xác thực chính chủ tài xế
+        if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        if (booking.status === "completed") {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "✅ Cuốc xe này đã hoàn thành!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        booking.onWayAt = new Date().toISOString();
+        await persistBooking(booking);
+
+        const mapPickupUrl = booking.pickupLat && booking.pickupLng
+          ? `https://www.google.com/maps/dir/?api=1&destination=${booking.pickupLat},${booking.pickupLng}`
+          : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.pickupLocation)}`;
+        const cleanPhone = (booking.phone || "").replace(/\D/g, "");
+
+        await sendTelegramApi("answerCallbackQuery", {
+          callback_query_id: callbackId,
+          text: `🚗 Đã ghi nhận Bác tài đang trên đường đến đón khách cuốc #${booking.id}!`,
+          show_alert: true,
+        });
+
+        if (chatId && messageId) {
+          await sendTelegramApi("editMessageText", {
+            chat_id: chatId,
+            message_id: messageId,
+            text: `
 🚖 <b>CUỐC #${booking.id} - ĐANG TRÊN ĐƯỜNG ĐẾN ĐÓN KHÁCH</b>
 ━━━━━━━━━━━━━━━━━━━━
 👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b> (<code>${booking.phone}</code>)
@@ -333,29 +379,28 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
 ━━━━━━━━━━━━━━━━━━━━
 ⚡ <i>Khi đã đón được khách lên xe, Bác tài hãy bấm nút bên dưới:</i>
 `.trim(),
-              parse_mode: "HTML",
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    { text: `🧭 Google Maps Chỉ Đường`, url: mapPickupUrl },
-                    { text: `💬 Nhắn Zalo Khách`, url: `https://zalo.me/${cleanPhone}` },
-                  ],
-                  [
-                    { text: `🙋‍♂️ BÁO ĐÃ ĐÓN ĐƯỢC KHÁCH`, callback_data: `trip_pickedup_${booking.id}` },
-                  ],
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: `🧭 Google Maps Chỉ Đường`, url: mapPickupUrl },
+                  { text: `💬 Nhắn Zalo Khách`, url: `https://zalo.me/${cleanPhone}` },
                 ],
-              },
-            });
-          }
+                [
+                  { text: `🙋‍♂️ BÁO ĐÃ ĐÓN ĐƯỢC KHÁCH`, callback_data: `trip_pickedup_${booking.id}` },
+                ],
+              ],
+            },
+          });
+        }
 
-          // Báo cho Admin
-          if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
-            await sendTelegramApi("sendMessage", {
-              chat_id: OWNER_CHAT_ID,
-              text: `🚗 <b>TÀI XẾ ĐANG ĐẾN ĐÓN KHÁCH CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName} (<code>${booking.phone}</code>)\n📍 Đang đến đón tại: <b>${booking.pickupLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
-              parse_mode: "HTML",
-            });
-          }
+        // Báo cho Admin
+        if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
+          await sendTelegramApi("sendMessage", {
+            chat_id: OWNER_CHAT_ID,
+            text: `🚗 <b>TÀI XẾ ĐANG ĐẾN ĐÓN KHÁCH CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName} (<code>${booking.phone}</code>)\n📍 Đang đến đón tại: <b>${booking.pickupLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
+            parse_mode: "HTML",
+          });
         }
         return NextResponse.json({ ok: true });
       }
@@ -365,61 +410,65 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
       // =======================================================================
       if (data.startsWith("trip_pickedup_")) {
         const bookingId = data.replace("trip_pickedup_", "");
-        const bookings = getBookings();
-        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+        const booking = await findBooking(bookingId);
 
-        if (bookingIndex !== -1) {
-          const booking = bookings[bookingIndex];
-
-          // Xác thực chính chủ tài xế
-          if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          if (booking.status === "completed") {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "✅ Cuốc xe này đã hoàn thành!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          // BẢO VỆ TUẦN TỰ: Phải bấm "Đang đến điểm đón" trước
-          if (!booking.onWayAt) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "⚠️ Bác tài vui lòng bấm '🚗 Báo Đang Đến Điểm Đón' trước khi báo đã đón khách!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          booking.status = "in_progress";
-          booking.pickedUpAt = new Date().toISOString();
-          bookings[bookingIndex] = booking;
-          saveBookings(bookings);
-
-          const mapDropoffUrl = booking.dropoffLat && booking.dropoffLng
-            ? `https://www.google.com/maps/dir/?api=1&destination=${booking.dropoffLat},${booking.dropoffLng}`
-            : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.dropoffLocation)}`;
-
+        if (!booking) {
           await sendTelegramApi("answerCallbackQuery", {
             callback_query_id: callbackId,
-            text: `🙋‍♂️ ĐÃ GHI NHẬN ĐÓN KHÁCH THÀNH CÔNG! Chúc Bác tài lái xe an toàn và chu đáo.`,
+            text: "❌ Không tìm thấy thông tin cuốc xe này trên hệ thống!",
             show_alert: true,
           });
+          return NextResponse.json({ ok: true });
+        }
 
-          if (chatId && messageId) {
-            await sendTelegramApi("editMessageText", {
-              chat_id: chatId,
-              message_id: messageId,
-              text: `
+        // Xác thực chính chủ tài xế
+        if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        if (booking.status === "completed") {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "✅ Cuốc xe này đã hoàn thành!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        // BẢO VỆ TUẦN TỰ: Phải bấm "Đang đến điểm đón" trước
+        if (!booking.onWayAt) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bác tài vui lòng bấm '🚗 Báo Đang Đến Điểm Đón' trước khi báo đã đón khách!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        booking.status = "in_progress";
+        booking.pickedUpAt = new Date().toISOString();
+        await persistBooking(booking);
+
+        const mapDropoffUrl = booking.dropoffLat && booking.dropoffLng
+          ? `https://www.google.com/maps/dir/?api=1&destination=${booking.dropoffLat},${booking.dropoffLng}`
+          : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(booking.dropoffLocation)}`;
+
+        await sendTelegramApi("answerCallbackQuery", {
+          callback_query_id: callbackId,
+          text: `🙋‍♂️ ĐÃ GHI NHẬN ĐÓN KHÁCH THÀNH CÔNG! Chúc Bác tài lái xe an toàn và chu đáo.`,
+          show_alert: true,
+        });
+
+        if (chatId && messageId) {
+          await sendTelegramApi("editMessageText", {
+            chat_id: chatId,
+            message_id: messageId,
+            text: `
 🚖 <b>CUỐC #${booking.id} - ĐÃ ĐÓN KHÁCH LÊN XE</b>
 ━━━━━━━━━━━━━━━━━━━━
 👤 <b>Khách hàng:</b> <b>${booking.fullName || "Khách đặt xe"}</b>
@@ -430,28 +479,27 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
 ━━━━━━━━━━━━━━━━━━━━
 ⚡ <i>Khi đưa khách đến nơi an toàn và thu cước xong, Bác tài bấm nút bên dưới để hoàn tất:</i>
 `.trim(),
-              parse_mode: "HTML",
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    { text: `🧭 Google Maps Đến Điểm Trả`, url: mapDropoffUrl },
-                  ],
-                  [
-                    { text: `🏁 BÁO HOÀN THÀNH CUỐC XE`, callback_data: `trip_completed_${booking.id}` },
-                  ],
+            parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: `🧭 Google Maps Đến Điểm Trả`, url: mapDropoffUrl },
                 ],
-              },
-            });
-          }
+                [
+                  { text: `🏁 BÁO HOÀN THÀNH CUỐC XE`, callback_data: `trip_completed_${booking.id}` },
+                ],
+              ],
+            },
+          });
+        }
 
-          // Báo cho Admin
-          if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
-            await sendTelegramApi("sendMessage", {
-              chat_id: OWNER_CHAT_ID,
-              text: `🙋‍♂️ <b>TÀI XẾ ĐÃ ĐÓN KHÁCH LÊN XE CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName}\n🏁 Đang di chuyển đến: <b>${booking.dropoffLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
-              parse_mode: "HTML",
-            });
-          }
+        // Báo cho Admin
+        if (OWNER_CHAT_ID && OWNER_CHAT_ID !== telegramId) {
+          await sendTelegramApi("sendMessage", {
+            chat_id: OWNER_CHAT_ID,
+            text: `🙋‍♂️ <b>TÀI XẾ ĐÃ ĐÓN KHÁCH LÊN XE CUỐC #${booking.id}</b>\n━━━━━━━━━━━━━━━━━━━━\n👤 Bác tài: <b>${booking.driverName}</b> (<code>${booking.driverPhone}</code>)\n👤 Khách: ${booking.fullName}\n🏁 Đang di chuyển đến: <b>${booking.dropoffLocation}</b>\n⏰ Lúc: ${new Date().toLocaleTimeString("vi-VN")}`,
+            parse_mode: "HTML",
+          });
         }
         return NextResponse.json({ ok: true });
       }
@@ -461,60 +509,64 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
       // =======================================================================
       if (data.startsWith("trip_completed_")) {
         const bookingId = data.replace("trip_completed_", "");
-        const bookings = getBookings();
-        const bookingIndex = bookings.findIndex((b) => b.id === bookingId);
+        const booking = await findBooking(bookingId);
 
-        if (bookingIndex !== -1) {
-          const booking = bookings[bookingIndex];
-
-          // Xác thực chính chủ tài xế
-          if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          if (booking.status === "completed") {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "✅ Cuốc xe này đã hoàn thành trước đó rồi!",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          // BẢO VỆ TUẦN TỰ: Phải đón khách trước khi hoàn thành
-          if (!booking.onWayAt) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "⚠️ Bác tài chưa bấm '🚗 Báo Đang Đến Điểm Đón'! Vui lòng thực hiện tuần tự theo quy trình.",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          if (!booking.pickedUpAt) {
-            await sendTelegramApi("answerCallbackQuery", {
-              callback_query_id: callbackId,
-              text: "⚠️ Bác tài chưa đón khách lên xe! Vui lòng bấm '🙋‍♂️ Báo Đã Đón Được Khách' trước khi hoàn thành cuốc.",
-              show_alert: true,
-            });
-            return NextResponse.json({ ok: true });
-          }
-
-          booking.status = "completed";
-          booking.completedAt = new Date().toISOString();
-          bookings[bookingIndex] = booking;
-          saveBookings(bookings);
-
+        if (!booking) {
           await sendTelegramApi("answerCallbackQuery", {
             callback_query_id: callbackId,
-            text: `🎉 CHÚC MỪNG BÁC TÀI ĐÃ HOÀN THÀNH XUẤT SẮC CUỐC XE #${booking.id}!`,
+            text: "❌ Không tìm thấy thông tin cuốc xe này trên hệ thống!",
             show_alert: true,
           });
+          return NextResponse.json({ ok: true });
+        }
+
+        // Xác thực chính chủ tài xế
+        if (booking.driverTelegramId && String(booking.driverTelegramId).trim() !== String(telegramId).trim()) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "❌ Bạn không phải là tài xế đã nhận cuốc xe này!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        if (booking.status === "completed") {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "✅ Cuốc xe này đã hoàn thành trước đó rồi!",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        // BẢO VỆ TUẦN TỰ: Phải đón khách trước khi hoàn thành
+        if (!booking.onWayAt) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bác tài chưa bấm '🚗 Báo Đang Đến Điểm Đón'! Vui lòng thực hiện tuần tự theo quy trình.",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        if (!booking.pickedUpAt) {
+          await sendTelegramApi("answerCallbackQuery", {
+            callback_query_id: callbackId,
+            text: "⚠️ Bác tài chưa đón khách lên xe! Vui lòng bấm '🙋‍♂️ Báo Đã Đón Được Khách' trước khi hoàn thành cuốc.",
+            show_alert: true,
+          });
+          return NextResponse.json({ ok: true });
+        }
+
+        booking.status = "completed";
+        booking.completedAt = new Date().toISOString();
+        await persistBooking(booking);
+
+        await sendTelegramApi("answerCallbackQuery", {
+          callback_query_id: callbackId,
+          text: `🎉 CHÚC MỪNG BÁC TÀI ĐÃ HOÀN THÀNH XUẤT SẮC CUỐC XE #${booking.id}!`,
+          show_alert: true,
+        });
 
           const grossFare = booking.grossFare || 450000;
           const commissionAmount = booking.commissionAmount || Math.round(grossFare * 0.15);
@@ -555,9 +607,8 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${booking.notes}\n` : ""}━━━━�
               parse_mode: "HTML",
             });
           }
+          return NextResponse.json({ ok: true });
         }
-        return NextResponse.json({ ok: true });
-      }
 
       // B. BẤM NÚT BẮT ĐẦU ĐĂNG KÝ: start_reg
       if (data === "start_reg") {

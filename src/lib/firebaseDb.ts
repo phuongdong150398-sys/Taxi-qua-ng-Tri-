@@ -47,6 +47,20 @@ export async function saveBookingToDb(booking: BookingRecord): Promise<boolean> 
   }
 }
 
+export async function getBookingByIdFromDb(id: string): Promise<BookingRecord | undefined> {
+  try {
+    const docRef = doc(db, BOOKINGS_COLLECTION, id);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data() as BookingRecord;
+    }
+    return undefined;
+  } catch (error) {
+    console.error("[FIRESTORE ERROR] getBookingByIdFromDb:", error);
+    return undefined;
+  }
+}
+
 export async function updateBookingInDb(
   id: string,
   updateData: Partial<BookingRecord>
