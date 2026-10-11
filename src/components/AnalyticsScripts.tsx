@@ -49,7 +49,7 @@ export default function AnalyticsScripts() {
                 gtag('config', '${config.gaId}', {
                   page_path: window.location.pathname,
                 });
-                ${config.googleAdsId ? `gtag('config', '${config.googleAdsId}');` : ""}
+                ${config.googleAdsId && config.googleAdsId !== "AW-18493093047" ? `gtag('config', '${config.googleAdsId}');` : ""}
               `,
             }}
           />

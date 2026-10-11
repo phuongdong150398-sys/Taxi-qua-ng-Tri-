@@ -62,6 +62,7 @@ export const metadata: Metadata = {
 };
 
 import AnalyticsScripts from "@/components/AnalyticsScripts";
+import Script from "next/script";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -118,6 +119,24 @@ export default function RootLayout({
         />
       </head>
       <body className={`${montserrat.className} bg-[#040E1C] text-slate-100 antialiased selection:bg-amber-400 selection:text-[#040E1C]`}>
+        {/* Google tag (gtag.js) */}
+        <Script
+          id="google-tag-manager-aw"
+          strategy="beforeInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18493093047"
+        />
+        <Script
+          id="google-tag-aw-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-18493093047');
+            `,
+          }}
+        />
         <AnalyticsScripts />
         {children}
       </body>
