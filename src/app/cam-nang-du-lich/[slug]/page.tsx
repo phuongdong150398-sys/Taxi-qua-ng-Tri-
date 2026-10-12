@@ -353,6 +353,26 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                     {section.content}
                   </div>
 
+                  {/* Section In-line Image */}
+                  {section.image && (
+                    <div className="my-5 rounded-3xl overflow-hidden border border-[#133863] shadow-xl bg-[#07172C] group">
+                      <div className="overflow-hidden">
+                        <img
+                          src={section.image}
+                          alt={section.imageCaption || section.heading}
+                          className="w-full h-64 sm:h-80 md:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                      {section.imageCaption && (
+                        <div className="p-3 text-center text-xs text-slate-300 bg-[#07172C] border-t border-[#133863] flex items-center justify-center gap-1.5 italic font-medium">
+                          <span>📸</span>
+                          <span>{section.imageCaption}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {section.tips && section.tips.length > 0 && (
                     <div className="bg-[#07172C] p-4 sm:p-5 rounded-2xl border border-emerald-500/40 space-y-2 mt-3">
                       <div className="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -372,6 +392,49 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                 </div>
               ))}
             </div>
+
+            {/* Photo Gallery Showcase */}
+            {guide.gallery && guide.gallery.length > 0 && (
+              <div className="space-y-4 pt-6 border-t border-[#133863]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4" />
+                      <span>GÓC NHÌN ĐẶC SẮC</span>
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-white mt-1">
+                      Bộ Sưu Tập Hình Ảnh Về {guide.destination}
+                    </h3>
+                  </div>
+                  <span className="text-xs text-slate-400 font-semibold bg-[#07172C] px-3 py-1.5 rounded-full border border-[#133863]">
+                    {guide.gallery.length} góc chụp đẹp
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {guide.gallery.map((img, gIdx) => (
+                    <div
+                      key={gIdx}
+                      className="group relative rounded-2xl overflow-hidden border border-[#133863] bg-[#07172C] shadow-lg flex flex-col"
+                    >
+                      <div className="h-48 sm:h-56 overflow-hidden">
+                        <img
+                          src={img.url}
+                          alt={img.caption || `${guide.destination} hình ảnh ${gIdx + 1}`}
+                          className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                      {img.caption && (
+                        <div className="p-3 text-xs text-slate-300 font-medium bg-[#07172C] border-t border-[#133863]">
+                          📸 {img.caption}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* FAQs Accordion Section */}
             {guide.faqs && guide.faqs.length > 0 && (

@@ -18,10 +18,15 @@ export interface TravelGuide {
   rating: number;
   reviewsCount: number;
   highlights: string[];
+  gallery?: Array<{
+    url: string;
+    caption: string;
+  }>;
   sections: Array<{
     heading: string;
     content: string;
     image?: string;
+    imageCaption?: string;
     tips?: string[];
   }>;
   faqs: Array<{
