@@ -1492,43 +1492,43 @@ export function synthesizeCustomGoldenTopic(rawTopic: string): TopicSeed {
         tips: ["Hãy dành một khoảng lặng để lắng nghe tiếng gió và tận hưởng không gian thanh tịnh."],
       },
       {
-        heading: `4. Gợi ý lịch trình Tour ${cleanTopic} 1 Ngày trọn vẹn`,
-        content: `Một hành trình khoa học và tiện lợi nhất khi thuê xe Taxi ${region} 24H:\n\n• 07:30 - 08:30: Xe đón quý khách tại khách sạn/ga tàu hoặc sân bay, khởi hành đi ${cleanTopic}.\n• 08:30 - 11:30: Tham quan chi tiết các điểm nhấn chính của ${cleanTopic}, chụp ảnh lưu niệm và tìm hiểu câu chuyện bản xứ.\n• 11:45 - 13:30: Thưởng thức bữa trưa đặc sản nức tiếng tại nhà hàng địa phương uy tín.\n• 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng trục đường.\n• 17:00: Xe đưa đoàn trở về điểm hẹn ban đầu an toàn, kết thúc chuyến đi đầy ắp kỷ niệm đẹp.`,
+        heading: `4. Gợi ý lịch trình Tour ${cleanTopic} 1 Ngày trọn vẹn xuất phát từ TP. Đồng Hới`,
+        content: `Một hành trình khoa học và tiện lợi nhất khi thuê xe Taxi Quảng Bình - Đồng Hới 24H:\n\n• 07:30 - 08:30: Xe đón quý khách tại trung tâm TP. Đồng Hới (Sân bay Đồng Hới, Ga tàu hoặc các khách sạn đường Trương Pháp, Bảo Ninh), khởi hành đi ${cleanTopic}.\n• 08:30 - 11:30: Tham quan chi tiết các điểm nhấn chính của ${cleanTopic}, chụp ảnh lưu niệm và tìm hiểu câu chuyện bản xứ.\n• 11:45 - 13:30: Thưởng thức bữa trưa đặc sản nức tiếng tại nhà hàng địa phương uy tín.\n• 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng trục đường.\n• 17:00: Xe đưa đoàn trở về trung tâm TP. Đồng Hới an toàn, kết thúc chuyến đi đầy ắp kỷ niệm đẹp.`,
         image: isQuangTri
           ? "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
           : "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
-        imageCaption: `Cung đường di chuyển thuận lợi kết nối tour 1 ngày hoàn hảo`,
-        tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H để không phải lo lắng việc tìm xe hay đổi xe giữa đường."],
+        imageCaption: `Cung đường di chuyển thuận lợi xuất phát từ Đồng Hới kết nối tour 1 ngày hoàn hảo`,
+        tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H từ Đồng Hới để không phải lo lắng việc tìm xe hay đổi xe giữa đường, tiết kiệm 50% chiều về."],
       },
       {
-        heading: `5. Thưởng thức đặc sản ẩm thực ${region} thơm ngon khó cưỡng`,
-        content: `Ẩm thực ${region} luôn làm say lòng du khách với những món ăn đậm đà, mộc mạc mang trọn hồn quê:\n• Bánh bột lọc trứ danh với vỏ trong veo dai giòn bọc tôm sông thịt mỡ chấm mắm ớt cay nồng.\n• Cháo bột cá lóc (bánh canh) nóng hổi ngọt lịm từ nước hầm xương cá đồng.\n• Gà đồi nướng than chấm muối cheo thơm lừng mùi lá rừng.\n• Hải sản tươi sống cập bến hàng ngày ngọt đậm đà vị biển miền Trung.`,
+        heading: `5. Thưởng thức đặc sản ẩm thực TP. Đồng Hới & ${region} thơm ngon khó cưỡng`,
+        content: `Ẩm thực Đồng Hới & ${region} luôn làm say lòng du khách với những món ăn đậm đà, mộc mạc mang trọn hồn quê:\n• Bánh bột lọc Mệ Xuân trứ danh với vỏ trong veo dai giòn bọc tôm sông thịt mỡ chấm mắm ớt cay nồng.\n• Cháo canh cá lóc (bánh canh) Đồng Hới nóng hổi ngọt lịm từ nước hầm xương cá đồng.\n• Gà đồi nướng than chấm muối cheo thơm lừng mùi lá rừng Phong Nha.\n• Hải sản bờ kè Nhật Lệ & Bảo Ninh tươi sống cập bến hàng ngày ngọt đậm đà vị biển miền Trung.`,
         image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
-        imageCaption: `Mâm đặc sản ẩm thực miền Trung đậm đà hương vị quê hương`,
-        tips: ["Bác tài Taxi 24H sẽ gợi ý những quán ăn ngon đúng điệu của người bản địa, giá cả rất bình dân."],
+        imageCaption: `Mâm đặc sản ẩm thực Đồng Hới đậm đà hương vị miền Trung`,
+        tips: ["Bác tài Taxi 24H bản xứ Đồng Hới sẽ gợi ý những quán ăn ngon đúng điệu của người bản địa, giá cả rất bình dân."],
       },
       {
-        heading: `6. Dịch vụ Taxi ${region} 24H: Đưa đón chu đáo, an toàn, giá tốt nhất`,
-        content: `Taxi ${region} 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường:\n• Đội xe đời mới từ 4 chỗ đến 7 chỗ sang trọng, nội thất sạch sẽ, điều hòa mát rượi.\n• Tài xế bản xứ thân thiện, rành đường, hỗ trợ hành lý chu đáo và tư vấn miễn phí suốt hành trình.\n• Giá cước niêm yết rõ ràng chỉ từ 12.000đ/km, ưu đãi giảm tới 50% cho chiều về khi đặt khứ hồi.\n• Tổng đài đặt xe nhanh 24/7: Hotline 0877.669.555 (Zalo: 0398.567.070).`,
+        heading: `6. Dịch vụ Taxi Quảng Bình - Đồng Hới 24H: Đón nhanh 5 phút, an toàn, giá tốt nhất`,
+        content: `Taxi Quảng Bình - Đồng Hới 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường:\n• Đội ngũ tài xế tập trung đông đảo nhất tại TP. Đồng Hới, đón khách nhanh chóng chỉ sau 5 phút tại Sân bay, Ga tàu và các khách sạn.\n• Đội xe đời mới từ 4 chỗ đến 7 chỗ sang trọng, nội thất sạch sẽ, điều hòa mát rượi.\n• Tài xế bản xứ Đồng Hới thân thiện, rành đường, hỗ trợ hành lý chu đáo và tư vấn miễn phí suốt hành trình.\n• Giá cước niêm yết rõ ràng chỉ từ 12.000đ/km, ưu đãi giảm tới 50% cho chiều về khi đặt khứ hồi.\n• Tổng đài đặt xe nhanh 24/7: Hotline 0877.669.555 (Zalo: 0398.567.070).`,
         image: isQuangTri
           ? "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg"
           : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
-        imageCaption: `Đội xe Taxi ${region} 24H luôn túc trực phục vụ quý khách tận tình`,
+        imageCaption: `Đội xe Taxi Quảng Bình - Đồng Hới 24H luôn túc trực phục vụ quý khách tận tình`,
         tips: ["Gọi ngay Hotline 0877.669.555 trước 30 phút để giữ xe đời mới nhất cho hành trình của bạn."],
       },
     ],
     faqs: [
       {
-        question: `Từ trung tâm đi taxi đến ${cleanTopic} mất bao lâu?`,
-        answer: `Thời gian di chuyển bằng taxi chỉ khoảng ${isQuangTri ? "20 - 45 phút" : "30 - 50 phút"} tùy điểm xuất phát, đường đi rất êm ái và thuận tiện.`,
+        question: `Từ trung tâm TP. Đồng Hới đi taxi đến ${cleanTopic} mất bao lâu?`,
+        answer: `Thời gian di chuyển bằng taxi chỉ khoảng ${isQuangTri ? "60 - 80 phút" : "30 - 50 phút"} xuất phát từ trung tâm TP. Đồng Hới hoặc Sân bay Đồng Hới, đường đi rất êm ái và thuận tiện.`,
       },
       {
-        question: "Cước thuê xe taxi đưa đón trọn gói giá bao nhiêu?",
-        answer: "Giá xe 4 chỗ trọn gói chỉ từ 12.000đ/km. Đặt khứ hồi trong ngày được giảm ngay 50% cước chiều về.",
+        question: "Cước thuê xe taxi đưa đón trọn gói từ Đồng Hới giá bao nhiêu?",
+        answer: "Giá xe 4 chỗ trọn gói chỉ từ 12.000đ/km. Đặt khứ hồi trong ngày xuất phát từ Đồng Hới được giảm ngay 50% cước chiều về.",
       },
       {
-        question: "Cần lưu ý trang phục gì khi tham quan?",
-        answer: "Quý khách nên mặc trang phục lịch sự, gọn gàng và mang giày thể thao thoải mái để thuận tiện đi bộ ngắm cảnh.",
+        question: "Đón tại Sân bay Đồng Hới hoặc Ga xe lửa Đồng Hới có phụ phí không?",
+        answer: "Cam kết giá báo trọn gói đã bao gồm vé vào cổng sân bay và ga tàu, quý khách hoàn toàn không phát sinh thêm bất kỳ phụ phí nào.",
       },
     ],
   };
@@ -1575,21 +1575,61 @@ export async function generateAndPublishSeoArticle(
       }
     }
 
-    // 2. Nếu không có chủ đề tùy chỉnh -> lấy bài tiếp theo trong kho SEO_TOPICS_DATABASE
+    // 2. Nếu không có chủ đề tùy chỉnh -> ưu tiên các chủ đề trọng tâm Quảng Bình & TP. Đồng Hới
     if (!chosenSeed) {
-      const availableSeeds = SEO_TOPICS_DATABASE.filter((s) => !existingSlugs.has(s.slug));
+      // Ưu tiên các bài viết thuộc địa bàn Quảng Bình & TP. Đồng Hới trước
+      const quangBinhSeeds = SEO_TOPICS_DATABASE.filter(
+        (s) =>
+          !existingSlugs.has(s.slug) &&
+          !/thanh-co|vinh-moc|la-vang|hien-luong|quang-tri/i.test(s.slug)
+      );
+      const remainingSeeds = SEO_TOPICS_DATABASE.filter((s) => !existingSlugs.has(s.slug));
+      const availableSeeds = quangBinhSeeds.length > 0 ? quangBinhSeeds : remainingSeeds;
+
       if (availableSeeds.length > 0) {
         chosenSeed = ensureGoldenBlueprintQuality(availableSeeds[0]);
       } else {
-        // Đã đăng hết -> chọn ngẫu nhiên và làm mới phiên bản 2026
-        const randomSeed = SEO_TOPICS_DATABASE[Math.floor(Math.random() * SEO_TOPICS_DATABASE.length)];
-        const timestamp = Date.now().toString().slice(-4);
-        chosenSeed = ensureGoldenBlueprintQuality({
-          ...randomSeed,
-          slug: `${randomSeed.slug}-${timestamp}`,
-          title: `${randomSeed.title.replace(/2026/g, "").trim()} Mới Nhất 2026`,
-          publishedDate: new Date().toISOString().split("T")[0],
-        });
+        // Đã đăng hết các bài trong kho -> ưu tiên sáng tạo bài viết mới về TP. Đồng Hới & Quảng Bình
+        const QUANG_BINH_TOPICS = [
+          "Cẩm nang đặt Taxi Sân bay Đồng Hới về Khách sạn Biển Nhật Lệ & Bảo Ninh 2026",
+          "Kinh nghiệm đi Tour Động Thiên Đường & Suối Nước Moọc 1 ngày xuất phát từ TP. Đồng Hới",
+          "Tour Taxi Đồng Hới đi Động Phong Nha & Sông Chày Hang Tối trọn gói giá rẻ",
+          "Kinh nghiệm viếng Mộ Đại Tướng Võ Nguyên Giáp (Vũng Chùa - Đảo Yến) & Bãi Đá Nhảy từ Đồng Hới",
+          "Cẩm nang du lịch Bãi biển Nhật Lệ & Check-in Đồi cát Quang Phú Đồng Hới",
+          "Kinh nghiệm đón Taxi Ga xe lửa Đồng Hới đi Phong Nha Kẻ Bàng",
+          "Tour nghỉ dưỡng Onsen Suối khoáng nóng Bang Lệ Thủy từ TP. Đồng Hới 1 ngày",
+          "Food tour ẩm thực đêm TP. Đồng Hới: Bánh lọc Mệ Xuân, Cháo canh, Hải sản Nhật Lệ",
+          "Kinh nghiệm du lịch Thung lũng Hava & Công viên Ozo Treetop Park Quảng Bình từ Đồng Hới",
+          "Cẩm nang thuê xe Taxi trọn gói đi Tour khám phá Hang Sơn Đoòng & Vườn quốc gia Phong Nha",
+        ];
+        const randomTopic = QUANG_BINH_TOPICS[Math.floor(Math.random() * QUANG_BINH_TOPICS.length)];
+
+        if (geminiKey) {
+          try {
+            const aiGenerated = await generateWithGemini(geminiKey, randomTopic);
+            if (aiGenerated) {
+              const timestamp = Date.now().toString().slice(-4);
+              chosenSeed = ensureGoldenBlueprintQuality({
+                ...aiGenerated,
+                slug: `${aiGenerated.slug || "tour-quang-binh"}-${timestamp}`,
+                publishedDate: new Date().toISOString().split("T")[0],
+              });
+            }
+          } catch (e) {
+            console.warn("Gemini auto-generation failed, falling back to database seed:", e);
+          }
+        }
+
+        if (!chosenSeed) {
+          const randomSeed = SEO_TOPICS_DATABASE[Math.floor(Math.random() * SEO_TOPICS_DATABASE.length)];
+          const timestamp = Date.now().toString().slice(-4);
+          chosenSeed = ensureGoldenBlueprintQuality({
+            ...randomSeed,
+            slug: `${randomSeed.slug}-${timestamp}`,
+            title: `${randomSeed.title.replace(/2026/g, "").trim()} Mới Nhất 2026`,
+            publishedDate: new Date().toISOString().split("T")[0],
+          });
+        }
       }
     }
 
@@ -1649,22 +1689,40 @@ export async function generateAndPublishSeoArticle(
  */
 async function generateWithGemini(apiKey: string, promptTopic: string): Promise<TopicSeed | null> {
   const prompt = `
-Bạn là chuyên gia biên tập nội dung du lịch và SEO hàng đầu, am hiểu sâu sắc về lịch sử, văn hóa và danh lam thắng cảnh tại Quảng Bình & Quảng Trị.
+Bạn là chuyên gia biên tập nội dung du lịch và SEO hàng đầu, am hiểu sâu sắc về văn hóa, danh lam thắng cảnh và ẩm thực tại TỈNH QUẢNG BÌNH (cũ), đặc biệt là TP. ĐỒNG HỚI, Phong Nha - Kẻ Bàng, Biển Nhật Lệ, Bãi Đá Nhảy, Vũng Chùa - Đảo Yến, Suối Moọc, Động Thiên Đường...
+
+CHIẾN LƯỢC KINH DOANH & ĐỊA BÀN HOẠT ĐỘNG BẮT BUỘC (THEO CHỈ ĐẠO TRỰC TIẾP TỪ CHỦ XE):
+1. ĐỊA BÀN HOẠT ĐỘNG CỐT LÕI: Hoạt động chủ yếu tại địa bàn TỈNH QUẢNG BÌNH (cũ).
+2. ĐỘI NGŨ TÀI XẾ CHỦ LỰC TẬP TRUNG TẠI TP. ĐỒNG HỚI: Nhà xe có lượng tài xế tập trung đông đảo nhất tại TP. ĐỒNG HỚI, túc trực 24/7 tại:
+   - Cảng Hàng không Đồng Hới (Sân bay Đồng Hới)
+   - Ga xe lửa Đồng Hới
+   - Tuyến đường ven biển Trương Pháp, bán đảo Bảo Ninh
+   - Bến xe Đồng Hới và toàn bộ khu vực nội thành trung tâm TP. Đồng Hới
+   - Cam kết xe đón nhanh trong 5 phút sau khi gọi tổng đài.
+3. MỐC QUY CHIẾU LỘ TRÌNH VÀ BẢNG GIÁ TAXI:
+   - MỌI bài viết du lịch PHẢI lấy mốc xuất phát và quy chiếu chính từ TP. ĐỒNG HỚI (hoặc Sân bay Đồng Hới / Ga Đồng Hới) đi các điểm du lịch nổi tiếng Quảng Bình: Động Phong Nha, Động Thiên Đường, Suối Nước Moọc, Sông Chày - Hang Tối, Thung lũng Hava, Công viên Ozo, Bãi Đá Nhảy, Vũng Chùa - Đảo Yến (Mộ Đại Tướng Võ Nguyên Giáp), Đồi cát Quang Phú, Bãi biển Nhật Lệ, Bán đảo Bảo Ninh, Suối khoáng nóng Bang Onsen (Lệ Thủy)...
+   - Khoảng cách và cước phí taxi: Báo giá trọn gói minh bạch từ Đồng Hới với đơn giá từ 12.000đ/km, cam kết không phụ phí, ưu đãi giảm giá chiều về tới 50%.
+4. CẨM NANG ẨM THỰC BẢN ĐỊA:
+   - Ưu tiên giới thiệu các món ẩm thực nức tiếng làm nên thương hiệu của TP. ĐỒNG HỚI và QUẢNG BÌNH: Bánh bột lọc Mệ Xuân, Cháo canh cá lóc Đồng Hới, Hải sản tươi sống bờ kè Nhật Lệ & Bảo Ninh (mực nhảy, đẻn biển, chắt chắt xào bánh tráng), Bánh xèo gạo lứt Ba Đồn, Khoai gieo Hải Ninh, Lẩu cá khoai mùa đông...
+5. DỊCH VỤ TAXI:
+   - Định vị thương hiệu: Taxi Quảng Bình - Đồng Hới 24H (Hotline: 0877.669.555, Zalo: 0398.567.070).
+   - Đội xe đời mới 4 - 7 chỗ sạch mát, tài xế bản xứ Đồng Hới lịch sự, nhiệt tình, am hiểu từng ngõ ngách và tư vấn quán ăn chuẩn vị, giá địa phương không lo chặt chém.
+
 Hãy viết một bài viết cẩm nang du lịch và dịch vụ xe taxi chuẩn SEO ĐẶC SẮC NHẤT về chủ đề: "${promptTopic}".
 
 BẮT BUỘC TUÂN THỦ "MẪU CHUẨN VÀNG" ĐÃ ĐƯỢC CHỦ XE DUYỆT SAU ĐÂY:
-1. VĂN PHONG: Sâu sắc, hào hùng, giàu cảm xúc, thấm đượm giá trị văn hóa lịch sử, kết hợp mẹo thực tế bổ ích từ bác tài bản xứ.
+1. VĂN PHONG: Sâu sắc, hào hùng, giàu cảm xúc, thấm đượm giá trị văn hóa lịch sử, kết hợp mẹo thực tế bổ ích từ bác tài bản xứ Đồng Hới.
 2. CẤU TRÚC 6 PHẦN BẮT BUỘC:
-   - Phần 1: Bối cảnh lịch sử hào hùng hoặc vẻ đẹp thiên nhiên kỳ vĩ (chi tiết số liệu, sự kiện, giá trị di sản, câu chuyện lay động lòng người).
-   - Phần 2: Kiến trúc, vết tích chứng tích hoặc các điểm tham quan chi tiết bên trong di tích/thắng cảnh.
+   - Phần 1: Bối cảnh, giá trị di sản hoặc vẻ đẹp thiên nhiên kỳ vĩ của điểm đến tại Quảng Bình.
+   - Phần 2: Kiến trúc, vết tích chứng tích hoặc các trải nghiệm tham quan chi tiết.
    - Phần 3: Trải nghiệm thi vị, thơ ca bất hủ, cảm xúc lắng đọng hoặc nghi thức tâm linh tri ân.
-   - Phần 4: Gợi ý lịch trình Tour 1 ngày trọn vẹn theo khung giờ cụ thể (07:30 đến 17:30) kết nối với các điểm du lịch lân cận.
-   - Phần 5: Cẩm nang ẩm thực đặc sản bản địa trứ danh (kể tên 4-5 món đặc sản độc đáo và cách thưởng thức chuẩn vị).
-   - Phần 6: Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Tài xế bản xứ am hiểu lịch sử, xe sạch mát đời mới 4-7 chỗ, giá trọn gói từ 12.000đ/km, cam kết không phụ phí, Hotline 0877.669.555.
+   - Phần 4: Gợi ý lịch trình Tour 1 ngày trọn vẹn theo khung giờ cụ thể (07:30 đến 17:30) XUẤT PHÁT TỪ TRUNG TÂM TP. ĐỒNG HỚI kết nối với các điểm du lịch lân cận.
+   - Phần 5: Cẩm nang ẩm thực đặc sản bản địa trứ danh tại TP. Đồng Hới / Quảng Bình (4-5 món độc đáo và quán ăn ngon chuẩn vị).
+   - Phần 6: Dịch vụ Taxi Quảng Bình - Đồng Hới 24H: Đội xe tập trung tại Đồng Hới đón nhanh 5 phút, xe sạch mát 4-7 chỗ, giá trọn gói từ 12.000đ/km, ưu đãi 50% chiều về, Hotline 0877.669.555.
 3. HÌNH ẢNH MINH HỌA: Mỗi phần (section) BẮT BUỘC phải có trường "image" (URL ảnh chất lượng cao) và "imageCaption" (chú thích ảnh chi tiết, cảm xúc).
 4. BỘ SƯU TẬP ẢNH (GALLERY): Mảng "gallery" gồm 4-5 ảnh chụp các góc độ đặc sắc khác nhau của địa danh kèm "caption".
 5. MẸO BÁC TÀI BẢN ĐỊA: Mỗi phần có 1-2 mẹo hữu ích từ kinh nghiệm lái xe thực tế (tips).
-6. CÂU HỎI THƯỜNG GẶP (FAQS): 3 câu hỏi thực tế về thời gian di chuyển, giá cước taxi, trang phục và vé vào cổng.
+6. CÂU HỎI THƯỜNG GẶP (FAQS): 3 câu hỏi thực tế về thời gian di chuyển từ TP. Đồng Hới, giá cước taxi, trang phục và vé vào cổng.
 
 Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm markdown code block hoặc text nào khác) với cấu trúc sau:
 {
@@ -1673,12 +1731,12 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
   "metaTitle": "Tiêu đề hiển thị Google < 65 ký tự",
   "metaDescription": "Đoạn mô tả SEO 150-160 ký tự",
   "excerpt": "Đoạn mở đầu truyền cảm hứng 2-3 câu sâu sắc",
-  "category": "Di Tích Lịch Sử Tâm Linh" hoặc "Di Sản Thiên Nhiên Thế Giới" hoặc "Điểm Đến Du Lịch Hot",
+  "category": "Di Sản Thiên Nhiên Thế Giới" hoặc "Điểm Đến Du Lịch Hot" hoặc "Tuyến Đường & Đón Tiễn" hoặc "Di Tích Lịch Sử Tâm Linh",
   "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
-  "destination": "Tên địa danh cụ thể",
-  "distanceFromDongHoi": "Khoảng cách và thời gian đi từ Đồng Hới",
-  "taxiFare4Seats": "Giá xe 4 chỗ (VD: 650.000 VNĐ)",
-  "taxiFare6Seats": "Giá xe 7 chỗ (VD: 800.000 VNĐ)",
+  "destination": "Tên địa danh cụ thể tại Quảng Bình",
+  "distanceFromDongHoi": "Khoảng cách và thời gian đi từ trung tâm TP. Đồng Hới",
+  "taxiFare4Seats": "Giá xe 4 chỗ (VD: 550.000 VNĐ)",
+  "taxiFare6Seats": "Giá xe 7 chỗ (VD: 700.000 VNĐ)",
   "ticketPrice": "Giá vé tham quan thực tế",
   "bestTimeToVisit": "Thời điểm đẹp nhất trong năm",
   "readTime": "8 phút đọc",
@@ -1695,7 +1753,7 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
       "content": "Nội dung giàu cảm xúc, thấm đượm văn hóa lịch sử khoảng 120-180 từ...",
       "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
       "imageCaption": "Chú thích ảnh phần 1",
-      "tips": ["Mẹo hữu ích từ bác tài bản địa"]
+      "tips": ["Mẹo hữu ích từ bác tài bản địa Đồng Hới"]
     },
     {
       "heading": "2. Tiêu đề phần 2",
@@ -1712,27 +1770,27 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
       "tips": ["Mẹo phần 3"]
     },
     {
-      "heading": "4. Gợi ý lịch trình Tour 1 Ngày chi tiết",
-      "content": "Lịch trình theo các mốc giờ 07:30, 09:30, 11:30, 13:30, 15:30...",
+      "heading": "4. Gợi ý lịch trình Tour 1 Ngày chi tiết xuất phát từ TP. Đồng Hới",
+      "content": "Lịch trình theo các mốc giờ 07:30, 09:30, 11:30, 13:30, 15:30 từ TP. Đồng Hới...",
       "image": "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=1000&q=80",
       "imageCaption": "Chú thích ảnh lịch trình tour",
-      "tips": ["Mẹo đặt xe trọn gói khứ hồi"]
+      "tips": ["Mẹo đặt xe trọn gói khứ hồi từ Đồng Hới để nhận ưu đãi 50% chiều về"]
     },
     {
-      "heading": "5. Thưởng thức đặc sản ẩm thực bản địa trứ danh",
-      "content": "Giới thiệu 4-5 món đặc sản độc đáo và địa chỉ thưởng thức chuẩn vị...",
-      "tips": ["Mẹo thưởng thức ẩm thực từ bác tài"]
+      "heading": "5. Thưởng thức đặc sản ẩm thực TP. Đồng Hới & Quảng Bình nức tiếng",
+      "content": "Giới thiệu 4-5 món đặc sản độc đáo và địa chỉ quán ngon chuẩn vị tại Đồng Hới...",
+      "tips": ["Mẹo thưởng thức ẩm thực từ bác tài Đồng Hới"]
     },
     {
-      "heading": "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H đưa đón chu đáo",
-      "content": "Cam kết xe đời mới, giá từ 12.000đ/km, tài xế bản xứ am hiểu địa phương, Hotline 0877.669.555...",
+      "heading": "6. Dịch vụ Taxi Quảng Bình - Đồng Hới 24H đưa đón chu đáo",
+      "content": "Đội xe tập trung tại TP. Đồng Hới đón nhanh 5 phút, giá từ 12.000đ/km, tài xế bản xứ am hiểu địa phương, Hotline 0877.669.555...",
       "tips": ["Mẹo liên hệ đặt xe trước để nhận ưu đãi chiều về tới 50%"]
     }
   ],
   "faqs": [
-    { "question": "Câu hỏi 1?", "answer": "Trả lời câu hỏi 1 chi tiết" },
-    { "question": "Câu hỏi 2?", "answer": "Trả lời câu hỏi 2 chi tiết" },
-    { "question": "Câu hỏi 3?", "answer": "Trả lời câu hỏi 3 chi tiết" }
+    { "question": "Từ trung tâm TP. Đồng Hới đi taxi mất bao lâu?", "answer": "Trả lời câu hỏi chi tiết thời gian và cự ly" },
+    { "question": "Giá cước taxi trọn gói từ Đồng Hới là bao nhiêu?", "answer": "Trả lời bảng giá xe 4 chỗ và 7 chỗ" },
+    { "question": "Đón tại Sân bay hoặc Ga Đồng Hới có phụ phí không?", "answer": "Cam kết giá trọn gói không phát sinh phụ phí" }
   ]
 }
 `;

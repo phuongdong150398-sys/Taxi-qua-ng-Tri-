@@ -714,19 +714,52 @@ export default function ArticlesManagementTab() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase">
-                  Nhập chủ đề muốn AI viết ngay (Tùy chọn):
-                </label>
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-300 uppercase">
+                    Nhập chủ đề muốn AI viết ngay (Tùy chọn):
+                  </label>
+                  <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                    🎯 Trọng tâm Quảng Bình &amp; Đội xe TP. Đồng Hới
+                  </span>
+                </div>
                 <input
                   type="text"
-                  placeholder="VD: Tour Hang Sơn Đoòng, Cầu Hiền Lương, Động Phong Nha, Biển Nhật Lệ..."
+                  placeholder="VD: Taxi Sân bay Đồng Hới, Động Thiên Đường, Suối Moọc, Biển Nhật Lệ..."
                   value={aiTopicInput}
                   onChange={(e) => setAiTopicInput(e.target.value)}
                   disabled={isAiGenerating}
                   className="w-full bg-[#040E1C] border border-[#133863] focus:border-purple-400 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none"
                 />
-                <p className="text-[11px] text-slate-400 mt-1">
-                  💡 <i>Nếu để trống, AI sẽ tự động chọn chủ đề du lịch &amp; đón tiễn taxi hot nhất tiếp theo trong kho.</i>
+
+                {/* Gợi ý chủ đề nhanh Quảng Bình & Đồng Hới */}
+                <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] text-slate-400 font-bold mr-1">Chủ đề gợi ý:</span>
+                  {[
+                    "Taxi Sân bay Đồng Hới ✈️",
+                    "Động Thiên Đường & Suối Moọc 🏞️",
+                    "Động Phong Nha & Hang Tối 🚣",
+                    "Biển Nhật Lệ & Đồi cát Quang Phú 🏖️",
+                    "Mộ Đại Tướng (Vũng Chùa) & Đá Nhảy 🙏",
+                    "Taxi Ga xe lửa Đồng Hới 🚆",
+                    "Suối Bang Onsen Lệ Thủy ♨️",
+                    "Food Tour ẩm thực Đồng Hới 🍜",
+                  ].map((topic) => {
+                    const clean = topic.replace(/[✈️🏞️🚣🏖️🙏🚆♨️🍜]/g, "").trim();
+                    return (
+                      <button
+                        key={topic}
+                        type="button"
+                        onClick={() => setAiTopicInput(clean)}
+                        className="text-[10px] bg-[#0B2240] hover:bg-[#133863] text-amber-300 hover:text-white px-2 py-1 rounded-lg border border-[#133863] transition cursor-pointer"
+                      >
+                        {topic}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <p className="text-[11px] text-slate-400 mt-2">
+                  💡 <i>Nếu để trống, AI sẽ tự động chọn chủ đề đón tiễn taxi &amp; danh thắng hot nhất tại Quảng Bình &amp; TP. Đồng Hới.</i>
                 </p>
               </div>
 
