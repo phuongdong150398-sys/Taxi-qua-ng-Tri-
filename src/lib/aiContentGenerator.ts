@@ -262,87 +262,257 @@ Ngày nay, Bến thả hoa sông Thạch Hãn là điểm đến tâm linh khôn
   },
   {
     slug: "cam-nang-du-lich-dia-dao-vinh-moc-quang-tri",
-    title: "Cẩm Nang Du Lịch Địa Đạo Vịnh Mốc 2026: Kỳ Tích Sống Trong Lòng Đất Quảng Trị",
+    title: "Cẩm Nang Du Lịch Địa Đạo Vịnh Mốc 2026: Huyền Thoại Làng Hầm Trong Lòng Đất Quảng Trị",
     metaTitle: "Cẩm Nang Khám Phá Địa Đạo Vịnh Mốc Quảng Trị 2026 | Taxi 24H",
     metaDescription: "Khám phá huyền thoại làng hầm Địa đạo Vịnh Mốc Quảng Trị: Giá vé, hướng dẫn tham quan các tầng địa đạo, kinh nghiệm thuê xe taxi trọn gói từ Đông Hà và Đồng Hới.",
-    excerpt: "Địa đạo Vịnh Mốc - kỳ tích kiến trúc quân sự lòng đất độc nhất vô nhị. Nơi đây từng là ngôi làng kiên cường che chở cho hàng trăm người dân và bộ đội suốt những năm tháng kháng chiến.",
+    excerpt: "Địa đạo Vịnh Mốc - kỳ tích kiến trúc quân sự lòng đất độc nhất vô nhị của nhân loại. Giữa mưa bom bão đạn, quân và dân Vĩnh Linh đã kiến tạo một thành phố ngầm kiên cường, nơi 17 đứa trẻ cất tiếng khóc chào đời trong lòng đất mẹ.",
     category: "Di Tích Lịch Sử Tâm Linh",
-    coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    destination: "Xã Vĩnh Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị",
-    distanceFromDongHoi: "65 km (khoảng 65 phút đi xe)",
+    coverImage: "https://upload.wikimedia.org/wikipedia/commons/c/c8/C%E1%BB%ADa_s%E1%BB%91_13_c%E1%BB%A7a_%C4%91%E1%BB%8Ba_%C4%91%E1%BA%A1o_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+    destination: "Địa Đạo Vịnh Mốc (Huyện Vĩnh Linh, Quảng Trị)",
+    distanceFromDongHoi: "65 km (khoảng 60 - 70 phút đi xe)",
     taxiFare4Seats: "650.000 VNĐ",
     taxiFare6Seats: "800.000 VNĐ",
     ticketPrice: "50.000đ/người lớn (Trẻ em miễn phí)",
-    bestTimeToVisit: "Quanh năm, thời tiết mát mẻ",
-    readTime: "6 phút đọc",
+    bestTimeToVisit: "Quanh năm, thời tiết trong lòng hầm luôn mát mẻ 22-25°C",
+    readTime: "8 phút đọc",
     highlights: [
-      "Hệ thống địa đạo 3 tầng kỳ vĩ dài gần 2km đào hoàn toàn bằng tay",
-      "Đầy đủ giếng nước, hội trường, phòng sinh hoạt và cả phòng hộ sinh đón chào 17 đứa trẻ chào đời",
-      "Không khí trong lòng hầm luôn mát rượi và thông gió tự nhiên ra bờ biển lộng gió",
+      "Hệ thống làng hầm 3 tầng kỳ vĩ dài gần 2km đào hoàn toàn bằng bàn tay và công cụ thô sơ",
+      "Kỳ tích 17 đứa trẻ cất tiếng khóc chào đời an toàn ngay trong phòng hộ sinh lòng đất",
+      "Hệ thống 13 cửa hầm thông gió thông minh với 6 cửa trổ thẳng ra bờ biển Đông lộng gió",
+      "Di tích Quốc gia đặc biệt tiêu biểu cho ý chí 'Một tấc không đi, một ly không rời'",
+      "Dịch vụ taxi đưa đón trọn gói từ Đồng Hới hoặc Đông Hà chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/c/c8/C%E1%BB%ADa_s%E1%BB%91_13_c%E1%BB%A7a_%C4%91%E1%BB%8Ba_%C4%91%E1%BA%A1o_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+        caption: "Cửa hầm số 13 trổ thẳng ra bãi biển Vịnh Mốc đón gió mát lành",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Family_Room_in_Vinh_Moc_tunnel.JPG",
+        caption: "Căn hộ gia đình khoét sâu vào vách đất son - Nơi sinh hoạt ấm cúng thời chiến",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/6/68/Gi%E1%BA%BFng_n%C6%B0%E1%BB%9Bc_%E1%BB%9F_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+        caption: "Giếng nước ngọt sinh hoạt khoét sâu giữa lòng địa đạo",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/4/4d/Visitors_in_Vinh_Moc_tunnel.JPG",
+        caption: "Du khách quốc tế ngỡ ngàng trước quy mô đường hầm 3 tầng kiên cố",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+        caption: "Cầu Hiền Lương - Sông Bến Hải nằm trên cùng cung đường tour Vịnh Mốc",
+      },
     ],
     sections: [
       {
-        heading: "1. Kiến trúc địa đạo 3 tầng độc đáo có một không hai",
-        content: "Địa đạo Vịnh Mốc nằm sát bờ biển Vĩnh Linh, được người dân đào thủ công từ năm 1965 đến 1967. Toàn bộ công trình có kết cấu 3 tầng: tầng 1 sâu 12-15m dùng để chiến đấu và trú ẩn tạm thời; tầng 2 sâu 18m là nơi sinh hoạt, hội họp, trạm xá; tầng 3 sâu 22-23m dùng làm kho chứa vũ khí và lương thực. Hệ thống gồm 13 cửa thông ra ngoài, trong đó có 6 cửa trổ thẳng ra biển đón gió mát lành.",
-        tips: ["Nên mang giày thể thao thoải mái và đi theo hướng dẫn của hướng dẫn viên để không bỏ sót các điểm tham quan thú vị."],
+        heading: "1. Địa đạo Vịnh Mốc - Bản trường ca sống trong lòng đất của lũy thép Vĩnh Linh",
+        content: `Nằm bên bờ biển Vĩnh Thạch, huyện Vĩnh Linh, Địa đạo Vịnh Mốc là di tích lịch sử huyền thoại minh chứng cho sức sống quật cường của nhân dân vùng giới tuyến Vĩ tuyến 17. Trong những năm tháng chiến tranh khốc liệt (1965 - 1972), mỗi người dân Vĩnh Linh phải gánh chịu trung bình 7 tấn bom đạn. Để bám đất, giữ làng và tiếp tế cho đảo Cồn Cỏ tiền tiêu, người dân nơi đây đã quyết định chuyển toàn bộ cuộc sống xuống lòng đất.
+
+Chỉ bằng những chiếc cuốc, xẻng thô sơ và đôi bàn tay trần, quân và dân Vịnh Mốc đã đào và di chuyển hơn 6.000 mét khối đất đá bazan cứng, kiến tạo nên một công trình địa đạo đồ sộ với tổng chiều dài gần 2.000 mét. Địa đạo trở thành pháo đài thép bất khả xâm phạm, chở che cho hàng trăm con người suốt gần 2.000 ngày đêm khói lửa.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/C%E1%BB%ADa_s%E1%BB%91_13_c%E1%BB%A7a_%C4%91%E1%BB%8Ba_%C4%91%E1%BA%A1o_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+        imageCaption: "Cửa hầm số 13 của địa đạo Vịnh Mốc nhìn ra biển xanh - Điểm check-in biểu tượng của di tích",
+        tips: [
+          "Nên mang giày thể thao chống trơn trượt vì lối đi trong lòng hầm là đất đất sét nén tự nhiên.",
+        ],
       },
       {
-        heading: "2. Cách thức di chuyển đến Địa đạo Vịnh Mốc thuận tiện nhất",
-        content: "Nằm cách QL1A khoảng 14km về phía biển, đường vào Vịnh Mốc rất đẹp, rợp bóng phi lao và cao su bạt ngàn. Du khách từ Đông Hà (khoảng 38km) hoặc Đồng Hới (khoảng 65km) có thể dễ dàng đặt taxi đưa đón trọn gói. Đội ngũ lái xe Taxi Quảng Trị 24H luôn sẵn sàng phục vụ với xe đời mới 4 - 7 chỗ máy lạnh mát sâu, lái xe an toàn và nhiệt tình hỗ trợ suốt chuyến đi.",
-        tips: ["Có thể kết hợp tham quan Cầu Hiền Lương - Sông Bến Hải và Bãi biển Cửa Tùng trên cùng một cung đường."],
+        heading: "2. Kiến trúc 3 tầng lòng đất thông minh và khoa học vượt thời đại",
+        content: `Hệ thống địa đạo Vịnh Mốc được thiết kế với 3 tầng sâu khác nhau:
+• Tầng 1 (sâu 12 - 15m): Là nơi cơ động chiến đấu, trực chiến bắn máy bay và tàu chiến địch.
+• Tầng 2 (sâu 18m): Là trung tâm sinh hoạt của dân làng, gồm trạm xá, hội trường sức chứa 60 người, bếp Hoàng Cầm, kho lương thực và trường học cho các em nhỏ.
+• Tầng 3 (sâu 22 - 23m): Dùng làm kho cất giấu vũ khí, đạn dược và trung chuyển hàng hóa tiếp tế cho bộ đội đảo Cồn Cỏ.
+
+Toàn bộ địa đạo có 13 cửa hầm thông ra ngoài (7 cửa trổ lên đồi, 6 cửa trổ thẳng ra biển) cùng hệ thống giếng thông hơi thông minh giúp luồng gió biển luôn lưu thông mát rượi, xua tan cảm giác ngột ngạt ngỡ như đang ở trên mặt đất.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4d/Visitors_in_Vinh_Moc_tunnel.JPG",
+        imageCaption: "Du khách trải nghiệm khám phá các tầng địa đạo được giữ gìn nguyên vẹn qua hơn nửa thế kỷ",
+        tips: [
+          "Chiều cao lòng hầm từ 1m50 - 1m80, du khách đi bộ hơi cúi đầu nhẹ ở một số đoạn ngắn.",
+        ],
+      },
+      {
+        heading: "3. Kỳ tích 17 đứa trẻ chào đời trong lòng đất tối",
+        content: `Điều khiến du khách trong và ngoài nước xúc động nhất khi đặt chân đến Vịnh Mốc chính là Căn phòng hộ sinh dã chiến nằm ở tầng 2 địa đạo. Giữa tiếng gầm rú của bom tọa độ và pháo hạm từ biển bắn vào, nữ hộ sinh địa phương đã đỡ đẻ thành công cho 17 em bé chào đời bình an vô sự.
+
+Những mầm sống non nớt cất tiếng khóc đầu đời trong lòng đất mẹ sâu thẳm dưới ánh đèn dầu le lói là biểu tượng bất diệt cho tình yêu thương, niềm tin mãnh liệt vào hòa bình và sự trường tồn của dân tộc Việt Nam.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Family_Room_in_Vinh_Moc_tunnel.JPG",
+        imageCaption: "Căn hộ gia đình khoét sâu vào vách đất - Nơi lưu giữ ký ức về cuộc sống kiên cường của nhân dân Vịnh Mốc",
+        tips: [
+          "Hãy dành vài phút lắng đọng tại khu phòng hộ sinh để nghe hướng dẫn viên kể câu chuyện về các 'em bé địa đạo' nay đã thành đạt.",
+        ],
+      },
+      {
+        heading: "4. Gợi ý lịch trình Tour Vĩ Tuyến 17 - Vịnh Mốc - Cầu Hiền Lương 1 Ngày",
+        content: `Lịch trình kết hợp hoàn hảo khám phá cụm Di tích lịch sử Quốc gia đặc biệt Vĩnh Linh:
+• 07:30 - 08:30: Xe đón tại khách sạn Đồng Hới hoặc Đông Hà, khởi hành theo QL1A đi Vĩnh Linh.
+• 08:45 - 10:15: Tham quan Cụm di tích Đôi bờ Hiền Lương - Sông Bến Hải (Cầu Hiền Lương lịch sử, Nhà trưng bày Vĩ tuyến 17, Cột cờ giới tuyến).
+• 10:30 - 12:30: Khám phá Địa đạo Vịnh Mốc, Bảo tàng chứng tích và check-in Cửa hầm số 13 ngắm biển xanh.
+• 12:30 - 14:00: Ăn trưa hải sản tươi sống tại Bãi tắm Cửa Tùng - nơi từng được mệnh danh là 'Nữ hoàng của các bãi tắm'.
+• 14:30 - 16:00: Check-in Mũi Trèo Vĩnh Linh với vách đá nhô ra biển hùng vĩ hoặc Rừng nguyên sinh Rú Lịnh.
+• 16:30: Xe trả quý khách về lại khách sạn hoặc ga tàu, sân bay an toàn.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+        imageCaption: "Cầu Hiền Lương bắc qua sông Bến Hải - Điểm kết hợp hoàn hảo cùng tour Vịnh Mốc",
+        tips: [
+          "Đặt xe taxi trọn gói khứ hồi với Taxi Quảng Trị 24H để bác tài chở thẳng tuyến tour không cần lo tìm đường hay đổi xe.",
+        ],
+      },
+      {
+        heading: "5. Thưởng thức ẩm thực hải sản Cửa Tùng & đặc sản Vĩnh Linh",
+        content: `Đến Vịnh Mốc, du khách sẽ được thưởng thức những món quà ẩm thực đậm đà phong vị biển miền Trung:
+• Mực nháy Cửa Tùng hấp gừng: Mực câu trong đêm tươi rói giòn ngọt sần sật chấm muối tiêu chanh ớt xiêm xanh.
+• Bánh đúc rau câu Vĩnh Linh: Món ăn thanh mát độc đáo nấu từ rau câu biển tự nhiên, chấm nước ruốc biển cay nồng.
+• Canh chua cá bớp nấu lá giang: Vị chua thanh ngọt đậm đà đánh tan mệt mỏi sau chuyến đi bộ.
+• Nước mắm truyền thống Cửa Tùng và Tiêu đen Vĩnh Linh: Món quà đặc sản hảo hạng du khách thường mua về biếu người thân.`,
+        tips: [
+          "Bác tài Taxi 24H sẽ gợi ý những quán hải sản bình dân của bà con ngư dân Cửa Tùng, đồ tươi rói giá cả phải chăng.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị 24H đưa đón Vịnh Mốc tận tâm, giá rẻ",
+        content: `Taxi Quảng Trị - Quảng Bình 24H tự hào là sự lựa chọn hàng đầu của du khách khi khám phá Di tích Vịnh Mốc:
+• Đội xe đời mới từ 4 đến 7 chỗ máy lạnh sạch sẽ, chạy êm ái trên các cung đường ven biển.
+• Giá cước trọn gói cam kết chỉ từ 12.000đ/km, rẻ hơn 20-30% so với taxi truyền thống, không phí phụ trội.
+• Đội ngũ tài xế bản địa thân thiện, lái xe cẩn thận, am hiểu sâu sắc lịch sử và hỗ trợ khách hàng nhiệt tình suốt chuyến đi.`,
+        tips: [
+          "Gọi ngay Hotline 0877.669.555 để đặt xe trước và giữ xe đời mới nhất cho hành trình khám phá.",
+        ],
       },
     ],
     faqs: [
       {
-        question: "Đi trong lòng địa đạo Vịnh Mốc có ngột ngạt không?",
-        answer: "Hoàn toàn không. Hệ thống địa đạo được thiết kế các giếng thông hơi thông minh và cửa sổ hướng biển nên không khí bên trong luôn mát mẻ và dễ chịu.",
+        question: "Từ TP. Đông Hà hoặc Đồng Hới đi taxi đến Vịnh Mốc mất bao xa?",
+        answer: "Từ Đông Hà đi Vịnh Mốc khoảng 38km (40 phút). Từ Đồng Hới đi Vịnh Mốc khoảng 65km (65 phút). Taxi phục vụ đón tận nơi 24/7.",
       },
       {
-        question: "Giá taxi đi tour Vịnh Mốc từ TP. Đông Hà là bao nhiêu?",
-        answer: "Giá taxi 4 chỗ khứ hồi từ Đông Hà đi Vịnh Mốc kết hợp Cầu Hiền Lương khoảng 500.000đ - 650.000đ trọn gói cả đi và về.",
+        question: "Đi trong lòng địa đạo Vịnh Mốc có ngột ngạt hoặc thiếu oxy không?",
+        answer: "Hoàn toàn không. Hệ thống địa đạo Vịnh Mốc có các giếng thông gió tự nhiên thông thẳng ra bờ biển nên không khí bên trong luôn mát mẻ 22-25°C, thông thoáng và rất dễ thở.",
+      },
+      {
+        question: "Vé vào cổng Địa đạo Vịnh Mốc là bao nhiêu?",
+        answer: "Giá vé tham quan hiện tại là 50.000đ/người lớn. Trẻ em dưới 1m2 được miễn phí vé tham quan.",
       },
     ],
   },
   {
     slug: "kinh-nghiem-hanh-huong-thanh-dia-la-vang-quang-tri",
-    title: "Kinh Nghiệm Hành Hương Thánh Địa La Vang Quảng Trị 2026: Trung Tâm Hành Hương Công Giáo Linh Thiêng",
+    title: "Kinh Nghiệm Hành Hương Thánh Địa La Vang Quảng Trị 2026: Trung Tâm Thánh Mẫu Linh Thiêng Bậc Nhất",
     metaTitle: "Kinh Nghiệm Hành Hương Đức Mẹ La Vang Quảng Trị 2026 | Taxi 24H",
     metaDescription: "Cẩm nang hướng dẫn hành hương Thánh địa Đức Mẹ La Vang Quảng Trị: Nguồn gốc tích Đức Mẹ hiện ra, giờ lễ, kinh nghiệm xin ơn và dịch vụ xe taxi đón tiễn từ Huế, Đông Hà, Đồng Hới.",
-    excerpt: "Thánh địa La Vang là trung tâm hành hương Công giáo lớn bậc nhất Việt Nam. Cùng khám phá cẩm nang chiêm bái linh thiêng, kiến trúc Vương cung Thánh đường và phương tiện di chuyển thuận tiện.",
+    excerpt: "Thánh địa La Vang là trung tâm hành hương Công giáo lớn bậc nhất Việt Nam. Nơi đây gắn liền với sự tích Đức Mẹ Maria hiện ra che chở đoàn con trong rừng thẳm Dinh Cát năm 1798.",
     category: "Di Tích Lịch Sử Tâm Linh",
-    coverImage: "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=1200&q=80",
-    destination: "Xã Hải Phú, Huyện Hải Lăng, Tỉnh Quảng Trị",
-    distanceFromDongHoi: "110 km (khoảng 100 phút đi xe)",
+    coverImage: "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+    destination: "Thánh Địa La Vang (Huyện Hải Lăng, Quảng Trị)",
+    distanceFromDongHoi: "110 km (khoảng 95 - 105 phút đi xe)",
     taxiFare4Seats: "950.000 VNĐ",
     taxiFare6Seats: "1.200.000 VNĐ",
     ticketPrice: "Miễn phí tham quan và hành hương",
-    bestTimeToVisit: "Quanh năm, đặc biệt dịp Đại hội La Vang ngày 15/8",
-    readTime: "6 phút đọc",
+    bestTimeToVisit: "Quanh năm, đặc biệt dịp Đại hội La Vang ngày 15/8 và các ngày Lễ trọng",
+    readTime: "8 phút đọc",
     highlights: [
-      "Trung tâm Thánh Mẫu Quốc gia thiêng liêng của cộng đồng Công giáo",
-      "Vương cung Thánh đường La Vang mới với quy mô đồ sộ và kiến trúc đậm nét văn hóa Việt",
-      "Cây đa La Vang lịch sử - nơi tương truyền Đức Mẹ bồng Chúa Hài Đồng hiện ra che chở đoàn con",
+      "Trung tâm Thánh Mẫu Quốc gia thiêng liêng thu hút hàng triệu tín hữu và du khách thập phương",
+      "Vương cung Thánh đường La Vang mới với quy mô nguy nga mang đậm nét kiến trúc truyền thống Việt Nam",
+      "Tháp chuông cổ rêu phong lịch sử in hằn dấu ấn thăng trầm của thời gian",
+      "Cây đa La Vang lịch sử - nơi tương truyền Đức Mẹ bồng Chúa Hài Đồng hiện ra chữa lành bệnh tật",
+      "Dịch vụ taxi đón tiễn sân bay Phú Bài (Huế), ga Đông Hà về La Vang giá rẻ chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        caption: "Toàn cảnh quảng trường và Vương cung Thánh đường La Vang bề thế nguy nga",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG",
+        caption: "Di tích Tháp chuông cổ kính La Vang sừng sững qua bao biến thiên lịch sử",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG",
+        caption: "Tượng Đức Mẹ La Vang nhân từ trong tà áo dài truyền thống Việt Nam",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg",
+        caption: "Thành Cổ Quảng Trị cách La Vang chỉ 6km - Điểm kết hợp lý tưởng trong ngày",
+      },
     ],
     sections: [
       {
         heading: "1. Sự tích huyền thoại Đức Mẹ La Vang hiện ra che chở giáo dân",
-        content: "Năm 1798, dưới thời vua Cảnh Thịnh, nhiều giáo dân đã chạy trốn vào khu rừng rậm hoang vu La Vang thuộc vùng đất Dinh Cát xưa. Giữa cảnh đói khổ và dịch bệnh hoành hành, giáo dân đã tụ họp dưới gốc cây đa cổ thụ đọc kinh cầu nguyện. Tương truyền, Đức Mẹ Maria đã hiện ra với áo choàng lộng lẫy, tay bồng Chúa Giêsu, an ủi con cái và chỉ cho họ hái lá vằng đun nước uống để chữa lành bệnh tật.",
-        tips: ["Du khách và giáo dân có thể mang theo bình nước sạch để lấy nước thánh từ nguồn nước tại trung tâm La Vang về làm quà phước lành."],
+        content: `Năm 1798, dưới thời vua Cảnh Thịnh nhà Tây Sơn, nhiều tín hữu Công giáo đã chạy trốn vào khu rừng rậm hoang vu La Vang thuộc vùng đất Dinh Cát xưa (nay thuộc xã Hải Phú, huyện Hải Lăng, Quảng Trị). Giữa cảnh đói khổ, bệnh tật và thú dữ rình rập, giáo dân đêm ngày tụ họp dưới gốc cây đa cổ thụ đọc kinh cầu nguyện xin ơn che chở.
+
+Tương truyền, vào một đêm thanh vắng, Đức Mẹ Maria đã hiện ra trong ánh hào quang rực rỡ, khoác áo choàng lộng lẫy, tay bồng Chúa Giêsu Hài Đồng và có hai thiên thần hầu cận. Đức Mẹ ủi an đoàn con đau khổ và chỉ dạy họ hái một loại lá cây mọc quanh vùng (cây lá Vằng) đun nước uống để chữa lành bệnh tật. Từ đó, địa danh La Vang trở thành mảnh đất linh thiêng, nơi Đức Mẹ luôn lắng nghe và ban ơn lành cho mọi người đến cầu xin.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG",
+        imageCaption: "Tượng Đức Mẹ La Vang bồng Chúa Hài Đồng nhân từ chở che đoàn con cái",
+        tips: [
+          "Du khách có thể chuẩn bị bình nước sạch để xin nước thánh tại nguồn nước suối thiêng La Vang mang về cho gia đình.",
+        ],
       },
       {
-        heading: "2. Phương tiện di chuyển đến Thánh địa La Vang thuận tiện nhất",
-        content: "Thánh địa La Vang nằm cách TP. Đông Hà 18km về phía Nam và cách TP. Huế khoảng 55km về phía Bắc, đường đi hoàn toàn trải nhựa phẳng phiu. Khách hành hương hạ cánh tại Sân bay Phú Bài (Huế) hoặc Ga Đông Hà có thể đặt Taxi Quảng Trị 24H để được đưa đón tận cửa Vương cung Thánh đường với mức cước rẻ nhất khu vực chỉ từ 12.000đ/km.",
-        tips: ["Vào dịp Lễ Đức Mẹ Hồn Xác Lên Trời (15/8), lượng khách hành hương rất đông, du khách nên đặt xe trước 1-2 ngày để đảm bảo có xe đón đúng giờ."],
+        heading: "2. Chiêm ngưỡng kiến trúc Vương cung Thánh đường và Tháp chuông cổ rêu phong",
+        content: `Quần thể Trung tâm Hành hương La Vang là sự kết hợp hài hòa giữa văn hóa Công giáo và nét kiến trúc cung đình, đình làng Việt Nam:
+• Tháp chuông cổ La Vang: Là chứng tích còn sót lại của ngôi thánh đường xây dựng năm 1928, trải qua bom đạn chiến tranh năm 1972 vẫn sừng sững đứng vững, rêu phong cổ kính như chứng nhân của lịch sử.
+• Cụm tượng đài Ba Cây Đa: Nơi đặt tượng Đức Mẹ La Vang mặc trang phục áo dài truyền thống Việt Nam, đầu đội khăn đóng bồng Chúa Giêsu, che chở bên dưới là ba cây đa nhân tạo khổng lồ vươn tán rộng lớn.
+• Vương cung Thánh đường mới: Công trình đồ sộ mang phong cách kiến trúc Á Đông với mái ngói đỏ cong vút, cột gỗ chạm khắc tinh xảo có sức chứa hàng ngàn người tham dự thánh lễ.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG",
+        imageCaption: "Tháp chuông cổ La Vang - Di tích linh thiêng sừng sững giữa đất trời Quảng Trị",
+        tips: [
+          "Khuôn viên La Vang rất rộng lớn và rợp bóng cây xanh, du khách nên mặc trang phục lịch sự, kín đáo khi vào chiêm bái.",
+        ],
+      },
+      {
+        heading: "3. Lễ hội Hành hương La Vang và các giờ Thánh Lễ thiêng liêng",
+        content: `Hàng năm, Thánh địa La Vang đón hàng triệu lượt khách hành hương. Đặc biệt vào dịp Đại hội La Vang (tổ chức định kỳ 3 năm một lần vào ngày 13 - 15/8 kỷ niệm Lễ Đức Mẹ Hồn Xác Lên Trời), biển người từ khắp mọi miền đất nước và kiều bào hải ngoại đổ về đây hiệp dâng thánh lễ, rước kiệu Đức Mẹ trong bầu không khí thánh thiện và xúc động khôn tả.
+
+Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày vào các khung giờ: 05h00 sáng và 19h00 tối. Riêng ngày Chúa Nhật có các thánh lễ vào 05h00, 08h00 sáng và 15h00 chiều.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        imageCaption: "Quảng trường trung tâm La Vang - Nơi diễn ra các đại lễ hành hương long trọng",
+        tips: [
+          "Nếu có kế hoạch tham dự thánh lễ, bạn nên có mặt trước giờ lễ 20 phút để chọn được vị trí ngồi thuận lợi.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình Tour Hành Hương La Vang - Thành Cổ Quảng Trị 1 Ngày",
+        content: `Cung đường tâm linh kết hợp lý tưởng nhất trong ngày:
+• 08:00: Xe đón tại Ga Đông Hà hoặc khách sạn, di chuyển đến Thánh địa La Vang (cách 18km).
+• 08:30 - 11:00: Tham quan Vương cung Thánh đường, viếng tượng đài Ba Cây Đa, dâng hạt chuỗi mân côi và lấy nước thánh tại giếng thiêng.
+• 11:30: Thưởng thức bữa trưa đặc sản Bánh bột lọc Mỹ Chánh và Cháo bột Hải Lăng trứ danh ngay gần La Vang.
+• 13:30 - 15:30: Di chuyển về viếng Thành Cổ Quảng Trị (cách La Vang chỉ 6km), dâng hương Bến thả hoa sông Thạch Hãn.
+• 16:00: Xe đưa đoàn ghé mua đặc sản bánh ướt Phương Lang, cao lá vằng làm quà và trả khách về điểm hẹn.`,
+        tips: [
+          "Đặt xe taxi phục vụ riêng trọn gói cả ngày với Taxi Quảng Trị 24H để thoải mái thời gian cầu nguyện mà không bị giục giã.",
+        ],
+      },
+      {
+        heading: "5. Đặc sản ẩm thực Hải Lăng & Quà tặng phước lành La Vang",
+        content: `Vùng đất Hải Lăng bao bọc La Vang có nền ẩm thực dân dã nhưng vô cùng độc đáo:
+• Cao lá Vằng La Vang: Chiết xuất từ lá vằng sẻ tự nhiên nơi Đức Mẹ chỉ dạy, có tác dụng mát gan, bổ máu, kích thích tiêu hóa và lợi sữa cho phụ nữ sau sinh.
+• Bánh bột lọc Mỹ Chánh: Nổi tiếng nhất tỉnh Quảng Trị với hương vị đậm đà khó quên.
+• Bánh ướt Phương Lang: Món bánh ướt thịt heo chấm tương ớt mè gia truyền hơn 100 năm tuổi.`,
+        tips: [
+          "Nên mua cao lá vằng tại các quầy dòng tu bên trong trung tâm La Vang để đảm bảo chất lượng tinh chất nguyên chất 100%.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị 24H đưa đón hành hương La Vang chu đáo",
+        content: `Taxi Quảng Trị 24H hân hạnh phục vụ bà con giáo dân và du khách hành hương về đất Mẹ:
+• Đưa đón tận nơi từ Sân bay Phú Bài (Huế - 55km), Sân bay Đồng Hới (110km), Ga Đông Hà (18km) hoặc Ga Huế.
+• Xe 4 - 7 chỗ đời mới sạch sẽ, trang bị điều hòa êm ái, bác tài bản xứ tận tình, chu đáo hỗ trợ đồ lễ và hành lý.
+• Mức giá cước trọn gói tiết kiệm nhất khu vực chỉ từ 12.000đ/km, cam kết không tăng giá vào các dịp lễ hội cao điểm.`,
+        tips: [
+          "Liên hệ Hotline 0877.669.555 để đặt xe trước 30 phút hoặc đặt xe theo ngày trọn gói ưu đãi nhất.",
+        ],
       },
     ],
     faqs: [
       {
-        question: "Từ Ga Đông Hà đi taxi đến Thánh địa La Vang mất bao lâu?",
-        answer: "Khoảng cách chỉ khoảng 18km, thời gian di chuyển bằng taxi mất khoảng 20-25 phút. Giá cước taxi 4 chỗ khoảng 200.000đ - 220.000đ.",
+        question: "Từ Ga Đông Hà hoặc TP. Huế đi taxi đến La Vang mất bao lâu?",
+        answer: "Từ Ga Đông Hà đến La Vang chỉ 18km (khoảng 20 phút đi taxi, giá khoảng 200.000đ - 220.000đ). Từ trung tâm TP. Huế đến La Vang khoảng 55km (khoảng 60 phút đi taxi, giá khoảng 550.000đ - 650.000đ).",
       },
       {
-        question: "Người ngoài Công giáo có được vào tham quan Thánh địa La Vang không?",
-        answer: "Hoàn toàn được. Thánh địa mở cửa chào đón tất cả du khách thập phương đến tham quan, chiêm bái và tìm hiểu nét đẹp kiến trúc trong không gian thanh tịnh.",
+        question: "Người không theo đạo Công giáo có được vào tham quan Thánh địa La Vang không?",
+        answer: "Thánh địa La Vang mở cửa tự do và nồng nhiệt chào đón tất cả mọi người, không phân biệt tôn giáo, đến tham quan, chiêm bái và tận hưởng không gian thanh tịnh.",
+      },
+      {
+        question: "Tại La Vang có chỗ nghỉ qua đêm cho khách hành hương không?",
+        answer: "Có. Trung tâm Hành hương La Vang có các dãy nhà lưu trú phục vụ khách hành hương với chi phí hỗ trợ tùy tâm hoặc giá tượng trưng rất rẻ.",
       },
     ],
   },
@@ -688,50 +858,95 @@ export async function generateAndPublishSeoArticle(customTopic?: string): Promis
 }
 
 /**
- * Gọi Google Gemini API để tạo bài viết du lịch chuẩn SEO
+ * Gọi Google Gemini API để tạo bài viết du lịch chuẩn SEO theo "MẪU CHUẨN VÀNG ĐẶC SẮC"
+ * (Đầy đủ 6 phần chuyên sâu, ảnh minh họa từng phần, bộ sưu tập gallery, ẩm thực bản địa, tour 1 ngày và Taxi 24H)
  */
 async function generateWithGemini(apiKey: string, promptTopic: string): Promise<TopicSeed | null> {
   const prompt = `
-Bạn là chuyên gia SEO hàng đầu và người am hiểu sâu sắc về du lịch Quảng Bình & Quảng Trị.
-Hãy viết một bài viết cẩm nang du lịch và dịch vụ xe taxi chuẩn SEO chi tiết về chủ đề: "${promptTopic}".
+Bạn là chuyên gia biên tập nội dung du lịch và SEO hàng đầu, am hiểu sâu sắc về lịch sử, văn hóa và danh lam thắng cảnh tại Quảng Bình & Quảng Trị.
+Hãy viết một bài viết cẩm nang du lịch và dịch vụ xe taxi chuẩn SEO ĐẶC SẮC NHẤT về chủ đề: "${promptTopic}".
+
+BẮT BUỘC TUÂN THỦ "MẪU CHUẨN VÀNG" ĐÃ ĐƯỢC CHỦ XE DUYỆT SAU ĐÂY:
+1. VĂN PHONG: Sâu sắc, hào hùng, giàu cảm xúc, thấm đượm giá trị văn hóa lịch sử, kết hợp mẹo thực tế bổ ích từ bác tài bản xứ.
+2. CẤU TRÚC 6 PHẦN BẮT BUỘC:
+   - Phần 1: Bối cảnh lịch sử hào hùng hoặc vẻ đẹp thiên nhiên kỳ vĩ (chi tiết số liệu, sự kiện, giá trị di sản, câu chuyện lay động lòng người).
+   - Phần 2: Kiến trúc, vết tích chứng tích hoặc các điểm tham quan chi tiết bên trong di tích/thắng cảnh.
+   - Phần 3: Trải nghiệm thi vị, thơ ca bất hủ, cảm xúc lắng đọng hoặc nghi thức tâm linh tri ân.
+   - Phần 4: Gợi ý lịch trình Tour 1 ngày trọn vẹn theo khung giờ cụ thể (07:30 đến 17:30) kết nối với các điểm du lịch lân cận.
+   - Phần 5: Cẩm nang ẩm thực đặc sản bản địa trứ danh (kể tên 4-5 món đặc sản độc đáo và cách thưởng thức chuẩn vị).
+   - Phần 6: Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Tài xế bản xứ am hiểu lịch sử, xe sạch mát đời mới 4-7 chỗ, giá trọn gói từ 12.000đ/km, cam kết không phụ phí, Hotline 0877.669.555.
+3. HÌNH ẢNH MINH HỌA: Mỗi phần (section) BẮT BUỘC phải có trường "image" (URL ảnh chất lượng cao) và "imageCaption" (chú thích ảnh chi tiết, cảm xúc).
+4. BỘ SƯU TẬP ẢNH (GALLERY): Mảng "gallery" gồm 4-5 ảnh chụp các góc độ đặc sắc khác nhau của địa danh kèm "caption".
+5. MẸO BÁC TÀI BẢN ĐỊA: Mỗi phần có 1-2 mẹo hữu ích từ kinh nghiệm lái xe thực tế (tips).
+6. CÂU HỎI THƯỜNG GẶP (FAQS): 3 câu hỏi thực tế về thời gian di chuyển, giá cước taxi, trang phục và vé vào cổng.
+
 Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm markdown code block hoặc text nào khác) với cấu trúc sau:
 {
   "slug": "chu-de-khong-dau-ngan-gon",
   "title": "Tiêu đề hấp dẫn chuẩn SEO 2026 có từ khóa chính",
   "metaTitle": "Tiêu đề hiển thị Google < 65 ký tự",
   "metaDescription": "Đoạn mô tả SEO 150-160 ký tự",
-  "excerpt": "Đoạn tóm tắt mở đầu 2-3 câu",
-  "category": "Kinh Nghiệm Du Lịch" hoặc "Di Tích Lịch Sử Tâm Linh" hoặc "Điểm Đến Nổi Tiếng",
+  "excerpt": "Đoạn mở đầu truyền cảm hứng 2-3 câu sâu sắc",
+  "category": "Di Tích Lịch Sử Tâm Linh" hoặc "Di Sản Thiên Nhiên Thế Giới" hoặc "Điểm Đến Du Lịch Hot",
   "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
   "destination": "Tên địa danh cụ thể",
   "distanceFromDongHoi": "Khoảng cách và thời gian đi từ Đồng Hới",
-  "taxiFare4Seats": "Giá xe 4 chỗ (VD: 450.000 VNĐ)",
-  "taxiFare6Seats": "Giá xe 7 chỗ (VD: 600.000 VNĐ)",
+  "taxiFare4Seats": "Giá xe 4 chỗ (VD: 650.000 VNĐ)",
+  "taxiFare6Seats": "Giá xe 7 chỗ (VD: 800.000 VNĐ)",
   "ticketPrice": "Giá vé tham quan thực tế",
-  "bestTimeToVisit": "Tháng mấy",
-  "readTime": "6 phút đọc",
-  "highlights": ["Điểm nổi bật 1", "Điểm nổi bật 2", "Điểm nổi bật 3"],
+  "bestTimeToVisit": "Thời điểm đẹp nhất trong năm",
+  "readTime": "8 phút đọc",
+  "highlights": ["Điểm nổi bật 1", "Điểm nổi bật 2", "Điểm nổi bật 3", "Điểm nổi bật 4", "Điểm nổi bật 5"],
+  "gallery": [
+    { "url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 1" },
+    { "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 2" },
+    { "url": "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 3" },
+    { "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 4" }
+  ],
   "sections": [
     {
-      "heading": "1. Giới thiệu tổng quan",
-      "content": "Nội dung chi tiết 200-300 từ...",
-      "tips": ["Mẹo hữu ích 1"]
+      "heading": "1. Tiêu đề phần 1",
+      "content": "Nội dung chi tiết 250-350 từ...",
+      "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+      "imageCaption": "Chú thích ảnh phần 1",
+      "tips": ["Mẹo hữu ích từ bác tài bản địa"]
     },
     {
-      "heading": "2. Hướng dẫn di chuyển bằng Taxi Quảng Trị - Quảng Bình 24H",
-      "content": "Nội dung chi tiết về cách đi lại, cam kết giá rẻ chỉ từ 12.000đ/km, xe mới đón nhanh...",
-      "tips": ["Mẹo đặt xe trước"]
+      "heading": "2. Tiêu đề phần 2",
+      "content": "Nội dung chi tiết 250-350 từ...",
+      "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+      "imageCaption": "Chú thích ảnh phần 2",
+      "tips": ["Mẹo phần 2"]
+    },
+    {
+      "heading": "3. Tiêu đề phần 3",
+      "content": "Nội dung chi tiết 250-350 từ...",
+      "image": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+      "imageCaption": "Chú thích ảnh phần 3",
+      "tips": ["Mẹo phần 3"]
+    },
+    {
+      "heading": "4. Gợi ý lịch trình Tour 1 Ngày chi tiết",
+      "content": "Lịch trình theo các mốc giờ 07:30, 09:30, 11:30, 13:30, 15:30...",
+      "image": "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=1000&q=80",
+      "imageCaption": "Chú thích ảnh lịch trình tour",
+      "tips": ["Mẹo đặt xe trọn gói khứ hồi"]
+    },
+    {
+      "heading": "5. Thưởng thức đặc sản ẩm thực bản địa trứ danh",
+      "content": "Giới thiệu 4-5 món đặc sản độc đáo và địa chỉ thưởng thức chuẩn vị...",
+      "tips": ["Mẹo thưởng thức ẩm thực từ bác tài"]
+    },
+    {
+      "heading": "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H đưa đón chu đáo",
+      "content": "Cam kết xe đời mới, giá từ 12.000đ/km, tài xế bản xứ am hiểu địa phương, Hotline 0877.669.555...",
+      "tips": ["Mẹo liên hệ đặt xe trước để nhận ưu đãi chiều về tới 50%"]
     }
   ],
   "faqs": [
-    {
-      "question": "Câu hỏi thường gặp 1?",
-      "answer": "Trả lời câu hỏi 1 chi tiết"
-    },
-    {
-      "question": "Câu hỏi thường gặp 2?",
-      "answer": "Trả lời câu hỏi 2 chi tiết"
-    }
+    { "question": "Câu hỏi 1?", "answer": "Trả lời câu hỏi 1 chi tiết" },
+    { "question": "Câu hỏi 2?", "answer": "Trả lời câu hỏi 2 chi tiết" },
+    { "question": "Câu hỏi 3?", "answer": "Trả lời câu hỏi 3 chi tiết" }
   ]
 }
 `;
@@ -746,7 +961,7 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 2500,
+            maxOutputTokens: 3500,
           },
         }),
       }
