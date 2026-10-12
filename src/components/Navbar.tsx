@@ -36,7 +36,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Trang chủ", href: "/#hero" },
     { name: "Đặt xe", href: "/#dat-xe" },
-    { name: "Cẩm nang du lịch", href: "/cam-nang-du-lich", highlight: true },
+    { name: "Cẩm nang du lịch", href: "/cam-nang-du-lich" },
     { name: "Bảng giá cước", href: "/#bang-gia" },
     { name: "Đội xe", href: "/#doi-xe" },
     { name: "Tuyến phổ biến", href: "/#tuyen-duong" },
@@ -103,11 +103,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`px-3 py-1.5 text-xs lg:text-sm font-bold rounded-xl transition-all ${
-                  link.highlight
-                    ? "bg-amber-400/15 text-amber-400 border border-amber-400/40 hover:bg-amber-400 hover:text-[#040E1C]"
-                    : "text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
-                }`}
+                className="px-3 py-1.5 text-xs lg:text-sm font-bold rounded-xl transition-all text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
               >
                 {link.name}
               </Link>
@@ -176,11 +172,7 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-xl transition ${
-                  link.highlight
-                    ? "bg-amber-400/20 text-amber-400 border border-amber-400/40"
-                    : "text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
-                }`}
+                className="px-3 py-2 text-xs sm:text-sm font-bold rounded-xl transition text-slate-200 hover:text-amber-400 hover:bg-[#0B2240]"
               >
                 {link.name}
               </Link>
