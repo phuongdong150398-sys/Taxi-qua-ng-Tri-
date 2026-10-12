@@ -1,57 +1,64 @@
 [
   {
+    "rating": 5,
+    "ticketPrice": "50.000đ/người lớn (Trẻ em miễn phí)",
+    "category": "Di Tích Lịch Sử Tâm Linh",
     "distanceFromDongHoi": "65 km (khoảng 65 phút đi xe)",
     "publishedDate": "2026-10-12",
+    "destination": "Xã Vĩnh Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị",
+    "taxiFare4Seats": "650.000 VNĐ",
+    "slug": "cam-nang-du-lich-dia-dao-vinh-moc-quang-tri",
+    "coverImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    "metaDescription": "Khám phá huyền thoại làng hầm Địa đạo Vịnh Mốc Quảng Trị: Giá vé, hướng dẫn tham quan các tầng địa đạo, kinh nghiệm thuê xe taxi trọn gói từ Đông Hà và Đồng Hới.",
     "highlights": [
       "Hệ thống địa đạo 3 tầng kỳ vĩ dài gần 2km đào hoàn toàn bằng tay",
       "Đầy đủ giếng nước, hội trường, phòng sinh hoạt và cả phòng hộ sinh đón chào 17 đứa trẻ chào đời",
       "Không khí trong lòng hầm luôn mát rượi và thông gió tự nhiên ra bờ biển lộng gió"
     ],
-    "destination": "Xã Vĩnh Thạch, Huyện Vĩnh Linh, Tỉnh Quảng Trị",
-    "taxiFare4Seats": "650.000 VNĐ",
-    "metaDescription": "Khám phá huyền thoại làng hầm Địa đạo Vịnh Mốc Quảng Trị: Giá vé, hướng dẫn tham quan các tầng địa đạo, kinh nghiệm thuê xe taxi trọn gói từ Đông Hà và Đồng Hới.",
-    "title": "Cẩm Nang Du Lịch Địa Đạo Vịnh Mốc 2026: Kỳ Tích Sống Trong Lòng Đất Quảng Trị",
-    "slug": "cam-nang-du-lich-dia-dao-vinh-moc-quang-tri",
-    "bestTimeToVisit": "Quanh năm, thời tiết mát mẻ",
-    "readTime": "6 phút đọc",
-    "coverImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
-    "category": "Di Tích Lịch Sử Tâm Linh",
-    "gallery": [],
-    "sections": [
-      {
-        "tips": [
-          "Nên mang giày thể thao thoải mái và đi theo hướng dẫn của hướng dẫn viên để không bỏ sót các điểm tham quan thú vị."
-        ],
-        "heading": "1. Kiến trúc địa đạo 3 tầng độc đáo có một không hai",
-        "content": "Địa đạo Vịnh Mốc nằm sát bờ biển Vĩnh Linh, được người dân đào thủ công từ năm 1965 đến 1967. Toàn bộ công trình có kết cấu 3 tầng: tầng 1 sâu 12-15m dùng để chiến đấu và trú ẩn tạm thời; tầng 2 sâu 18m là nơi sinh hoạt, hội họp, trạm xá; tầng 3 sâu 22-23m dùng làm kho chứa vũ khí và lương thực. Hệ thống gồm 13 cửa thông ra ngoài, trong đó có 6 cửa trổ thẳng ra biển đón gió mát lành."
-      },
-      {
-        "tips": [
-          "Có thể kết hợp tham quan Cầu Hiền Lương - Sông Bến Hải và Bãi biển Cửa Tùng trên cùng một cung đường."
-        ],
-        "content": "Nằm cách QL1A khoảng 14km về phía biển, đường vào Vịnh Mốc rất đẹp, rợp bóng phi lao và cao su bạt ngàn. Du khách từ Đông Hà (khoảng 38km) hoặc Đồng Hới (khoảng 65km) có thể dễ dàng đặt taxi đưa đón trọn gói. Đội ngũ lái xe Taxi Quảng Trị 24H luôn sẵn sàng phục vụ với xe đời mới 4 - 7 chỗ máy lạnh mát sâu, lái xe an toàn và nhiệt tình hỗ trợ suốt chuyến đi.",
-        "heading": "2. Cách thức di chuyển đến Địa đạo Vịnh Mốc thuận tiện nhất"
-      }
-    ],
     "faqs": [
       {
-        "answer": "Hoàn toàn không. Hệ thống địa đạo được thiết kế các giếng thông hơi thông minh và cửa sổ hướng biển nên không khí bên trong luôn mát mẻ và dễ chịu.",
-        "question": "Đi trong lòng địa đạo Vịnh Mốc có ngột ngạt không?"
+        "question": "Đi trong lòng địa đạo Vịnh Mốc có ngột ngạt không?",
+        "answer": "Hoàn toàn không. Hệ thống địa đạo được thiết kế các giếng thông hơi thông minh và cửa sổ hướng biển nên không khí bên trong luôn mát mẻ và dễ chịu."
       },
       {
-        "answer": "Giá taxi 4 chỗ khứ hồi từ Đông Hà đi Vịnh Mốc kết hợp Cầu Hiền Lương khoảng 500.000đ - 650.000đ trọn gói cả đi và về.",
-        "question": "Giá taxi đi tour Vịnh Mốc từ TP. Đông Hà là bao nhiêu?"
+        "question": "Giá taxi đi tour Vịnh Mốc từ TP. Đông Hà là bao nhiêu?",
+        "answer": "Giá taxi 4 chỗ khứ hồi từ Đông Hà đi Vịnh Mốc kết hợp Cầu Hiền Lương khoảng 500.000đ - 650.000đ trọn gói cả đi và về."
       }
     ],
+    "gallery": [],
+    "bestTimeToVisit": "Quanh năm, thời tiết mát mẻ",
+    "reviewsCount": 147,
+    "readTime": "6 phút đọc",
+    "sections": [
+      {
+        "content": "Địa đạo Vịnh Mốc nằm sát bờ biển Vĩnh Linh, được người dân đào thủ công từ năm 1965 đến 1967. Toàn bộ công trình có kết cấu 3 tầng: tầng 1 sâu 12-15m dùng để chiến đấu và trú ẩn tạm thời; tầng 2 sâu 18m là nơi sinh hoạt, hội họp, trạm xá; tầng 3 sâu 22-23m dùng làm kho chứa vũ khí và lương thực. Hệ thống gồm 13 cửa thông ra ngoài, trong đó có 6 cửa trổ thẳng ra biển đón gió mát lành.",
+        "heading": "1. Kiến trúc địa đạo 3 tầng độc đáo có một không hai",
+        "tips": [
+          "Nên mang giày thể thao thoải mái và đi theo hướng dẫn của hướng dẫn viên để không bỏ sót các điểm tham quan thú vị."
+        ]
+      },
+      {
+        "content": "Nằm cách QL1A khoảng 14km về phía biển, đường vào Vịnh Mốc rất đẹp, rợp bóng phi lao và cao su bạt ngàn. Du khách từ Đông Hà (khoảng 38km) hoặc Đồng Hới (khoảng 65km) có thể dễ dàng đặt taxi đưa đón trọn gói. Đội ngũ lái xe Taxi Quảng Trị 24H luôn sẵn sàng phục vụ với xe đời mới 4 - 7 chỗ máy lạnh mát sâu, lái xe an toàn và nhiệt tình hỗ trợ suốt chuyến đi.",
+        "heading": "2. Cách thức di chuyển đến Địa đạo Vịnh Mốc thuận tiện nhất",
+        "tips": [
+          "Có thể kết hợp tham quan Cầu Hiền Lương - Sông Bến Hải và Bãi biển Cửa Tùng trên cùng một cung đường."
+        ]
+      }
+    ],
+    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
+    "excerpt": "Địa đạo Vịnh Mốc - kỳ tích kiến trúc quân sự lòng đất độc nhất vô nhị. Nơi đây từng là ngôi làng kiên cường che chở cho hàng trăm người dân và bộ đội suốt những năm tháng kháng chiến.",
     "metaTitle": "Cẩm Nang Khám Phá Địa Đạo Vịnh Mốc Quảng Trị 2026 | Taxi 24H",
     "taxiFare6Seats": "800.000 VNĐ",
-    "excerpt": "Địa đạo Vịnh Mốc - kỳ tích kiến trúc quân sự lòng đất độc nhất vô nhị. Nơi đây từng là ngôi làng kiên cường che chở cho hàng trăm người dân và bộ đội suốt những năm tháng kháng chiến.",
-    "rating": 5,
-    "ticketPrice": "50.000đ/người lớn (Trẻ em miễn phí)",
-    "reviewsCount": 147
+    "title": "Cẩm Nang Du Lịch Địa Đạo Vịnh Mốc 2026: Kỳ Tích Sống Trong Lòng Đất Quảng Trị"
   },
   {
+    "excerpt": "Động Thiên Đường được ví như 'Hoàng cung trong lòng đất' với cầu gỗ dài 1km xuyên qua thế giới thạch nhũ lộng lẫy. Hướng dẫn chi tiết đường đi và dịch vụ taxi đưa đón tiện lợi.",
+    "taxiFare4Seats": "780.000 VNĐ",
+    "publishedDate": "2026-03-22",
+    "metaDescription": "Cẩm nang khám phá Động Thiên Đường Quảng Bình - hang động khô dài nhất Châu Á. Hướng dẫn giá vé, xe điện trung chuyển và dịch vụ taxi đưa đón từ Đồng Hới chỉ từ 780k.",
+    "category": "Kỳ Quan Hang Động Thế Giới",
+    "metaTitle": "Kinh Nghiệm Du Lịch Động Thiên Đường 2026 - Bảng Giá Taxi Đồng Hới Đi Thiên Đường",
+    "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
     "faqs": [
       {
         "answer": "Rất phù hợp! Khác với các hang mạo hiểm, Động Thiên Đường có hệ thống cầu gỗ rộng rãi, tay vịn vững chắc và ánh sáng đầy đủ, bậc thang dốc thoai thoải rất dễ đi cho cả gia đình.",
@@ -62,24 +69,30 @@
         "question": "Giá taxi trọn gói từ TP. Đồng Hới đi Động Thiên Đường khứ hồi bao nhiêu?"
       }
     ],
-    "publishedDate": "2026-03-22",
-    "excerpt": "Động Thiên Đường được ví như 'Hoàng cung trong lòng đất' với cầu gỗ dài 1km xuyên qua thế giới thạch nhũ lộng lẫy. Hướng dẫn chi tiết đường đi và dịch vụ taxi đưa đón tiện lợi.",
+    "title": "Khám Phá Động Thiên Đường: Hoàng Cung Trong Lòng Đất & Bảng Giá Taxi Trọn Gói",
+    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H",
+    "distanceFromDongHoi": "65 km (khoảng 1 giờ 15 phút đi xe)",
     "highlights": [
       "Hang động khô có chiều dài kỷ lục 31.4km quy mô bậc nhất Châu Á",
       "Hệ thống cầu gỗ dài 1.000m uốn lượn an toàn cho cả người già và trẻ nhỏ",
       "Cung Quần Tiên Hội Tụ, Tháp Liên Hoa, Cung Giao Trì tráng lệ như cung điện",
       "Hệ thống đèn LED chiếu sáng hiện đại tôn vinh vẻ đẹp tự nhiên của khối nhũ"
     ],
-    "category": "Kỳ Quan Hang Động Thế Giới",
-    "title": "Khám Phá Động Thiên Đường: Hoàng Cung Trong Lòng Đất & Bảng Giá Taxi Trọn Gói",
+    "slug": "kham-pha-dong-thien-duong-quang-binh",
+    "readTime": "7 phút đọc",
+    "rating": 5,
+    "taxiFare6Seats": "980.000 VNĐ",
+    "reviewsCount": 1540,
+    "ticketPrice": "250.000đ/người lớn (Xe điện trung chuyển từ 100.000đ/chuyến)",
+    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Tránh mùa mưa lũ cuối năm)",
     "sections": [
       {
         "content": "Được Hiệp hội Hang động Hoàng gia Anh khám phá vào năm 2005, Động Thiên Đường sở hữu cấu trúc kỳ vĩ với trần hang cao vút, không gian thoáng đãng và muôn vàn khối thạch nhũ đa dạng sắc màu. Bước vào hang, du khách ngỡ ngàng như lạc vào chốn bồng lai tiên cảnh với nhiệt độ mát mẻ từ 16 - 20°C.",
         "heading": "1. Động Thiên Đường - Tuyệt tác kiến trúc thiên nhiên"
       },
       {
-        "heading": "2. Đường đi từ Đồng Hới đến Động Thiên Đường",
         "content": "Nằm sâu trong vùng lõi Vườn Quốc Gia Phong Nha - Kẻ Bàng, cách TP. Đồng Hới khoảng 65km về phía Tây Bắc. Tuyến đường đi qua đường Hồ Chí Minh nhánh Tây uốn lượn giữa rừng nguyên sinh đại ngàn tuyệt đẹp.\n\nĐể đảm bảo an toàn trên cung đường đèo dốc uốn lượn, việc lựa chọn tài xế bản địa giàu kinh nghiệm lái xe taxi đời mới với máy lạnh mát sâu là phương án thoải mái và an tâm nhất.",
+        "heading": "2. Đường đi từ Đồng Hới đến Động Thiên Đường",
         "tips": [
           "Quãng đường đi bộ từ bến xe điện lên cửa hang khoảng 570m dốc thoai thoải hoặc bậc thang, nên mang giày thể thao chống trơn.",
           "Nên mua vé xe điện khứ hồi (khoảng 100k - 200k/chuyến tùy số chỗ) để giữ sức tham quan trong lòng hang."
@@ -94,33 +107,40 @@
         "heading": "4. Tuyến tour kết hợp lý tưởng trong ngày"
       }
     ],
-    "taxiFare6Seats": "980.000 VNĐ",
-    "destination": "Động Thiên Đường",
-    "distanceFromDongHoi": "65 km (khoảng 1 giờ 15 phút đi xe)",
-    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H",
-    "taxiFare4Seats": "780.000 VNĐ",
-    "readTime": "7 phút đọc",
-    "slug": "kham-pha-dong-thien-duong-quang-binh",
-    "ticketPrice": "250.000đ/người lớn (Xe điện trung chuyển từ 100.000đ/chuyến)",
-    "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
-    "metaDescription": "Cẩm nang khám phá Động Thiên Đường Quảng Bình - hang động khô dài nhất Châu Á. Hướng dẫn giá vé, xe điện trung chuyển và dịch vụ taxi đưa đón từ Đồng Hới chỉ từ 780k.",
-    "metaTitle": "Kinh Nghiệm Du Lịch Động Thiên Đường 2026 - Bảng Giá Taxi Đồng Hới Đi Thiên Đường",
-    "rating": 5,
-    "reviewsCount": 1540,
-    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Tránh mùa mưa lũ cuối năm)"
+    "destination": "Động Thiên Đường"
   },
   {
-    "slug": "kinh-nghiem-du-lich-dong-phong-nha",
     "ticketPrice": "150.000đ/người lớn (Thuyền sông Son: 550.000đ/thuyền chở tối đa 12 khách)",
-    "category": "Di Sản Thiên Nhiên Thế Giới",
+    "faqs": [
+      {
+        "question": "Từ Đồng Hới đi Phong Nha bằng taxi mất bao lâu và giá cước bao nhiêu?",
+        "answer": "Thời gian di chuyển bằng taxi khoảng 45 - 50 phút. Giá cước trọn gói xe 4 chỗ là 540.000đ/chiều, xe 6-7 chỗ là 680.000đ/chiều. Nếu đặt khứ hồi 2 chiều kết hợp đợi sẽ có giá cực kỳ ưu đãi."
+      },
+      {
+        "answer": "Thời điểm đẹp nhất là từ tháng 3 đến tháng 9. Đây là mùa khô ở miền Trung, nước sông Son xanh biếc và hang khô ráo, ánh nắng rực rỡ rất thuận tiện cho việc chụp ảnh và đi thuyền.",
+        "question": "Nên đi Động Phong Nha vào thời gian nào trong năm?"
+      }
+    ],
+    "highlights": [
+      "Du thuyền rẽ sóng trên dòng sông Son thơ mộng như tranh thủy mặc",
+      "Khám phá 7 kỷ lục thế giới của Động Phong Nha",
+      "Hệ thống thạch nhũ lung linh huyền ảo trong hang Cung Đình và hang Bi Ký",
+      "Nhiệt độ trong hang luôn mát mẻ dễ chịu 18 - 22°C quanh năm"
+    ],
+    "rating": 4.9,
+    "readTime": "6 phút đọc",
+    "destination": "Động Phong Nha",
+    "title": "Kinh Nghiệm Du Lịch Động Phong Nha 2026: Giá Vé, Lịch Trình & Thuê Xe Taxi Trọn Gói",
+    "taxiFare6Seats": "680.000 VNĐ",
+    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Mùa khô, nước sông Son xanh ngắt, thời tiết lý tưởng)",
     "sections": [
       {
         "content": "Nằm trong quần thể Vườn Quốc Gia Phong Nha - Kẻ Bàng (Di sản thiên nhiên thế giới UNESCO), Động Phong Nha là hang động nước tiêu biểu nhất thế giới với chiều dài gần 8km. Du khách sẽ được ngồi thuyền máy xuôi dòng sông Son trong vắt để tiến vào cửa hang khổng lồ, chiêm ngưỡng thế giới thạch nhũ hàng triệu năm tuổi được thiên nhiên điêu khắc tinh xảo.",
         "heading": "1. Giới thiệu về Động Phong Nha - Kỳ quan đệ nhất động"
       },
       {
-        "heading": "2. Hướng dẫn di chuyển từ TP. Đồng Hới đến Động Phong Nha",
         "content": "Khoảng cách từ trung tâm TP. Đồng Hới (sân bay, ga tàu, khách sạn) đến Trung tâm Du lịch Phong Nha là khoảng 45km theo đường mòn Hồ Chí Minh nhánh Đông. Tuyến đường trải nhựa êm ái, hai bên là đồi núi xanh biếc thơ mộng.\n\nPhương tiện tối ưu và an toàn nhất cho gia đình và nhóm bạn là thuê xe Taxi trọn gói hoặc xe du lịch gia đình có lái. Bác tài bản địa sẽ đón tận sảnh khách sạn hoặc ga/sân bay, đưa bạn đến tận bến thuyền, chờ bạn tham quan và đưa về an toàn.",
+        "heading": "2. Hướng dẫn di chuyển từ TP. Đồng Hới đến Động Phong Nha",
         "tips": [
           "Nên đặt taxi khứ hồi 2 chiều để được giảm giá cước chiều về đến 50%.",
           "Xe 4-5 chỗ phù hợp gia đình 2 - 4 người; xe 6-7 chỗ rộng rãi thoải mái cho nhóm 5 - 7 người.",
@@ -136,168 +156,167 @@
         "heading": "4. Lịch trình gợi ý 1 ngày kết hợp khám phá trọn vẹn"
       }
     ],
-    "reviewsCount": 1280,
-    "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
-    "publishedDate": "2026-03-20",
-    "taxiFare4Seats": "540.000 VNĐ",
-    "title": "Kinh Nghiệm Du Lịch Động Phong Nha 2026: Giá Vé, Lịch Trình & Thuê Xe Taxi Trọn Gói",
-    "taxiFare6Seats": "680.000 VNĐ",
-    "destination": "Động Phong Nha",
-    "distanceFromDongHoi": "45 km (khoảng 45 - 50 phút đi xe)",
-    "author": "Đội Ngũ Hướng Dẫn Bản Địa Taxi 24H",
-    "readTime": "6 phút đọc",
-    "highlights": [
-      "Du thuyền rẽ sóng trên dòng sông Son thơ mộng như tranh thủy mặc",
-      "Khám phá 7 kỷ lục thế giới của Động Phong Nha",
-      "Hệ thống thạch nhũ lung linh huyền ảo trong hang Cung Đình và hang Bi Ký",
-      "Nhiệt độ trong hang luôn mát mẻ dễ chịu 18 - 22°C quanh năm"
-    ],
-    "excerpt": "Động Phong Nha được mệnh danh là 'Kỳ quan đệ nhất động' với dòng sông ngầm dài nhất thế giới và thạch nhũ kỳ vĩ. Hướng dẫn đường đi, giá vé thuyền và mẹo thuê taxi tiết kiệm.",
     "metaTitle": "Kinh Nghiệm Du Lịch Động Phong Nha 2026 - Bảng Giá Thuê Xe Taxi Trọn Gói",
-    "faqs": [
-      {
-        "answer": "Thời gian di chuyển bằng taxi khoảng 45 - 50 phút. Giá cước trọn gói xe 4 chỗ là 540.000đ/chiều, xe 6-7 chỗ là 680.000đ/chiều. Nếu đặt khứ hồi 2 chiều kết hợp đợi sẽ có giá cực kỳ ưu đãi.",
-        "question": "Từ Đồng Hới đi Phong Nha bằng taxi mất bao lâu và giá cước bao nhiêu?"
-      },
-      {
-        "answer": "Thời điểm đẹp nhất là từ tháng 3 đến tháng 9. Đây là mùa khô ở miền Trung, nước sông Son xanh biếc và hang khô ráo, ánh nắng rực rỡ rất thuận tiện cho việc chụp ảnh và đi thuyền.",
-        "question": "Nên đi Động Phong Nha vào thời gian nào trong năm?"
-      }
-    ],
-    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Mùa khô, nước sông Son xanh ngắt, thời tiết lý tưởng)",
+    "publishedDate": "2026-03-20",
+    "distanceFromDongHoi": "45 km (khoảng 45 - 50 phút đi xe)",
+    "taxiFare4Seats": "540.000 VNĐ",
+    "category": "Di Sản Thiên Nhiên Thế Giới",
+    "excerpt": "Động Phong Nha được mệnh danh là 'Kỳ quan đệ nhất động' với dòng sông ngầm dài nhất thế giới và thạch nhũ kỳ vĩ. Hướng dẫn đường đi, giá vé thuyền và mẹo thuê taxi tiết kiệm.",
+    "reviewsCount": 1280,
+    "slug": "kinh-nghiem-du-lich-dong-phong-nha",
     "metaDescription": "Cẩm nang du lịch Động Phong Nha chi tiết từ A-Z: giá vé tham quan, đường đi từ Đồng Hới, kinh nghiệm đi thuyền sông Son và dịch vụ taxi đón tận nơi giá rẻ.",
-    "rating": 4.9
+    "author": "Đội Ngũ Hướng Dẫn Bản Địa Taxi 24H",
+    "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80"
   },
   {
+    "excerpt": "Sơn Đoòng - hang động tự nhiên lớn nhất thế giới ẩn chứa cả một khu rừng nguyên sinh và dòng sông ngầm kỳ bí. Cùng tìm hiểu cẩm nang chinh phục và phương tiện di chuyển an toàn nhất.",
+    "readTime": "7 phút đọc",
+    "taxiFare4Seats": "600.000 VNĐ",
+    "slug": "kinh-nghiem-du-lich-hang-son-doong-quang-binh",
+    "reviewsCount": 154,
+    "rating": 5,
     "gallery": [
       {
         "caption": "Vòm hang kỳ vĩ Sơn Đoòng chứa vừa tòa nhà chọc trời 40 tầng",
         "url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Son_Doong_Cave_DB_%282%29.jpg"
       },
       {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Son_Doong_Cave_DB_%283%29.jpg",
-        "caption": "Hố sụt 2 - Doline 2 nơi ánh nắng chiếu rọi tạo nên khu rừng nhiệt đới Vườn Địa Đàng"
+        "caption": "Hố sụt 2 - Doline 2 nơi ánh nắng chiếu rọi tạo nên khu rừng nhiệt đới Vườn Địa Đàng",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Son_Doong_Cave_DB_%283%29.jpg"
       },
       {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg",
-        "caption": "Thạch nhũ khổng lồ kiến tạo qua hàng triệu năm trong lòng hang Sơn Đoòng"
+        "caption": "Thạch nhũ khổng lồ kiến tạo qua hàng triệu năm trong lòng hang Sơn Đoòng",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg"
       },
       {
-        "caption": "Dòng sông ngầm thám hiểm kỳ bí chảy xuyên qua khối núi đá vôi",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg"
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
+        "caption": "Dòng sông ngầm thám hiểm kỳ bí chảy xuyên qua khối núi đá vôi"
       }
     ],
-    "ticketPrice": "Theo tour thám hiểm chuyên nghiệp",
-    "taxiFare6Seats": "750.000 VNĐ",
-    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
-    "publishedDate": "2026-10-12",
-    "faqs": [
-      {
-        "answer": "Khoảng cách từ trung tâm Đồng Hới lên Phong Nha là 45-50km, thời gian di chuyển bằng taxi chỉ mất khoảng 45 đến 50 phút. Xe 4 chỗ và 7 chỗ phục vụ 24/7.",
-        "question": "Từ TP. Đồng Hới đi taxi lên trung tâm Phong Nha mất bao lâu?"
-      },
-      {
-        "question": "Thời điểm nào lý tưởng nhất để tham quan Sơn Đoòng?",
-        "answer": "Thời điểm lý tưởng nhất là từ tháng 2 đến tháng 8, lúc này thời tiết khô ráo, nắng ấm và nước trong hang êm dịu nhất."
-      }
-    ],
-    "rating": 5,
-    "excerpt": "Sơn Đoòng - hang động tự nhiên lớn nhất thế giới ẩn chứa cả một khu rừng nguyên sinh và dòng sông ngầm kỳ bí. Cùng tìm hiểu cẩm nang chinh phục và phương tiện di chuyển an toàn nhất.",
+    "distanceFromDongHoi": "55 km (khoảng 60 phút đi xe ô tô)",
     "highlights": [
       "Hang động tự nhiên lớn nhất hành tinh với vòm hang cao chứa vừa tòa nhà 40 tầng",
       "Khu rừng nguyên sinh 'Vườn Địa Đàng' độc nhất vô nhị phát triển ngay trong lòng hang",
       "Bức tường Việt Nam cao 90m - thử thách leo núi đỉnh cao của các nhà thám hiểm",
       "Dịch vụ taxi 4-7 chỗ đưa đón tận điểm tập kết Oxalis tại Phong Nha"
     ],
-    "readTime": "7 phút đọc",
-    "reviewsCount": 154,
-    "destination": "Hang Sơn Đoòng (Vườn Quốc Gia Phong Nha - Kẻ Bàng)",
+    "bestTimeToVisit": "Tháng 1 đến tháng 8 hàng năm",
     "sections": [
       {
-        "heading": "1. Vẻ đẹp kỳ vĩ vô tiền khoáng hậu của Hang Sơn Đoòng",
-        "imageCaption": "Vòm hang khổng lồ lộng lẫy được chiếu sáng bởi đội ngũ thám hiểm hang động quốc tế",
+        "content": "Nằm sâu trong Vườn Quốc gia Phong Nha - Kẻ Bàng, Sơn Đoòng được Hiệp hội Nghiên cứu Hang động Hoàng gia Anh công bố là hang động tự nhiên lớn nhất thế giới với thể tích ước tính lên đến 38,5 triệu mét khối. Bước vào lòng hang, du khách sẽ choáng ngợp trước hệ thống thạch nhũ khổng lồ, những hố sụt đón ánh nắng ban mai và cả một hệ sinh thái rừng nhiệt đới trù phú tồn tại độc lập.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/1/16/Son_Doong_Cave_DB_%282%29.jpg",
         "tips": [
           "Tour Sơn Đoòng yêu cầu đặt trước từ 6 tháng đến 1 năm vì số lượng giới hạn mỗi năm chỉ đón khoảng 1.000 du khách."
         ],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/1/16/Son_Doong_Cave_DB_%282%29.jpg",
-        "content": "Nằm sâu trong Vườn Quốc gia Phong Nha - Kẻ Bàng, Sơn Đoòng được Hiệp hội Nghiên cứu Hang động Hoàng gia Anh công bố là hang động tự nhiên lớn nhất thế giới với thể tích ước tính lên đến 38,5 triệu mét khối. Bước vào lòng hang, du khách sẽ choáng ngợp trước hệ thống thạch nhũ khổng lồ, những hố sụt đón ánh nắng ban mai và cả một hệ sinh thái rừng nhiệt đới trù phú tồn tại độc lập."
+        "heading": "1. Vẻ đẹp kỳ vĩ vô tiền khoáng hậu của Hang Sơn Đoòng",
+        "imageCaption": "Vòm hang khổng lồ lộng lẫy được chiếu sáng bởi đội ngũ thám hiểm hang động quốc tế"
       },
       {
         "tips": [
           "Đừng quên mang ống kính góc rộng để bắt trọn những luồng ánh sáng mặt trời huyền ảo xuyên qua hố sụt."
         ],
         "image": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Son_Doong_Cave_DB_%283%29.jpg",
-        "content": "Một trong những kỳ quan ngoạn mục nhất của Sơn Đoòng là Hố sụt 2 (Doline 2), nơi vòm đá vôi sụp đổ từ hàng trăm ngàn năm trước tạo thành giếng trời khổng lồ. Ánh sáng mặt trời chiếu rọi xuống đáy hang đã nuôi dưỡng cả một khu rừng nhiệt đới nguyên sinh tươi tốt mang tên 'Vườn Địa Đàng' (Garden of Edam). Nơi đây có cây cổ thụ cao hàng chục mét, dương xỉ cổ đại và cả hệ động vật riêng biệt chưa từng thấy ở nơi nào khác trên Trái Đất.",
         "imageCaption": "Hố sụt Doline 2 với thảm thực vật rừng nguyên sinh phát triển ngoạn mục dưới lòng đất",
-        "heading": "2. Hố sụt Doline 2 và khu rừng nguyên sinh Vườn Địa Đàng"
+        "heading": "2. Hố sụt Doline 2 và khu rừng nguyên sinh Vườn Địa Đàng",
+        "content": "Một trong những kỳ quan ngoạn mục nhất của Sơn Đoòng là Hố sụt 2 (Doline 2), nơi vòm đá vôi sụp đổ từ hàng trăm ngàn năm trước tạo thành giếng trời khổng lồ. Ánh sáng mặt trời chiếu rọi xuống đáy hang đã nuôi dưỡng cả một khu rừng nhiệt đới nguyên sinh tươi tốt mang tên 'Vườn Địa Đàng' (Garden of Edam). Nơi đây có cây cổ thụ cao hàng chục mét, dương xỉ cổ đại và cả hệ động vật riêng biệt chưa từng thấy ở nơi nào khác trên Trái Đất."
       },
       {
+        "heading": "3. Thạch nhũ nghìn năm và dòng sông ngầm kỳ bí",
+        "imageCaption": "Kiệt tác măng đá và thạch nhũ kỳ quan triệu năm kiến tạo trong bóng tối vĩnh hằng",
+        "content": "Hệ thống thạch nhũ trong hang Sơn Đoòng thuộc hàng lớn nhất thế giới, với những cột măng đá cao tới hơn 70m như Tháp Bàn Chân Chó (Hand of Dog). Dòng sông ngầm Rào Thương chảy ngầm cuồn cuộn qua lòng hang tạo nên những hồ nước ngọc bích trong vắt, nơi du khách có thể chèo thuyền vượt sông trong lòng đất đầy kỳ thú.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg",
         "tips": [
           "Tuân thủ tuyệt đối quy tắc không chạm tay vào thạch nhũ đang phát triển để bảo tồn nguyên vẹn kỳ quan."
-        ],
-        "imageCaption": "Kiệt tác măng đá và thạch nhũ kỳ quan triệu năm kiến tạo trong bóng tối vĩnh hằng",
-        "heading": "3. Thạch nhũ nghìn năm và dòng sông ngầm kỳ bí",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg",
-        "content": "Hệ thống thạch nhũ trong hang Sơn Đoòng thuộc hàng lớn nhất thế giới, với những cột măng đá cao tới hơn 70m như Tháp Bàn Chân Chó (Hand of Dog). Dòng sông ngầm Rào Thương chảy ngầm cuồn cuộn qua lòng hang tạo nên những hồ nước ngọc bích trong vắt, nơi du khách có thể chèo thuyền vượt sông trong lòng đất đầy kỳ thú."
+        ]
       },
       {
+        "content": "Để bắt đầu hành trình, du khách thường bay đến Sân bay Đồng Hới hoặc đi tàu hỏa đến Ga Đồng Hới, sau đó di chuyển khoảng 50km về thị trấn Phong Nha để tham gia buổi huấn luyện an toàn. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H cung cấp dòng xe đời mới từ 4 đến 7 chỗ, đón đúng giờ tại sảnh sân bay với mức giá trọn gói tiết kiệm chỉ từ 12.000đ/km.",
         "imageCaption": "Dòng sông ngầm thám hiểm uốn lượn bên trong hang Sơn Đoòng",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
+        "heading": "4. Hướng dẫn di chuyển và xe taxi đón tiễn Sân bay Đồng Hới",
         "tips": [
           "Nên liên hệ Hotline 0877.669.555 để đặt xe trước giờ hạ cánh 30 phút, tài xế sẽ có mặt sẵn sàng hỗ trợ hành lý chu đáo."
-        ],
-        "content": "Để bắt đầu hành trình, du khách thường bay đến Sân bay Đồng Hới hoặc đi tàu hỏa đến Ga Đồng Hới, sau đó di chuyển khoảng 50km về thị trấn Phong Nha để tham gia buổi huấn luyện an toàn. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H cung cấp dòng xe đời mới từ 4 đến 7 chỗ, đón đúng giờ tại sảnh sân bay với mức giá trọn gói tiết kiệm chỉ từ 12.000đ/km.",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
-        "heading": "4. Hướng dẫn di chuyển và xe taxi đón tiễn Sân bay Đồng Hới"
+        ]
       }
     ],
-    "category": "Di Sản Thiên Nhiên Thế Giới",
-    "slug": "kinh-nghiem-du-lich-hang-son-doong-quang-binh",
+    "destination": "Hang Sơn Đoòng (Vườn Quốc Gia Phong Nha - Kẻ Bàng)",
     "title": "Kinh Nghiệm Du Lịch Hang Sơn Đoòng Quảng Bình 2026: Khám Phá Kỳ Quan Lớn Nhất Thế Giới",
-    "metaTitle": "Kinh Nghiệm Khám Phá Hang Sơn Đoòng Quảng Bình 2026 | Taxi 24H",
-    "taxiFare4Seats": "600.000 VNĐ",
-    "bestTimeToVisit": "Tháng 1 đến tháng 8 hàng năm",
-    "distanceFromDongHoi": "55 km (khoảng 60 phút đi xe ô tô)",
     "coverImage": "https://upload.wikimedia.org/wikipedia/commons/1/16/Son_Doong_Cave_DB_%282%29.jpg",
-    "metaDescription": "Cẩm nang hướng dẫn du lịch khám phá Hang Sơn Đoòng Quảng Bình chi tiết nhất 2026: Chi phí, lịch trình tour, thể lực yêu cầu và dịch vụ taxi đón tiễn tận nơi."
-  },
-  {
-    "gallery": [
-      {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
-        "caption": "Toàn cảnh quảng trường và Vương cung Thánh đường La Vang bề thế nguy nga"
-      },
-      {
-        "caption": "Di tích Tháp chuông cổ kính La Vang sừng sững qua bao biến thiên lịch sử",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG"
-      },
-      {
-        "caption": "Tượng Đức Mẹ La Vang nhân từ trong tà áo dài truyền thống Việt Nam",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG"
-      },
-      {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg",
-        "caption": "Thành Cổ Quảng Trị cách La Vang chỉ 6km - Điểm kết hợp lý tưởng trong ngày"
-      }
-    ],
-    "taxiFare6Seats": "1.200.000 VNĐ",
-    "ticketPrice": "Miễn phí tham quan và hành hương",
-    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
     "publishedDate": "2026-10-12",
-    "rating": 5,
+    "taxiFare6Seats": "750.000 VNĐ",
+    "ticketPrice": "Theo tour thám hiểm chuyên nghiệp",
+    "metaDescription": "Cẩm nang hướng dẫn du lịch khám phá Hang Sơn Đoòng Quảng Bình chi tiết nhất 2026: Chi phí, lịch trình tour, thể lực yêu cầu và dịch vụ taxi đón tiễn tận nơi.",
+    "category": "Di Sản Thiên Nhiên Thế Giới",
+    "metaTitle": "Kinh Nghiệm Khám Phá Hang Sơn Đoòng Quảng Bình 2026 | Taxi 24H",
     "faqs": [
       {
-        "question": "Từ Ga Đông Hà hoặc TP. Huế đi taxi đến La Vang mất bao lâu?",
-        "answer": "Từ Ga Đông Hà đến La Vang chỉ 18km (khoảng 20 phút đi taxi, giá khoảng 200.000đ - 220.000đ). Từ trung tâm TP. Huế đến La Vang khoảng 55km (khoảng 60 phút đi taxi, giá khoảng 550.000đ - 650.000đ)."
+        "question": "Từ TP. Đồng Hới đi taxi lên trung tâm Phong Nha mất bao lâu?",
+        "answer": "Khoảng cách từ trung tâm Đồng Hới lên Phong Nha là 45-50km, thời gian di chuyển bằng taxi chỉ mất khoảng 45 đến 50 phút. Xe 4 chỗ và 7 chỗ phục vụ 24/7."
       },
       {
-        "question": "Người không theo đạo Công giáo có được vào tham quan Thánh địa La Vang không?",
-        "answer": "Thánh địa La Vang mở cửa tự do và nồng nhiệt chào đón tất cả mọi người, không phân biệt tôn giáo, đến tham quan, chiêm bái và tận hưởng không gian thanh tịnh."
-      },
-      {
-        "answer": "Có. Trung tâm Hành hương La Vang có các dãy nhà lưu trú phục vụ khách hành hương với chi phí hỗ trợ tùy tâm hoặc giá tượng trưng rất rẻ.",
-        "question": "Tại La Vang có chỗ nghỉ qua đêm cho khách hành hương không?"
+        "question": "Thời điểm nào lý tưởng nhất để tham quan Sơn Đoòng?",
+        "answer": "Thời điểm lý tưởng nhất là từ tháng 2 đến tháng 8, lúc này thời tiết khô ráo, nắng ấm và nước trong hang êm dịu nhất."
       }
     ],
+    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H"
+  },
+  {
+    "taxiFare6Seats": "700.000 VNĐ",
+    "highlights": [
+      "Làn nước sông Chày xanh biếc tự nhiên mát lạnh xua tan cái nắng hè",
+      "Đường trượt siêu tốc zipline đáp nước dài 600m mang lại cảm giác cực đã",
+      "Chèo thuyền kayak, thuyền SUP ngắm phong cảnh núi non trập trùng như tranh thủy mặc"
+    ],
+    "readTime": "5 phút đọc",
+    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
+    "reviewsCount": 154,
+    "faqs": [
+      {
+        "question": "Nên đi Hava vào thời gian nào trong ngày?",
+        "answer": "Nên đến Hava vào buổi sáng từ 8h30 hoặc đầu giờ chiều từ 14h00 để thỏa thích tắm suối và tham gia các trò chơi mà không bị gắt nắng."
+      },
+      {
+        "question": "Đến Hava ăn gì ngon?",
+        "answer": "Món ăn đặc sản trứ danh tại Hava là mẹt gà đồi nướng than chấm muối cheo Phong Nha, cá suối chiên giòn và xôi ba màu thơm dẻo."
+      }
+    ],
+    "destination": "Xã Sơn Trạch, Huyện Bố Trạch, Tỉnh Quảng Bình",
+    "sections": [
+      {
+        "tips": [
+          "Nên mua vé trọn gói bao gồm tất cả các trò chơi và chèo thuyền để tiết kiệm chi phí hơn so với mua vé lẻ."
+        ],
+        "content": "Nằm kề bên Di sản Phong Nha - Kẻ Bàng, Hava sở hữu bờ cát vàng thoai thoải bên dòng sông Chày trong vắt. Đến đây, du khách thỏa sức thử thách bản thân với đường trượt zipline siêu dài đáp nước cực phấn khích, chèo thuyền SUP len lỏi qua các hẻm núi đá vôi, hoặc thư giãn trên những chiếc võng êm ái dưới bóng cây rừng râm mát.",
+        "heading": "1. Những trải nghiệm không thể bỏ qua tại Thung lũng ngọc bích Hava"
+      },
+      {
+        "heading": "2. Hướng dẫn di chuyển và dịch vụ đưa đón taxi tận nơi",
+        "content": "Cách TP. Đồng Hới chỉ 50km theo hướng Tây Bắc, đường đi rải nhựa phẳng phiu uốn lượn qua những cánh rừng xanh ngút ngàn. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H chuyên phục vụ các chuyến đi chơi tour Hava trong ngày, xe gia đình đón tận sảnh khách sạn hoặc ga tàu, điều hòa mát lạnh và sẵn sàng đợi đưa đón 2 chiều.",
+        "tips": [
+          "Nên đi theo nhóm từ 4-7 người để đi taxi vừa thoải mái vừa chia tiền cước cực rẻ."
+        ]
+      }
+    ],
+    "metaDescription": "Review chi tiết Thung lũng ngọc bích Hava Quảng Bình 2026: Giá vé trọn gói trò chơi zipline, chèo thuyền kayak, ẩm thực mẹt gà nướng muối cheo và taxi đưa đón trọn gói.",
+    "ticketPrice": "150.000đ - 250.000đ/người (Tùy gói trò chơi)",
+    "bestTimeToVisit": "Tháng 3 đến tháng 9",
+    "publishedDate": "2026-10-12",
+    "category": "Điểm Đến Du Lịch Hot",
+    "distanceFromDongHoi": "50 km (khoảng 50 phút đi xe)",
+    "title": "Kinh Nghiệm Du Lịch Thung Lũng Hava Quảng Bình 2026: Thiên Đường Check-in Sông Chày Mát Lạnh",
+    "gallery": [],
+    "taxiFare4Seats": "550.000 VNĐ",
+    "coverImage": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    "metaTitle": "Kinh Nghiệm Du Lịch Thung Lũng Hava Quảng Bình 2026 | Taxi 24H",
+    "rating": 5,
+    "excerpt": "Thung lũng Hava với làn nước xanh màu ngọc bích tuyệt đẹp, bao bọc bởi núi đá vôi hùng vĩ là tọa độ vui chơi giải nhiệt hot bậc nhất tại Quảng Bình mùa du lịch 2026.",
+    "slug": "kinh-nghiem-du-lich-thung-lung-hava-quang-binh"
+  },
+  {
+    "metaDescription": "Cẩm nang hướng dẫn hành hương Thánh địa Đức Mẹ La Vang Quảng Trị: Nguồn gốc tích Đức Mẹ hiện ra, giờ lễ, kinh nghiệm xin ơn và dịch vụ xe taxi đón tiễn từ Huế, Đông Hà, Đồng Hới.",
+    "ticketPrice": "Miễn phí tham quan và hành hương",
+    "slug": "kinh-nghiem-hanh-huong-thanh-dia-la-vang-quang-tri",
+    "publishedDate": "2026-10-12",
     "highlights": [
       "Trung tâm Thánh Mẫu Quốc gia thiêng liêng thu hút hàng triệu tín hữu và du khách thập phương",
       "Vương cung Thánh đường La Vang mới với quy mô nguy nga mang đậm nét kiến trúc truyền thống Việt Nam",
@@ -305,76 +324,120 @@
       "Cây đa La Vang lịch sử - nơi tương truyền Đức Mẹ bồng Chúa Hài Đồng hiện ra chữa lành bệnh tật",
       "Dịch vụ taxi đón tiễn sân bay Phú Bài (Huế), ga Đông Hà về La Vang giá rẻ chỉ từ 12.000đ/km"
     ],
-    "excerpt": "Thánh địa La Vang là trung tâm hành hương Công giáo lớn bậc nhất Việt Nam. Nơi đây gắn liền với sự tích Đức Mẹ Maria hiện ra che chở đoàn con trong rừng thẳm Dinh Cát năm 1798.",
-    "readTime": "8 phút đọc",
-    "reviewsCount": 133,
-    "destination": "Thánh Địa La Vang (Huyện Hải Lăng, Quảng Trị)",
     "sections": [
       {
+        "image": "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG",
         "imageCaption": "Tượng Đức Mẹ La Vang bồng Chúa Hài Đồng nhân từ chở che đoàn con cái",
         "heading": "1. Sự tích huyền thoại Đức Mẹ La Vang hiện ra che chở giáo dân",
         "tips": [
           "Du khách có thể chuẩn bị bình nước sạch để xin nước thánh tại nguồn nước suối thiêng La Vang mang về cho gia đình."
         ],
-        "content": "Năm 1798, dưới thời vua Cảnh Thịnh nhà Tây Sơn, nhiều tín hữu Công giáo đã chạy trốn vào khu rừng rậm hoang vu La Vang thuộc vùng đất Dinh Cát xưa (nay thuộc xã Hải Phú, huyện Hải Lăng, Quảng Trị). Giữa cảnh đói khổ, bệnh tật và thú dữ rình rập, giáo dân đêm ngày tụ họp dưới gốc cây đa cổ thụ đọc kinh cầu nguyện xin ơn che chở.\n\nTương truyền, vào một đêm thanh vắng, Đức Mẹ Maria đã hiện ra trong ánh hào quang rực rỡ, khoác áo choàng lộng lẫy, tay bồng Chúa Giêsu Hài Đồng và có hai thiên thần hầu cận. Đức Mẹ ủi an đoàn con đau khổ và chỉ dạy họ hái một loại lá cây mọc quanh vùng (cây lá Vằng) đun nước uống để chữa lành bệnh tật. Từ đó, địa danh La Vang trở thành mảnh đất linh thiêng, nơi Đức Mẹ luôn lắng nghe và ban ơn lành cho mọi người đến cầu xin.",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG"
+        "content": "Năm 1798, dưới thời vua Cảnh Thịnh nhà Tây Sơn, nhiều tín hữu Công giáo đã chạy trốn vào khu rừng rậm hoang vu La Vang thuộc vùng đất Dinh Cát xưa (nay thuộc xã Hải Phú, huyện Hải Lăng, Quảng Trị). Giữa cảnh đói khổ, bệnh tật và thú dữ rình rập, giáo dân đêm ngày tụ họp dưới gốc cây đa cổ thụ đọc kinh cầu nguyện xin ơn che chở.\n\nTương truyền, vào một đêm thanh vắng, Đức Mẹ Maria đã hiện ra trong ánh hào quang rực rỡ, khoác áo choàng lộng lẫy, tay bồng Chúa Giêsu Hài Đồng và có hai thiên thần hầu cận. Đức Mẹ ủi an đoàn con đau khổ và chỉ dạy họ hái một loại lá cây mọc quanh vùng (cây lá Vằng) đun nước uống để chữa lành bệnh tật. Từ đó, địa danh La Vang trở thành mảnh đất linh thiêng, nơi Đức Mẹ luôn lắng nghe và ban ơn lành cho mọi người đến cầu xin."
       },
       {
-        "imageCaption": "Tháp chuông cổ La Vang - Di tích linh thiêng sừng sững giữa đất trời Quảng Trị",
         "content": "Quần thể Trung tâm Hành hương La Vang là sự kết hợp hài hòa giữa văn hóa Công giáo và nét kiến trúc cung đình, đình làng Việt Nam:\n• Tháp chuông cổ La Vang: Là chứng tích còn sót lại của ngôi thánh đường xây dựng năm 1928, trải qua bom đạn chiến tranh năm 1972 vẫn sừng sững đứng vững, rêu phong cổ kính như chứng nhân của lịch sử.\n• Cụm tượng đài Ba Cây Đa: Nơi đặt tượng Đức Mẹ La Vang mặc trang phục áo dài truyền thống Việt Nam, đầu đội khăn đóng bồng Chúa Giêsu, che chở bên dưới là ba cây đa nhân tạo khổng lồ vươn tán rộng lớn.\n• Vương cung Thánh đường mới: Công trình đồ sộ mang phong cách kiến trúc Á Đông với mái ngói đỏ cong vút, cột gỗ chạm khắc tinh xảo có sức chứa hàng ngàn người tham dự thánh lễ.",
         "tips": [
           "Khuôn viên La Vang rất rộng lớn và rợp bóng cây xanh, du khách nên mặc trang phục lịch sự, kín đáo khi vào chiêm bái."
         ],
         "heading": "2. Chiêm ngưỡng kiến trúc Vương cung Thánh đường và Tháp chuông cổ rêu phong",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG"
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG",
+        "imageCaption": "Tháp chuông cổ La Vang - Di tích linh thiêng sừng sững giữa đất trời Quảng Trị"
       },
       {
         "heading": "3. Lễ hội Hành hương La Vang và các giờ Thánh Lễ thiêng liêng",
         "image": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        "content": "Hàng năm, Thánh địa La Vang đón hàng triệu lượt khách hành hương. Đặc biệt vào dịp Đại hội La Vang (tổ chức định kỳ 3 năm một lần vào ngày 13 - 15/8 kỷ niệm Lễ Đức Mẹ Hồn Xác Lên Trời), biển người từ khắp mọi miền đất nước và kiều bào hải ngoại đổ về đây hiệp dâng thánh lễ, rước kiệu Đức Mẹ trong bầu không khí thánh thiện và xúc động khôn tả.\n\nVào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày vào các khung giờ: 05h00 sáng và 19h00 tối. Riêng ngày Chúa Nhật có các thánh lễ vào 05h00, 08h00 sáng và 15h00 chiều.",
         "tips": [
           "Nếu có kế hoạch tham dự thánh lễ, bạn nên có mặt trước giờ lễ 20 phút để chọn được vị trí ngồi thuận lợi."
         ],
-        "content": "Hàng năm, Thánh địa La Vang đón hàng triệu lượt khách hành hương. Đặc biệt vào dịp Đại hội La Vang (tổ chức định kỳ 3 năm một lần vào ngày 13 - 15/8 kỷ niệm Lễ Đức Mẹ Hồn Xác Lên Trời), biển người từ khắp mọi miền đất nước và kiều bào hải ngoại đổ về đây hiệp dâng thánh lễ, rước kiệu Đức Mẹ trong bầu không khí thánh thiện và xúc động khôn tả.\n\nVào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày vào các khung giờ: 05h00 sáng và 19h00 tối. Riêng ngày Chúa Nhật có các thánh lễ vào 05h00, 08h00 sáng và 15h00 chiều.",
         "imageCaption": "Quảng trường trung tâm La Vang - Nơi diễn ra các đại lễ hành hương long trọng"
       },
       {
-        "content": "Cung đường tâm linh kết hợp lý tưởng nhất trong ngày:\n• 08:00: Xe đón tại Ga Đông Hà hoặc khách sạn, di chuyển đến Thánh địa La Vang (cách 18km).\n• 08:30 - 11:00: Tham quan Vương cung Thánh đường, viếng tượng đài Ba Cây Đa, dâng hạt chuỗi mân côi và lấy nước thánh tại giếng thiêng.\n• 11:30: Thưởng thức bữa trưa đặc sản Bánh bột lọc Mỹ Chánh và Cháo bột Hải Lăng trứ danh ngay gần La Vang.\n• 13:30 - 15:30: Di chuyển về viếng Thành Cổ Quảng Trị (cách La Vang chỉ 6km), dâng hương Bến thả hoa sông Thạch Hãn.\n• 16:00: Xe đưa đoàn ghé mua đặc sản bánh ướt Phương Lang, cao lá vằng làm quà và trả khách về điểm hẹn.",
-        "heading": "4. Lịch trình Tour Hành Hương La Vang - Thành Cổ Quảng Trị 1 Ngày",
         "tips": [
           "Đặt xe taxi phục vụ riêng trọn gói cả ngày với Taxi Quảng Trị 24H để thoải mái thời gian cầu nguyện mà không bị giục giã."
-        ]
+        ],
+        "content": "Cung đường tâm linh kết hợp lý tưởng nhất trong ngày:\n• 08:00: Xe đón tại Ga Đông Hà hoặc khách sạn, di chuyển đến Thánh địa La Vang (cách 18km).\n• 08:30 - 11:00: Tham quan Vương cung Thánh đường, viếng tượng đài Ba Cây Đa, dâng hạt chuỗi mân côi và lấy nước thánh tại giếng thiêng.\n• 11:30: Thưởng thức bữa trưa đặc sản Bánh bột lọc Mỹ Chánh và Cháo bột Hải Lăng trứ danh ngay gần La Vang.\n• 13:30 - 15:30: Di chuyển về viếng Thành Cổ Quảng Trị (cách La Vang chỉ 6km), dâng hương Bến thả hoa sông Thạch Hãn.\n• 16:00: Xe đưa đoàn ghé mua đặc sản bánh ướt Phương Lang, cao lá vằng làm quà và trả khách về điểm hẹn.",
+        "heading": "4. Lịch trình Tour Hành Hương La Vang - Thành Cổ Quảng Trị 1 Ngày"
       },
       {
-        "heading": "5. Đặc sản ẩm thực Hải Lăng & Quà tặng phước lành La Vang",
-        "content": "Vùng đất Hải Lăng bao bọc La Vang có nền ẩm thực dân dã nhưng vô cùng độc đáo:\n• Cao lá Vằng La Vang: Chiết xuất từ lá vằng sẻ tự nhiên nơi Đức Mẹ chỉ dạy, có tác dụng mát gan, bổ máu, kích thích tiêu hóa và lợi sữa cho phụ nữ sau sinh.\n• Bánh bột lọc Mỹ Chánh: Nổi tiếng nhất tỉnh Quảng Trị với hương vị đậm đà khó quên.\n• Bánh ướt Phương Lang: Món bánh ướt thịt heo chấm tương ớt mè gia truyền hơn 100 năm tuổi.",
         "tips": [
           "Nên mua cao lá vằng tại các quầy dòng tu bên trong trung tâm La Vang để đảm bảo chất lượng tinh chất nguyên chất 100%."
-        ]
+        ],
+        "heading": "5. Đặc sản ẩm thực Hải Lăng & Quà tặng phước lành La Vang",
+        "content": "Vùng đất Hải Lăng bao bọc La Vang có nền ẩm thực dân dã nhưng vô cùng độc đáo:\n• Cao lá Vằng La Vang: Chiết xuất từ lá vằng sẻ tự nhiên nơi Đức Mẹ chỉ dạy, có tác dụng mát gan, bổ máu, kích thích tiêu hóa và lợi sữa cho phụ nữ sau sinh.\n• Bánh bột lọc Mỹ Chánh: Nổi tiếng nhất tỉnh Quảng Trị với hương vị đậm đà khó quên.\n• Bánh ướt Phương Lang: Món bánh ướt thịt heo chấm tương ớt mè gia truyền hơn 100 năm tuổi."
       },
       {
+        "heading": "6. Dịch vụ Taxi Quảng Trị 24H đưa đón hành hương La Vang chu đáo",
+        "content": "Taxi Quảng Trị 24H hân hạnh phục vụ bà con giáo dân và du khách hành hương về đất Mẹ:\n• Đưa đón tận nơi từ Sân bay Phú Bài (Huế - 55km), Sân bay Đồng Hới (110km), Ga Đông Hà (18km) hoặc Ga Huế.\n• Xe 4 - 7 chỗ đời mới sạch sẽ, trang bị điều hòa êm ái, bác tài bản xứ tận tình, chu đáo hỗ trợ đồ lễ và hành lý.\n• Mức giá cước trọn gói tiết kiệm nhất khu vực chỉ từ 12.000đ/km, cam kết không tăng giá vào các dịp lễ hội cao điểm.",
         "tips": [
           "Liên hệ Hotline 0877.669.555 để đặt xe trước 30 phút hoặc đặt xe theo ngày trọn gói ưu đãi nhất."
-        ],
-        "content": "Taxi Quảng Trị 24H hân hạnh phục vụ bà con giáo dân và du khách hành hương về đất Mẹ:\n• Đưa đón tận nơi từ Sân bay Phú Bài (Huế - 55km), Sân bay Đồng Hới (110km), Ga Đông Hà (18km) hoặc Ga Huế.\n• Xe 4 - 7 chỗ đời mới sạch sẽ, trang bị điều hòa êm ái, bác tài bản xứ tận tình, chu đáo hỗ trợ đồ lễ và hành lý.\n• Mức giá cước trọn gói tiết kiệm nhất khu vực chỉ từ 12.000đ/km, cam kết không tăng giá vào các dịp lễ hội cao điểm.",
-        "heading": "6. Dịch vụ Taxi Quảng Trị 24H đưa đón hành hương La Vang chu đáo"
+        ]
       }
     ],
-    "category": "Di Tích Lịch Sử Tâm Linh",
-    "slug": "kinh-nghiem-hanh-huong-thanh-dia-la-vang-quang-tri",
-    "title": "Kinh Nghiệm Hành Hương Thánh Địa La Vang Quảng Trị 2026: Trung Tâm Thánh Mẫu Linh Thiêng Bậc Nhất",
     "metaTitle": "Kinh Nghiệm Hành Hương Đức Mẹ La Vang Quảng Trị 2026 | Taxi 24H",
+    "destination": "Thánh Địa La Vang (Huyện Hải Lăng, Quảng Trị)",
+    "taxiFare6Seats": "1.200.000 VNĐ",
+    "title": "Kinh Nghiệm Hành Hương Thánh Địa La Vang Quảng Trị 2026: Trung Tâm Thánh Mẫu Linh Thiêng Bậc Nhất",
+    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
+    "readTime": "8 phút đọc",
     "taxiFare4Seats": "950.000 VNĐ",
-    "bestTimeToVisit": "Quanh năm, đặc biệt dịp Đại hội La Vang ngày 15/8 và các ngày Lễ trọng",
+    "excerpt": "Thánh địa La Vang là trung tâm hành hương Công giáo lớn bậc nhất Việt Nam. Nơi đây gắn liền với sự tích Đức Mẹ Maria hiện ra che chở đoàn con trong rừng thẳm Dinh Cát năm 1798.",
+    "reviewsCount": 133,
+    "rating": 5,
     "distanceFromDongHoi": "110 km (khoảng 95 - 105 phút đi xe)",
-    "coverImage": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
-    "metaDescription": "Cẩm nang hướng dẫn hành hương Thánh địa Đức Mẹ La Vang Quảng Trị: Nguồn gốc tích Đức Mẹ hiện ra, giờ lễ, kinh nghiệm xin ơn và dịch vụ xe taxi đón tiễn từ Huế, Đông Hà, Đồng Hới."
+    "gallery": [
+      {
+        "caption": "Toàn cảnh quảng trường và Vương cung Thánh đường La Vang bề thế nguy nga",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
+      },
+      {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Th%C3%A1p_chu%C3%B4ng_La_Vang.JPG",
+        "caption": "Di tích Tháp chuông cổ kính La Vang sừng sững qua bao biến thiên lịch sử"
+      },
+      {
+        "caption": "Tượng Đức Mẹ La Vang nhân từ trong tà áo dài truyền thống Việt Nam",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/75/T%C6%B0%E1%BB%A3ng_%C4%90%E1%BB%A9c_M%E1%BA%B9_La_Vang.JPG"
+      },
+      {
+        "caption": "Thành Cổ Quảng Trị cách La Vang chỉ 6km - Điểm kết hợp lý tưởng trong ngày",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
+      }
+    ],
+    "faqs": [
+      {
+        "answer": "Từ Ga Đông Hà đến La Vang chỉ 18km (khoảng 20 phút đi taxi, giá khoảng 200.000đ - 220.000đ). Từ trung tâm TP. Huế đến La Vang khoảng 55km (khoảng 60 phút đi taxi, giá khoảng 550.000đ - 650.000đ).",
+        "question": "Từ Ga Đông Hà hoặc TP. Huế đi taxi đến La Vang mất bao lâu?"
+      },
+      {
+        "question": "Người không theo đạo Công giáo có được vào tham quan Thánh địa La Vang không?",
+        "answer": "Thánh địa La Vang mở cửa tự do và nồng nhiệt chào đón tất cả mọi người, không phân biệt tôn giáo, đến tham quan, chiêm bái và tận hưởng không gian thanh tịnh."
+      },
+      {
+        "question": "Tại La Vang có chỗ nghỉ qua đêm cho khách hành hương không?",
+        "answer": "Có. Trung tâm Hành hương La Vang có các dãy nhà lưu trú phục vụ khách hành hương với chi phí hỗ trợ tùy tâm hoặc giá tượng trưng rất rẻ."
+      }
+    ],
+    "bestTimeToVisit": "Quanh năm, đặc biệt dịp Đại hội La Vang ngày 15/8 và các ngày Lễ trọng",
+    "category": "Di Tích Lịch Sử Tâm Linh",
+    "coverImage": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
   },
   {
+    "reviewsCount": 980,
     "author": "Đội Ngũ Hướng Dẫn Bản Địa Taxi 24H",
-    "readTime": "6 phút đọc",
-    "bestTimeToVisit": "Tháng 4 đến tháng 9 (Mùa hè thời tiết nắng đẹp, nước suối mát lạnh 20°C)",
+    "faqs": [
+      {
+        "answer": "Bạn nên mang theo đồ bơi (bắt buộc bikini/quần bơi ôm sát khi vào tắm bùn Hang Tối), túi chống nước cho điện thoại, khăn tắm, dầu gội và một bộ đồ khô để thay sau khi tắm.",
+        "question": "Cần chuẩn bị những gì khi đi Suối Moọc và Hang Tối?"
+      },
+      {
+        "question": "Giá thuê xe taxi từ Đồng Hới đi trọn gói Suối Moọc và Hang Tối bao nhiêu?",
+        "answer": "Giá taxi 4 chỗ trọn gói đón Đồng Hới ➔ Suối Moọc ➔ Hang Tối ➔ Đưa về khách sạn chỉ từ 1.100.000đ - 1.250.000đ/ngày, xe 7 chỗ chỉ từ 1.350.000đ - 1.500.000đ/ngày."
+      }
+    ],
+    "metaTitle": "Kinh Nghiệm Vui Chơi Suối Nước Moọc & Sông Chày Hang Tối 2026",
     "distanceFromDongHoi": "60 km (khoảng 1 giờ đi xe)",
-    "taxiFare4Seats": "720.000 VNĐ",
+    "taxiFare6Seats": "900.000 VNĐ",
+    "category": "Vui Chơi Sinh Thái & Mạo Hiểm",
     "metaDescription": "Trọn bộ kinh nghiệm vui chơi Suối Nước Moọc và Sông Chày Hang Tối Quảng Bình: bảng giá vé trò chơi Zipline, chèo thuyền Kayak, tắm bùn khoáng tự nhiên và taxi đưa đón.",
     "highlights": [
       "Dòng nước suối ngọc bích trồi lên từ lòng núi đá vôi mát lạnh 20°C",
@@ -382,27 +445,10 @@
       "Đu dây Zipline dài 400m vượt sông Chày và Zipline tắm sông cực đã",
       "Tắm bùn khoáng tự nhiên trong lòng hang Tối - trải nghiệm độc nhất vô nhị"
     ],
-    "excerpt": "Thiên đường sinh thái giải nhiệt mùa hè số 1 Quảng Bình với dòng suối ngọc bích trong vắt, đu dây Zipline cảm giác mạnh và tắm bùn tự nhiên kỳ thú.",
-    "title": "Cẩm Nang Vui Chơi Suối Nước Moọc & Sông Chày - Hang Tối (Zipline, Chèo Kayak, Tắm Bùn)",
-    "ticketPrice": "Suối Moọc trọn gói: 180.000đ/người | Hang Tối trọn gói Zipline: 450.000đ/người",
-    "rating": 4.9,
+    "bestTimeToVisit": "Tháng 4 đến tháng 9 (Mùa hè thời tiết nắng đẹp, nước suối mát lạnh 20°C)",
     "slug": "kinh-nghiem-suoi-nuoc-mooc-song-chay-hang-toi",
-    "faqs": [
-      {
-        "answer": "Bạn nên mang theo đồ bơi (bắt buộc bikini/quần bơi ôm sát khi vào tắm bùn Hang Tối), túi chống nước cho điện thoại, khăn tắm, dầu gội và một bộ đồ khô để thay sau khi tắm.",
-        "question": "Cần chuẩn bị những gì khi đi Suối Moọc và Hang Tối?"
-      },
-      {
-        "answer": "Giá taxi 4 chỗ trọn gói đón Đồng Hới ➔ Suối Moọc ➔ Hang Tối ➔ Đưa về khách sạn chỉ từ 1.100.000đ - 1.250.000đ/ngày, xe 7 chỗ chỉ từ 1.350.000đ - 1.500.000đ/ngày.",
-        "question": "Giá thuê xe taxi từ Đồng Hới đi trọn gói Suối Moọc và Hang Tối bao nhiêu?"
-      }
-    ],
-    "metaTitle": "Kinh Nghiệm Vui Chơi Suối Nước Moọc & Sông Chày Hang Tối 2026",
+    "ticketPrice": "Suối Moọc trọn gói: 180.000đ/người | Hang Tối trọn gói Zipline: 450.000đ/người",
     "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
-    "publishedDate": "2026-03-25",
-    "destination": "Suối Nước Moọc & Hang Tối",
-    "taxiFare6Seats": "900.000 VNĐ",
-    "category": "Vui Chơi Sinh Thái & Mạo Hiểm",
     "sections": [
       {
         "content": "Suối Nước Moọc là hiện tượng thiên nhiên kỳ lạ khi dòng nước ngầm phun trào ('moọc' theo tiếng địa phương nghĩa là mọc lên) từ lòng núi đá vôi với màu xanh ngọc bích huyền ảo. Nơi đây có những rặng phong lan khoe sắc, làn nước mát lạnh 20°C xua tan mọi nóng nực của mùa hè.",
@@ -421,88 +467,66 @@
         "heading": "4. Mẹo thuê xe taxi đưa đón tiết kiệm & an toàn"
       }
     ],
-    "reviewsCount": 980
+    "excerpt": "Thiên đường sinh thái giải nhiệt mùa hè số 1 Quảng Bình với dòng suối ngọc bích trong vắt, đu dây Zipline cảm giác mạnh và tắm bùn tự nhiên kỳ thú.",
+    "destination": "Suối Nước Moọc & Hang Tối",
+    "publishedDate": "2026-03-25",
+    "readTime": "6 phút đọc",
+    "title": "Cẩm Nang Vui Chơi Suối Nước Moọc & Sông Chày - Hang Tối (Zipline, Chèo Kayak, Tắm Bùn)",
+    "rating": 4.9,
+    "taxiFare4Seats": "720.000 VNĐ"
   },
   {
+    "coverImage": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
+    "excerpt": "Thành Cổ Quảng Trị - bản tráng ca bất tử gắn liền với cuộc chiến đấu 81 ngày đêm bảo vệ Thành Cổ mùa hè đỏ lửa 1972. Từng tấc đất nơi đây thấm đượm máu xương của hàng vạn người con anh dũng hiến dâng tuổi thanh xuân vì độc lập non sông.",
+    "metaDescription": "Cẩm nang hướng dẫn viếng thăm Di tích Quốc gia đặc biệt Thành Cổ Quảng Trị: Lịch sử 81 ngày đêm, kinh nghiệm dâng hương, thả hoa đăng bờ sông Thạch Hãn và thuê xe taxi trọn gói.",
     "faqs": [
       {
         "question": "Từ TP. Đông Hà đi Taxi đến Thành Cổ Quảng Trị mất bao xa và bao lâu?",
         "answer": "Khoảng cách từ trung tâm TP. Đông Hà đến Thành Cổ Quảng Trị là khoảng 14km, thời gian di chuyển bằng taxi chỉ mất khoảng 15 đến 20 phút. Giá cước taxi 4 chỗ chỉ khoảng 160.000đ - 180.000đ."
       },
       {
-        "question": "Thành Cổ Quảng Trị có mở cửa ban đêm không?",
-        "answer": "Khu di tích mở cửa đón khách dâng hương từ 07h00 sáng đến 17h30 chiều hàng ngày. Tuy nhiên, Đài tưởng niệm và Bến thả hoa sông Thạch Hãn thường sáng đèn lung linh vào buổi tối các ngày rằm, mùng một và dịp lễ 27/7."
+        "answer": "Khu di tích mở cửa đón khách dâng hương từ 07h00 sáng đến 17h30 chiều hàng ngày. Tuy nhiên, Đài tưởng niệm và Bến thả hoa sông Thạch Hãn thường sáng đèn lung linh vào buổi tối các ngày rằm, mùng một và dịp lễ 27/7.",
+        "question": "Thành Cổ Quảng Trị có mở cửa ban đêm không?"
       },
       {
         "answer": "Giá tour taxi trọn gói cả ngày đi Thành Cổ, La Vang, Nghĩa trang Trường Sơn, Cầu Hiền Lương rất tiết kiệm, dao động từ 900.000đ - 1.200.000đ tùy loại xe 4 hoặc 7 chỗ, xe phục vụ riêng suốt hành trình.",
         "question": "Thuê xe taxi tour trọn gói đi Thành Cổ và các điểm tâm linh Quảng Trị có đắt không?"
       }
     ],
-    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
-    "coverImage": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
-    "destination": "Thành Cổ Quảng Trị (Thị xã Quảng Trị)",
-    "rating": 5,
-    "taxiFare4Seats": "850.000 VNĐ",
-    "readTime": "8 phút đọc",
-    "gallery": [
-      {
-        "caption": "Đài tưởng niệm trung tâm Thành Cổ - Ngôi mộ chung linh thiêng của hàng vạn liệt sĩ",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
-      },
-      {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
-        "caption": "Cổng Tiền cổ kính rêu phong thời nhà Nguyễn in đậm dấu tích lịch sử"
-      },
-      {
-        "caption": "Dòng sông Thạch Hãn huyền thoại - Bến thả hoa tri nụ hoa bất tử",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG"
-      },
-      {
-        "caption": "Quảng trường và Vương cung Thánh đường La Vang cách Thành Cổ 6km",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
-      },
-      {
-        "caption": "Khuôn viên Thành Cổ xanh tươi hòa bình sau hơn nửa thế kỷ độc lập",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg"
-      }
-    ],
-    "title": "Kinh Nghiệm Viếng Thành Cổ Quảng Trị 2026: Dấu Ấn Lịch Sử 81 Ngày Đêm Khói Lửa & Tour Tâm Linh",
-    "metaTitle": "Kinh Nghiệm Viếng Thành Cổ Quảng Trị 2026 | Hướng Dẫn Di Chuyển Taxi 24H",
-    "ticketPrice": "Miễn phí vé vào cổng (Ủng hộ nhang đèn tùy tâm)",
     "sections": [
       {
-        "image": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg",
         "content": "Thành Cổ Quảng Trị là minh chứng hào hùng và xúc động bậc nhất cho ý chí sắt đá của dân tộc Việt Nam. Trong suốt 81 ngày đêm mùa hè năm 1972 (từ 28/6 đến 16/9/1972), trên diện tích vỏn vẹn chưa đầy 3 cây số vuông của Thành Cổ và thị xã Quảng Trị, quân đội Mỹ - ngụy đã trút xuống hơn 328.000 tấn bom đạn, tương đương sức công phá của 7 quả bom nguyên tử ném xuống Hiroshima.\n\nTừng tấc đất, từng viên gạch nơi đây đều thấm đượm máu xương của hàng vạn cán bộ chiến sĩ quân giải phóng, phần lớn là những thanh niên, sinh viên tuổi mới mười chín, đôi mươi rời giảng đường đại học bước vào chiến hào. Đài tưởng niệm trung tâm được xây dựng theo hình tượng ngôi mộ chung khổng lồ với 81 bậc đá tượng trưng cho 81 ngày đêm chiến đấu ngoan cường, bốn mặt đài khắc họa những áng thơ và ngọn lửa thiêng soi rọi sự bất tử của các anh hùng liệt sĩ.",
         "tips": [
           "Khi vào dâng hương tại Đài tưởng niệm, quý khách nên mặc trang phục trang nghiêm, đi lại nhẹ nhàng và giữ trật tự tôn kính.",
           "Bạn có thể chuẩn bị nhang đèn và hoa tươi ngay tại quầy lễ tân bên ngoài cổng di tích."
         ],
         "imageCaption": "Đài Tưởng Niệm Trung Tâm Thành Cổ Quảng Trị - Nấm mồ chung linh thiêng của hàng vạn người lính giải phóng",
-        "heading": "1. Thành Cổ Quảng Trị - Bản hùng ca bất tử 81 ngày đêm đỏ lửa 1972"
+        "heading": "1. Thành Cổ Quảng Trị - Bản hùng ca bất tử 81 ngày đêm đỏ lửa 1972",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
       },
       {
+        "content": "Thành Cổ vốn được khởi công xây dựng từ thời vua Gia Long (1809) và củng cố dưới thời vua Minh Mạng (1827) bằng gạch vồ kiên cố. Trải qua mưa bom bão đạn năm 1972, gần như toàn bộ kiến trúc thành quách đều bị san phẳng, chỉ còn lại dấu tích Cổng Tiền với những mảng tường loang lổ vết đạn cày xới rêu phong theo năm tháng.\n\nNgay bên cạnh cổng thành là Bảo tàng Chứng tích Thành Cổ Quảng Trị. Nơi đây trưng bày hàng trăm kỷ vật xúc động: chiếc bi đông méo mó vì mảnh bom, chiếc ba lô nhuộm màu thời gian, và đặc biệt là bức thư bất hủ của liệt sĩ Lê Văn Huỳnh (sinh viên ĐH Bách Khoa Hà Nội) gửi mẹ già và người vợ trẻ trước lúc hy sinh: 'Mẹ kính yêu, con đi mẹ đừng buồn... Toàn thể gia đình đừng buồn vì con đã cống hiến trọn vẹn tuổi xuân cho ngày đất nước thống nhất'. Cạnh bảo tàng, Tháp Chuông Thành Cổ ngày ngày ngân vang hồi chuông thanh thản cầu chúc linh hồn các chiến sĩ an giấc ngàn thu.",
+        "heading": "2. Cổng Tiền rêu phong và Bảo tàng Chứng tích chiến tranh nghẹn ngào",
         "imageCaption": "Cổng Tiền Thành Cổ Quảng Trị - Dấu tích thời gian và những vết thương chiến tranh còn mãi tạc vào đá gạch",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
         "tips": [
           "Nên liên hệ hướng dẫn viên tại bảo tàng để được nghe thuyết minh về những bức thư thời chiến xúc động rơi nước mắt."
-        ],
-        "content": "Thành Cổ vốn được khởi công xây dựng từ thời vua Gia Long (1809) và củng cố dưới thời vua Minh Mạng (1827) bằng gạch vồ kiên cố. Trải qua mưa bom bão đạn năm 1972, gần như toàn bộ kiến trúc thành quách đều bị san phẳng, chỉ còn lại dấu tích Cổng Tiền với những mảng tường loang lổ vết đạn cày xới rêu phong theo năm tháng.\n\nNgay bên cạnh cổng thành là Bảo tàng Chứng tích Thành Cổ Quảng Trị. Nơi đây trưng bày hàng trăm kỷ vật xúc động: chiếc bi đông méo mó vì mảnh bom, chiếc ba lô nhuộm màu thời gian, và đặc biệt là bức thư bất hủ của liệt sĩ Lê Văn Huỳnh (sinh viên ĐH Bách Khoa Hà Nội) gửi mẹ già và người vợ trẻ trước lúc hy sinh: 'Mẹ kính yêu, con đi mẹ đừng buồn... Toàn thể gia đình đừng buồn vì con đã cống hiến trọn vẹn tuổi xuân cho ngày đất nước thống nhất'. Cạnh bảo tàng, Tháp Chuông Thành Cổ ngày ngày ngân vang hồi chuông thanh thản cầu chúc linh hồn các chiến sĩ an giấc ngàn thu.",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
-        "heading": "2. Cổng Tiền rêu phong và Bảo tàng Chứng tích chiến tranh nghẹn ngào"
-      },
-      {
-        "heading": "3. Bến Thả Hoa Sông Thạch Hãn - Nơi huyền thoại nở hoa",
-        "content": "Cách cổng Tây Thành Cổ chỉ vài trăm mét là dòng sông Thạch Hãn êm đềm chảy qua lòng thị xã. Trong 81 ngày đêm lịch sử, dòng sông này chính là huyết mạch tiếp tế sinh tử của quân giải phóng. Dưới làn đạn pháo và bom bầy từ máy bay địch, hàng ngàn chiến sĩ đã mãi mãi gửi thân xác dưới đáy dòng sông xanh.\n\nCựu chiến binh Lê Bá Dương khi trở lại thăm dòng sông xưa đã nghẹn ngào chắp bút 4 câu thơ lay động hàng triệu trái tim:\n'Đò lên Thạch Hãn ơi... chèo nhẹ,\nĐáy sông còn đó bạn tôi nằm.\nTan theo bọt nước thay phù sa,\nCứ mỗi thu sang lại nở hoa.'\n\nNgày nay, Bến thả hoa sông Thạch Hãn là điểm đến tâm linh không thể tách rời khi viếng Thành Cổ. Hàng năm vào các dịp Rằm tháng Bảy, ngày 27/7 và 30/4, hàng vạn ngọn hoa đăng lung linh được người dân và du khách thập phương thả xuống dòng sông để tri ân những người con kiên trung của đất mẹ.",
-        "imageCaption": "Dòng sông Thạch Hãn huyền thoại - Bến thả hoa đăng tưởng niệm những người lính đã ngã xuống trong lòng nước",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG",
-        "tips": [
-          "Bạn có thể mua hoa tươi và đèn hoa đăng thả bên bờ sông lúc hoàng hôn (khoảng 17h00 - 18h00) để cảm nhận không gian linh thiêng, lắng đọng."
         ]
       },
       {
-        "content": "Một hành trình tâm linh ý nghĩa và khoa học nhất được đông đảo du khách lựa chọn khi thuê xe Taxi Quảng Trị 24H:\n\n• 07:30 - 09:00: Xe đón tại khách sạn/ga Đông Hà, di chuyển dâng hương tưởng niệm tại Thành Cổ Quảng Trị & Bến thả hoa sông Thạch Hãn.\n• 09:30 - 11:00: Viếng Trung tâm Hành hương Thánh địa La Vang (cách Thành Cổ chỉ 6km), chiêm ngưỡng Tháp chuông cổ kính và Đức Mẹ bồng Chúa.\n• 11:30 - 13:00: Thưởng thức bữa trưa đặc sản nức tiếng: Bánh bột lọc Mỹ Chánh, Bún hến Mai Xá hoặc Cháo bột cá lóc Diên Sanh.\n• 13:30 - 15:30: Di chuyển viếng Nghĩa trang Liệt sĩ Quốc gia Trường Sơn (hơn 10.000 phần mộ liệt sĩ) và Nghĩa trang Quốc gia Đường 9.\n• 15:45 - 17:30: Tham quan Di tích Đôi bờ Hiền Lương - Sông Bến Hải (Cầu Hiền Lương lịch sử, Cột cờ giới tuyến Vĩ tuyến 17) và Cụm địa đạo Vịnh Mốc.\n• 17:30: Xe đưa đoàn trở về điểm hẹn, kết thúc hành trình về nguồn đầy cảm xúc.",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        "content": "Cách cổng Tây Thành Cổ chỉ vài trăm mét là dòng sông Thạch Hãn êm đềm chảy qua lòng thị xã. Trong 81 ngày đêm lịch sử, dòng sông này chính là huyết mạch tiếp tế sinh tử của quân giải phóng. Dưới làn đạn pháo và bom bầy từ máy bay địch, hàng ngàn chiến sĩ đã mãi mãi gửi thân xác dưới đáy dòng sông xanh.\n\nCựu chiến binh Lê Bá Dương khi trở lại thăm dòng sông xưa đã nghẹn ngào chắp bút 4 câu thơ lay động hàng triệu trái tim:\n'Đò lên Thạch Hãn ơi... chèo nhẹ,\nĐáy sông còn đó bạn tôi nằm.\nTan theo bọt nước thay phù sa,\nCứ mỗi thu sang lại nở hoa.'\n\nNgày nay, Bến thả hoa sông Thạch Hãn là điểm đến tâm linh không thể tách rời khi viếng Thành Cổ. Hàng năm vào các dịp Rằm tháng Bảy, ngày 27/7 và 30/4, hàng vạn ngọn hoa đăng lung linh được người dân và du khách thập phương thả xuống dòng sông để tri ân những người con kiên trung của đất mẹ.",
+        "tips": [
+          "Bạn có thể mua hoa tươi và đèn hoa đăng thả bên bờ sông lúc hoàng hôn (khoảng 17h00 - 18h00) để cảm nhận không gian linh thiêng, lắng đọng."
+        ],
+        "imageCaption": "Dòng sông Thạch Hãn huyền thoại - Bến thả hoa đăng tưởng niệm những người lính đã ngã xuống trong lòng nước",
+        "heading": "3. Bến Thả Hoa Sông Thạch Hãn - Nơi huyền thoại nở hoa",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG"
+      },
+      {
         "heading": "4. Gợi ý lịch trình Tour Tâm Linh Quảng Trị 1 Ngày trọn vẹn",
         "imageCaption": "Thánh địa La Vang - Điểm đến thanh tịnh nằm ngay sát Thành Cổ trên cung đường tâm linh Quảng Trị",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        "content": "Một hành trình tâm linh ý nghĩa và khoa học nhất được đông đảo du khách lựa chọn khi thuê xe Taxi Quảng Trị 24H:\n\n• 07:30 - 09:00: Xe đón tại khách sạn/ga Đông Hà, di chuyển dâng hương tưởng niệm tại Thành Cổ Quảng Trị & Bến thả hoa sông Thạch Hãn.\n• 09:30 - 11:00: Viếng Trung tâm Hành hương Thánh địa La Vang (cách Thành Cổ chỉ 6km), chiêm ngưỡng Tháp chuông cổ kính và Đức Mẹ bồng Chúa.\n• 11:30 - 13:00: Thưởng thức bữa trưa đặc sản nức tiếng: Bánh bột lọc Mỹ Chánh, Bún hến Mai Xá hoặc Cháo bột cá lóc Diên Sanh.\n• 13:30 - 15:30: Di chuyển viếng Nghĩa trang Liệt sĩ Quốc gia Trường Sơn (hơn 10.000 phần mộ liệt sĩ) và Nghĩa trang Quốc gia Đường 9.\n• 15:45 - 17:30: Tham quan Di tích Đôi bờ Hiền Lương - Sông Bến Hải (Cầu Hiền Lương lịch sử, Cột cờ giới tuyến Vĩ tuyến 17) và Cụm địa đạo Vịnh Mốc.\n• 17:30: Xe đưa đoàn trở về điểm hẹn, kết thúc hành trình về nguồn đầy cảm xúc.",
         "tips": [
           "Nên đặt xe trọn gói khứ hồi với Taxi Quảng Trị 24H để bác tài đón đúng giờ, hỗ trợ hướng dẫn điểm ăn uống và tiết kiệm tới 50% chiều về."
         ]
@@ -511,8 +535,8 @@
         "tips": [
           "Bác tài Taxi Quảng Trị 24H luôn sẵn sàng đưa bạn đến đúng những quán ăn gốc bản địa lâu năm, giá cả bình dân không lo chặt chém."
         ],
-        "heading": "5. Thưởng thức đặc sản ẩm thực nức tiếng đất Quảng Trị",
-        "content": "Sau những giờ phút lắng đọng tâm linh, đừng quên thưởng thức văn hóa ẩm thực đậm đà hồn quê của mảnh đất gió Lào cát trắng:\n• Bánh bột lọc Mỹ Chánh: Vỏ bánh trong suốt dai giòn bọc tôm sông óng ả và thịt mỡ béo ngậy, chấm nước mắm ớt cay xé lưỡi đặc trưng.\n• Bún hến Mai Xá (đặc sản tiến vua): Nấu từ con chắt chắt sông Thạch Hãn ngọt lịm tự nhiên, ăn cùng rau sống bắp chuối bùi bùi.\n• Cháo bột cá lóc (Bánh canh Diên Sanh): Sợi bột gạo dai mềm quyện nước dùng cá lóc đồng rim nghệ vàng óng thơm lừng.\n• Thịt trâu lá trơng: Thịt trâu non nướng than hoa cuộn với lá trơng rừng the nồng mang lại hương vị khó quên.\n• Bánh ướt Phương Lang: Bánh tráng mỏng mềm mịn ăn kèm thịt ba chỉ luộc và bát nước mắm tương ớt mè truyền thống."
+        "content": "Sau những giờ phút lắng đọng tâm linh, đừng quên thưởng thức văn hóa ẩm thực đậm đà hồn quê của mảnh đất gió Lào cát trắng:\n• Bánh bột lọc Mỹ Chánh: Vỏ bánh trong suốt dai giòn bọc tôm sông óng ả và thịt mỡ béo ngậy, chấm nước mắm ớt cay xé lưỡi đặc trưng.\n• Bún hến Mai Xá (đặc sản tiến vua): Nấu từ con chắt chắt sông Thạch Hãn ngọt lịm tự nhiên, ăn cùng rau sống bắp chuối bùi bùi.\n• Cháo bột cá lóc (Bánh canh Diên Sanh): Sợi bột gạo dai mềm quyện nước dùng cá lóc đồng rim nghệ vàng óng thơm lừng.\n• Thịt trâu lá trơng: Thịt trâu non nướng than hoa cuộn với lá trơng rừng the nồng mang lại hương vị khó quên.\n• Bánh ướt Phương Lang: Bánh tráng mỏng mềm mịn ăn kèm thịt ba chỉ luộc và bát nước mắm tương ớt mè truyền thống.",
+        "heading": "5. Thưởng thức đặc sản ẩm thực nức tiếng đất Quảng Trị"
       },
       {
         "content": "Taxi Quảng Trị 24H tự hào là người bạn đồng hành tin cậy của hàng ngàn đoàn du khách, cựu chiến binh và gia đình về thăm chiến trường xưa:\n• Đội xe đời mới từ 4 chỗ (Vios, Accent, City) đến 7 chỗ (Xpander, Veloz, Fortuner) nội thất sạch bóng, máy lạnh mát rượi.\n• Tài xế là người con bản địa Quảng Trị, hiểu rõ từng di tích lịch sử, tận tâm hỗ trợ xách hành lý, mua nhang đèn và dẫn đường chu đáo.\n• Bảng giá cước công khai minh bạch chỉ từ 12.000đ/km, cam kết không phát sinh phụ phí ẩn, đón tận nơi 24/7 sau 5 - 10 phút gọi.",
@@ -522,6 +546,37 @@
         ]
       }
     ],
+    "reviewsCount": 168,
+    "title": "Kinh Nghiệm Viếng Thành Cổ Quảng Trị 2026: Dấu Ấn Lịch Sử 81 Ngày Đêm Khói Lửa & Tour Tâm Linh",
+    "gallery": [
+      {
+        "caption": "Đài tưởng niệm trung tâm Thành Cổ - Ngôi mộ chung linh thiêng của hàng vạn liệt sĩ",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
+      },
+      {
+        "caption": "Cổng Tiền cổ kính rêu phong thời nhà Nguyễn in đậm dấu tích lịch sử",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg"
+      },
+      {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG",
+        "caption": "Dòng sông Thạch Hãn huyền thoại - Bến thả hoa tri nụ hoa bất tử"
+      },
+      {
+        "caption": "Quảng trường và Vương cung Thánh đường La Vang cách Thành Cổ 6km",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
+      },
+      {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg",
+        "caption": "Khuôn viên Thành Cổ xanh tươi hòa bình sau hơn nửa thế kỷ độc lập"
+      }
+    ],
+    "metaTitle": "Kinh Nghiệm Viếng Thành Cổ Quảng Trị 2026 | Hướng Dẫn Di Chuyển Taxi 24H",
+    "readTime": "8 phút đọc",
+    "taxiFare4Seats": "850.000 VNĐ",
+    "author": "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
+    "rating": 5,
+    "destination": "Thành Cổ Quảng Trị (Thị xã Quảng Trị)",
+    "distanceFromDongHoi": "95 km (khoảng 80 - 90 phút đi xe)",
     "taxiFare6Seats": "1.050.000 VNĐ",
     "highlights": [
       "Di tích Quốc gia đặc biệt thiêng liêng tưởng niệm các anh hùng liệt sĩ bảo vệ Thành Cổ mùa hè đỏ lửa 1972",
@@ -530,42 +585,13 @@
       "Đại lễ thả hoa đăng tri ân xúc động trên dòng sông Thạch Hãn lịch sử",
       "Dịch vụ xe taxi đưa đón trọn gói tham quan cụm di tích tâm linh Quảng Trị chỉ từ 12.000đ/km"
     ],
-    "category": "Di Tích Lịch Sử Tâm Linh",
-    "distanceFromDongHoi": "95 km (khoảng 80 - 90 phút đi xe)",
-    "publishedDate": "2026-10-12",
-    "metaDescription": "Cẩm nang hướng dẫn viếng thăm Di tích Quốc gia đặc biệt Thành Cổ Quảng Trị: Lịch sử 81 ngày đêm, kinh nghiệm dâng hương, thả hoa đăng bờ sông Thạch Hãn và thuê xe taxi trọn gói.",
-    "excerpt": "Thành Cổ Quảng Trị - bản tráng ca bất tử gắn liền với cuộc chiến đấu 81 ngày đêm bảo vệ Thành Cổ mùa hè đỏ lửa 1972. Từng tấc đất nơi đây thấm đượm máu xương của hàng vạn người con anh dũng hiến dâng tuổi thanh xuân vì độc lập non sông.",
+    "slug": "kinh-nghiem-vieng-thanh-co-quang-tri-lich-su",
     "bestTimeToVisit": "Quanh năm, đặc biệt dịp 27/7, 30/4 và các ngày Rằm",
-    "reviewsCount": 168,
-    "slug": "kinh-nghiem-vieng-thanh-co-quang-tri-lich-su"
+    "ticketPrice": "Miễn phí vé vào cổng (Ủng hộ nhang đèn tùy tâm)",
+    "category": "Di Tích Lịch Sử Tâm Linh",
+    "publishedDate": "2026-10-12"
   },
   {
-    "title": "Thung Lũng Hava & Công Viên Ozo: Thiên Đường Sống Ảo Sinh Thái Quảng Bình Mới Nhất",
-    "faqs": [
-      {
-        "question": "Nên chọn đi Thung lũng Hava hay Công viên Ozo nếu chỉ có nửa ngày?",
-        "answer": "Nếu bạn thích tắm nước, chèo thuyền SUP và chụp ảnh sống ảo bên sông nước trong vắt thì Hava là lựa chọn số 1. Nếu bạn thích khám phá rừng nguyên sinh, đi bộ dưới tán cây và chơi trò chơi trên cây thì nên chọn Ozo."
-      }
-    ],
-    "taxiFare4Seats": "700.000 VNĐ",
-    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H",
-    "distanceFromDongHoi": "55 - 60 km (khoảng 1 giờ đi xe)",
-    "readTime": "5 phút đọc",
-    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Thời tiết ấm áp, tắm suối chụp ảnh cực đẹp)",
-    "coverImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    "destination": "Thung Lũng Hava & Ozo Park",
-    "metaDescription": "Khám phá 2 điểm vui chơi sinh thái 'hot hit' nhất Quảng Bình: Thung lũng ngọc bích Hava và Công viên Ozo trong rừng nguyên sinh. Bảng giá vé, trò chơi và taxi đưa đón.",
-    "rating": 4.8,
-    "excerpt": "Thung lũng Hava với bãi cát vàng bên bờ sông Chày và Công viên Ozo với hệ thống trò chơi trên cây độc đáo. Cẩm nang du lịch trải nghiệm cho giới trẻ và gia đình.",
-    "reviewsCount": 740,
-    "ticketPrice": "Hava trọn gói: 150.000đ/người | Công viên Ozo trọn gói: 200.000đ/người",
-    "highlights": [
-      "Vịnh sỏi vàng và bãi tắm sông Chày trong vắt tại Thung lũng Hava",
-      "Đường trượt siêu tốc thẳng xuống nước và máng trượt cảm giác mạnh",
-      "Công viên Ozo với cây cầu gỗ dài 800m xuyên rừng nguyên sinh",
-      "Chuỗi trò chơi Sasuke trên cây liên hoàn thách thức sự khéo léo"
-    ],
-    "metaTitle": "Kinh Nghiệm Du Lịch Thung Lũng Hava & Công Viên Ozo Quảng Bình 2026",
     "sections": [
       {
         "content": "Thung lũng ngọc bích Hava (Hava Valley) là điểm check-in gây sốt với không gian non nước hữu tình. Du khách được trải nghiệm chèo thuyền SUP, kayak, nhảy cầu tõm 3 cấp độ, trượt máng nước siêu tốc và thưởng thức mâm cơm mẹt gà nướng muối cheo đậm chất miền sơn cước.",
@@ -580,23 +606,45 @@
         "heading": "3. Giá vé dịch vụ tham quan & trải nghiệm"
       }
     ],
-    "category": "Địa Điểm Mới & Sống Ảo",
-    "publishedDate": "2026-03-28",
+    "coverImage": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    "taxiFare4Seats": "700.000 VNĐ",
+    "rating": 4.8,
+    "title": "Thung Lũng Hava & Công Viên Ozo: Thiên Đường Sống Ảo Sinh Thái Quảng Bình Mới Nhất",
+    "excerpt": "Thung lũng Hava với bãi cát vàng bên bờ sông Chày và Công viên Ozo với hệ thống trò chơi trên cây độc đáo. Cẩm nang du lịch trải nghiệm cho giới trẻ và gia đình.",
     "slug": "thung-lung-hava-cong-vien-ozo-quang-binh",
-    "taxiFare6Seats": "880.000 VNĐ"
+    "bestTimeToVisit": "Tháng 3 đến tháng 9 (Thời tiết ấm áp, tắm suối chụp ảnh cực đẹp)",
+    "readTime": "5 phút đọc",
+    "destination": "Thung Lũng Hava & Ozo Park",
+    "metaDescription": "Khám phá 2 điểm vui chơi sinh thái 'hot hit' nhất Quảng Bình: Thung lũng ngọc bích Hava và Công viên Ozo trong rừng nguyên sinh. Bảng giá vé, trò chơi và taxi đưa đón.",
+    "taxiFare6Seats": "880.000 VNĐ",
+    "faqs": [
+      {
+        "question": "Nên chọn đi Thung lũng Hava hay Công viên Ozo nếu chỉ có nửa ngày?",
+        "answer": "Nếu bạn thích tắm nước, chèo thuyền SUP và chụp ảnh sống ảo bên sông nước trong vắt thì Hava là lựa chọn số 1. Nếu bạn thích khám phá rừng nguyên sinh, đi bộ dưới tán cây và chơi trò chơi trên cây thì nên chọn Ozo."
+      }
+    ],
+    "ticketPrice": "Hava trọn gói: 150.000đ/người | Công viên Ozo trọn gói: 200.000đ/người",
+    "distanceFromDongHoi": "55 - 60 km (khoảng 1 giờ đi xe)",
+    "highlights": [
+      "Vịnh sỏi vàng và bãi tắm sông Chày trong vắt tại Thung lũng Hava",
+      "Đường trượt siêu tốc thẳng xuống nước và máng trượt cảm giác mạnh",
+      "Công viên Ozo với cây cầu gỗ dài 800m xuyên rừng nguyên sinh",
+      "Chuỗi trò chơi Sasuke trên cây liên hoàn thách thức sự khéo léo"
+    ],
+    "category": "Địa Điểm Mới & Sống Ảo",
+    "reviewsCount": 740,
+    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H",
+    "publishedDate": "2026-03-28",
+    "metaTitle": "Kinh Nghiệm Du Lịch Thung Lũng Hava & Công Viên Ozo Quảng Bình 2026"
   },
   {
-    "taxiFare4Seats": "Từ 300.000 VNĐ / chuyến",
-    "highlights": [
-      "Tổng hợp đầy đủ 10 thắng cảnh hàng đầu tại Quảng Bình",
-      "Bảng giá vé tham quan niêm yết chính xác mới nhất 2026",
-      "Gợi ý các tour 1 ngày, 2 ngày 1 đêm và 3 ngày 2 đêm tối ưu chi phí",
-      "Dịch vụ taxi gia đình, xe du lịch 4 - 7 - 16 chỗ đón tận nơi phục vụ 24/7"
-    ],
+    "title": "Top 10 Địa Điểm Du Lịch Quảng Bình Đẹp Nhất & Cẩm Nang Thuê Xe Taxi Trọn Gói 2026",
     "slug": "top-dia-diem-du-lich-quang-binh",
+    "distanceFromDongHoi": "25 - 65 km",
+    "metaDescription": "Tổng hợp 10 địa điểm du lịch Quảng Bình nổi tiếng nhất: Phong Nha, Thiên Đường, Suối Moọc, Hava, Ozo, Vũng Chùa, Đá Nhảy, Đồi Cát Quang Phú. Bảng giá taxi trọn gói.",
+    "readTime": "8 phút đọc",
     "rating": 5,
-    "category": "Cẩm Nang Tổng Hợp Du Lịch",
-    "ticketPrice": "Tùy từng điểm đến (Từ miễn phí đến 250k)",
+    "excerpt": "Quảng Bình - vương quốc hang động thế giới với vô vàn thắng cảnh say đắm lòng người. Khám phá ngay danh sách 10 điểm đến hot nhất và bảng giá thuê xe du lịch tiết kiệm.",
     "sections": [
       {
         "content": "1. Động Phong Nha (Kỳ quan đệ nhất động trên sông Son)\n2. Động Thiên Đường (Hoàng cung thạch nhũ trong lòng đất)\n3. Suối Nước Moọc (Dòng suối ngọc bích 20°C mát lạnh)\n4. Sông Chày - Hang Tối (Tắm bùn tự nhiên, Zipline 400m)\n5. Thung Lũng Hava (Khu sinh thái giải trí sông Chày)\n6. Công Viên Ozo (Công viên trên cây đầu tiên tại Việt Nam)\n7. Vũng Chùa - Đảo Yến (Mộ Đại Tướng Võ Nguyên Giáp)\n8. Bãi Tắm Đá Nhảy (Kỳ quan biển điêu khắc tự nhiên)\n9. Đồi Cát Quang Phú (Trượt cát ngắm hoàng hôn rực rỡ)\n10. Thành phố Đồng Hới (Tượng Đài Mẹ Suốt, Quảng Bình Quan, Biển Nhật Lệ).",
@@ -611,11 +659,18 @@
         "heading": "3. Vì sao nên đặt taxi du lịch trọn gói tại Taxi Quảng Trị 24H?"
       }
     ],
-    "author": "Ban Biên Tập Du Lịch Taxi 24H",
-    "distanceFromDongHoi": "25 - 65 km",
+    "ticketPrice": "Tùy từng điểm đến (Từ miễn phí đến 250k)",
+    "taxiFare4Seats": "Từ 300.000 VNĐ / chuyến",
+    "metaTitle": "Top 10 Địa Điểm Du Lịch Quảng Bình Đẹp Nhất 2026 - Thuê Xe Giá Rẻ",
+    "destination": "Tất cả điểm du lịch Quảng Bình",
     "coverImage": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
-    "metaDescription": "Tổng hợp 10 địa điểm du lịch Quảng Bình nổi tiếng nhất: Phong Nha, Thiên Đường, Suối Moọc, Hava, Ozo, Vũng Chùa, Đá Nhảy, Đồi Cát Quang Phú. Bảng giá taxi trọn gói.",
-    "readTime": "8 phút đọc",
+    "category": "Cẩm Nang Tổng Hợp Du Lịch",
+    "highlights": [
+      "Tổng hợp đầy đủ 10 thắng cảnh hàng đầu tại Quảng Bình",
+      "Bảng giá vé tham quan niêm yết chính xác mới nhất 2026",
+      "Gợi ý các tour 1 ngày, 2 ngày 1 đêm và 3 ngày 2 đêm tối ưu chi phí",
+      "Dịch vụ taxi gia đình, xe du lịch 4 - 7 - 16 chỗ đón tận nơi phục vụ 24/7"
+    ],
     "bestTimeToVisit": "Tháng 3 đến tháng 9",
     "faqs": [
       {
@@ -623,26 +678,19 @@
         "question": "Làm thế nào để đặt xe taxi đi tour du lịch Quảng Bình nhanh nhất?"
       }
     ],
-    "metaTitle": "Top 10 Địa Điểm Du Lịch Quảng Bình Đẹp Nhất 2026 - Thuê Xe Giá Rẻ",
+    "taxiFare6Seats": "Từ 380.000 VNĐ / chuyến",
     "reviewsCount": 2150,
-    "publishedDate": "2026-04-01",
-    "destination": "Tất cả điểm du lịch Quảng Bình",
-    "title": "Top 10 Địa Điểm Du Lịch Quảng Bình Đẹp Nhất & Cẩm Nang Thuê Xe Taxi Trọn Gói 2026",
-    "excerpt": "Quảng Bình - vương quốc hang động thế giới với vô vàn thắng cảnh say đắm lòng người. Khám phá ngay danh sách 10 điểm đến hot nhất và bảng giá thuê xe du lịch tiết kiệm.",
-    "taxiFare6Seats": "Từ 380.000 VNĐ / chuyến"
+    "author": "Ban Biên Tập Du Lịch Taxi 24H",
+    "publishedDate": "2026-04-01"
   },
   {
-    "taxiFare4Seats": "850.000 VNĐ",
-    "highlights": [
-      "Vùng đất phong thủy đắc địa tựa lưng núi Rồng, hướng nhìn Đảo Yến bình yên",
-      "Kính cẩn dâng hương tri ân vị Tổng Tư lệnh kiệt xuất của dân tộc",
-      "Bãi tắm Đá Nhảy với quần thể đá điêu khắc tự nhiên độc nhất vô nhị",
-      "Thưởng thức hải sản biển tươi ngon nức tiếng tại bờ biển Ba Đồn và Bố Trạch"
-    ],
-    "rating": 5,
     "slug": "vieng-mo-dai-tuong-vung-chua-dao-yen-da-nhay",
-    "category": "Du Lịch Tâm Linh & Biển Đảo",
-    "ticketPrice": "Miễn phí vé dâng hương (Chỉ chuẩn bị hoa tươi, hương quả)",
+    "title": "Kinh Nghiệm Viếng Mộ Đại Tướng Võ Nguyên Giáp (Vũng Chùa - Đảo Yến) & Bãi Biển Đá Nhảy",
+    "distanceFromDongHoi": "65 km (Vũng Chùa) - 25 km (Đá Nhảy)",
+    "metaDescription": "Cẩm nang dâng hương tưởng niệm Đại Tướng Võ Nguyên Giáp tại Vũng Chùa Đảo Yến và check-in Bãi Đá Nhảy Quảng Bình. Hướng dẫn lộ trình, trang phục và giá taxi trọn gói.",
+    "readTime": "6 phút đọc",
+    "rating": 5,
+    "excerpt": "Hành trình tâm linh và khám phá phía Bắc Quảng Bình: dâng hương viếng Mộ Đại Tướng tại vùng đất linh thiêng Vũng Chùa và chiêm ngưỡng kiệt tác đá tự nhiên tại bãi tắm Đá Nhảy.",
     "sections": [
       {
         "content": "Vũng Chùa - Đảo Yến thuộc xã Quảng Đông, huyện Quảng Trạch, cách Đèo Ngang khoảng 7km về phía Nam. Nơi đây có thế núi hùng vĩ bao bọc, sóng biển êm đềm quanh năm. Hàng triệu lượt đồng bào khắp cả nước và du khách quốc tế mỗi năm đều hành hương về đây dâng nén tâm nhang tưởng niệm Đại tướng Võ Nguyên Giáp.",
@@ -657,11 +705,18 @@
         "heading": "3. Lưu ý quan trọng khi dâng hương viếng Mộ Đại Tướng"
       }
     ],
-    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H",
-    "distanceFromDongHoi": "65 km (Vũng Chùa) - 25 km (Đá Nhảy)",
+    "ticketPrice": "Miễn phí vé dâng hương (Chỉ chuẩn bị hoa tươi, hương quả)",
+    "taxiFare4Seats": "850.000 VNĐ",
+    "metaTitle": "Kinh Nghiệm Viếng Mộ Đại Tướng & Biển Đá Nhảy Quảng Bình 2026",
+    "destination": "Vũng Chùa & Bãi Đá Nhảy",
     "coverImage": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-    "metaDescription": "Cẩm nang dâng hương tưởng niệm Đại Tướng Võ Nguyên Giáp tại Vũng Chùa Đảo Yến và check-in Bãi Đá Nhảy Quảng Bình. Hướng dẫn lộ trình, trang phục và giá taxi trọn gói.",
-    "readTime": "6 phút đọc",
+    "category": "Du Lịch Tâm Linh & Biển Đảo",
+    "highlights": [
+      "Vùng đất phong thủy đắc địa tựa lưng núi Rồng, hướng nhìn Đảo Yến bình yên",
+      "Kính cẩn dâng hương tri ân vị Tổng Tư lệnh kiệt xuất của dân tộc",
+      "Bãi tắm Đá Nhảy với quần thể đá điêu khắc tự nhiên độc nhất vô nhị",
+      "Thưởng thức hải sản biển tươi ngon nức tiếng tại bờ biển Ba Đồn và Bố Trạch"
+    ],
     "bestTimeToVisit": "Quanh năm (Tháng 4 - 8 thuận lợi kết hợp tắm biển Đá Nhảy)",
     "faqs": [
       {
@@ -673,12 +728,9 @@
         "question": "Giá cước taxi trọn gói tuyến Đồng Hới ➔ Mộ Đại Tướng ➔ Đá Nhảy ➔ Đồng Hới bao nhiêu?"
       }
     ],
-    "metaTitle": "Kinh Nghiệm Viếng Mộ Đại Tướng & Biển Đá Nhảy Quảng Bình 2026",
-    "publishedDate": "2026-03-30",
+    "taxiFare6Seats": "1.050.000 VNĐ",
     "reviewsCount": 1890,
-    "title": "Kinh Nghiệm Viếng Mộ Đại Tướng Võ Nguyên Giáp (Vũng Chùa - Đảo Yến) & Bãi Biển Đá Nhảy",
-    "destination": "Vũng Chùa & Bãi Đá Nhảy",
-    "excerpt": "Hành trình tâm linh và khám phá phía Bắc Quảng Bình: dâng hương viếng Mộ Đại Tướng tại vùng đất linh thiêng Vũng Chùa và chiêm ngưỡng kiệt tác đá tự nhiên tại bãi tắm Đá Nhảy.",
-    "taxiFare6Seats": "1.050.000 VNĐ"
+    "publishedDate": "2026-03-30",
+    "author": "Ban Biên Tập Du Lịch Taxi Quảng Trị - Quảng Bình 24H"
   }
 ]

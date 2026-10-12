@@ -242,11 +242,38 @@ Ngày nay, Bến thả hoa sông Thạch Hãn là điểm đến tâm linh khôn
         tips: ["Tuân thủ tuyệt đối quy tắc không chạm tay vào thạch nhũ đang phát triển để bảo tồn nguyên vẹn kỳ quan."],
       },
       {
-        heading: "4. Hướng dẫn di chuyển và xe taxi đón tiễn Sân bay Đồng Hới",
-        content: `Để bắt đầu hành trình, du khách thường bay đến Sân bay Đồng Hới hoặc đi tàu hỏa đến Ga Đồng Hới, sau đó di chuyển khoảng 50km về thị trấn Phong Nha để tham gia buổi huấn luyện an toàn. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H cung cấp dòng xe đời mới từ 4 đến 7 chỗ, đón đúng giờ tại sảnh sân bay với mức giá trọn gói tiết kiệm chỉ từ 12.000đ/km.`,
+        heading: "4. Gợi ý lịch trình Tour Phong Nha - Kẻ Bàng kết hợp 1 Ngày",
+        content: `Nếu chưa đủ điều kiện tham gia tour thám hiểm Sơn Đoòng nhiều ngày, du khách có thể lựa chọn lịch trình 1 ngày trải nghiệm trọn vẹn tinh hoa Phong Nha:
+
+• 07:30 - 08:30: Xe đón tại sân bay/khách sạn Đồng Hới đưa lên thị trấn Phong Nha theo đường Hồ Chí Minh.
+• 08:45 - 11:30: Ngồi thuyền máy xuôi dòng sông Son ngắm cảnh non nước hữu tình, khám phá Động Phong Nha hoặc Động Tiên Sơn.
+• 12:00 - 13:30: Ăn trưa mẹt gà nướng than muối cheo và cá trắm sông Son om măng tại nhà hàng ven sông.
+• 13:45 - 16:30: Khám phá Động Thiên Đường - 'Hoàng cung trong lòng đất' hoặc vui chơi tắm suối tại Suối Nước Moọc / Thung lũng Hava.
+• 17:00: Xe Taxi đưa đón quý khách trở về Đồng Hới an toàn, thư thái.`,
         image: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
-        imageCaption: "Dòng sông ngầm thám hiểm uốn lượn bên trong hang Sơn Đoòng",
-        tips: ["Nên liên hệ Hotline 0877.669.555 để đặt xe trước giờ hạ cánh 30 phút, tài xế sẽ có mặt sẵn sàng hỗ trợ hành lý chu đáo."],
+        imageCaption: "Dòng sông ngầm thám hiểm uốn lượn bên trong lòng núi đá vôi Phong Nha",
+        tips: ["Đặt taxi trọn gói khứ hồi với Taxi Quảng Trị - Quảng Bình 24H để bác tài đồng hành cả ngày, không lo chờ xe."],
+      },
+      {
+        heading: "5. Thưởng thức ẩm thực miền sơn cước Phong Nha trứ danh",
+        content: `Ẩm thực Phong Nha mang đậm hương vị núi rừng đại ngàn hoang sơ:
+• Mẹt gà đồi nướng than chấm muối cheo: Gà thả đồi thịt săn chắc nướng vàng ươm, chấm cùng muối cheo cay nồng thơm lừng mùi lá chanh và hạt dổi.
+• Cá trắm sông Son: Cá được nuôi lồng trên dòng sông Son nước trong vắt, thịt bùi béo ngọt tự nhiên nướng lá chuối hoặc om măng cay.
+• Bánh lọc Phong Nha: Nhân tôm thịt đậm đà, gói lá chuối hấp nóng hổi ăn kèm nước mắm ớt cay xé lưỡi.
+• Rau dớn xào tỏi: Loại rau rừng mọc bên bờ suối đá giòn sần sật ngọt thanh giải nhiệt cực tốt.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Mẹt ẩm thực gà đồi nướng than và đặc sản Phong Nha đậm đà phong vị bản xứ",
+        tips: ["Nhờ bác tài Taxi 24H giới thiệu những quán ăn ngon có view nhìn thẳng ra dòng sông Son thơ mộng."],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Đón tiễn Sân bay Đồng Hới chu đáo",
+        content: `Dịch vụ Taxi Quảng Trị - Quảng Bình 24H chuyên phục vụ đưa đón khách du lịch và các đoàn thám hiểm hang động:
+• Đón trả đúng giờ tại Sân bay Đồng Hới (VDH), Ga Đồng Hới lên thẳng Phong Nha (45-50km) chỉ sau 45 phút chạy xe.
+• Đội xe 4 chỗ và 7 chỗ đời mới, cốp xe siêu rộng chứa vừa hành lý trekking cồng kềnh.
+• Bảng giá niêm yết rõ ràng chỉ từ 12.000đ/km, ưu đãi chiều về tới 50%, bác tài bản xứ nhiệt tình hỗ trợ khuân vác hành lý.`,
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Taxi Quảng Bình 24H túc trực 24/7 sẵn sàng đồng hành cùng chuyến phiêu lưu của bạn",
+        tips: ["Gọi Hotline 0877.669.555 trước giờ hạ cánh để xe đợi sẵn ở sảnh sân bay, không phải chen lấn chờ xe."],
       },
     ],
     faqs: [
@@ -257,6 +284,10 @@ Ngày nay, Bến thả hoa sông Thạch Hãn là điểm đến tâm linh khôn
       {
         question: "Thời điểm nào lý tưởng nhất để tham quan Sơn Đoòng?",
         answer: "Thời điểm lý tưởng nhất là từ tháng 2 đến tháng 8, lúc này thời tiết khô ráo, nắng ấm và nước trong hang êm dịu nhất.",
+      },
+      {
+        question: "Giá taxi 4 chỗ từ Sân bay Đồng Hới lên Phong Nha là bao nhiêu?",
+        answer: "Giá taxi 4 chỗ trọn gói từ Sân bay Đồng Hới lên thẳng các khách sạn tại Phong Nha dao động từ 450.000đ - 540.000đ/chuyến. Đặt khứ hồi 2 chiều được giảm ngay 50% chiều về.",
       },
     ],
   },
@@ -517,6 +548,136 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
     ],
   },
   {
+    slug: "kinh-nghiem-du-lich-doi-bo-hien-luong-song-ben-hai",
+    title: "Kinh Nghiệm Tham Quan Đôi Bờ Hiền Lương - Sông Bến Hải 2026: Vĩ Tuyến 17 & Khát Vọng Thống Nhất",
+    metaTitle: "Kinh Nghiệm Du Lịch Đôi Bờ Hiền Lương Sông Bến Hải 2026 | Taxi 24H",
+    metaDescription: "Cẩm nang tham quan Cụm Di tích Quốc gia đặc biệt Đôi bờ Hiền Lương - Sông Bến Hải: Cầu Hiền Lương sơn 2 màu, Cột cờ giới tuyến, Nhà liên hợp và taxi đón tiễn giá rẻ.",
+    excerpt: "Đôi bờ Hiền Lương - Sông Bến Hải, nơi chia cắt hai miền Nam - Bắc suốt hơn 20 năm ròng rã trong chiến tranh. Cầu Hiền Lương lịch sử là chứng nhân bi tráng cho khát vọng non sông liền một dải.",
+    category: "Di Tích Lịch Sử Tâm Linh",
+    coverImage: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+    destination: "Cụm Di Tích Đôi Bờ Hiền Lương (Huyện Vĩnh Linh, Quảng Trị)",
+    distanceFromDongHoi: "70 km (khoảng 65 phút đi xe)",
+    taxiFare4Seats: "680.000 VNĐ",
+    taxiFare6Seats: "850.000 VNĐ",
+    ticketPrice: "50.000đ/người lớn (Trẻ em miễn phí)",
+    bestTimeToVisit: "Quanh năm, đặc biệt dịp kỷ niệm 30/4 ngày Thống nhất non sông",
+    readTime: "8 phút đọc",
+    highlights: [
+      "Di tích Quốc gia đặc biệt biểu tượng cho nỗi đau chia cắt và niềm vui sum họp non sông",
+      "Cây cầu Hiền Lương lịch sử được phục dựng với 2 màu sơn xanh - vàng chia đôi ranh giới",
+      "Cột cờ giới tuyến bờ Bắc cao 38m sừng sững tung bay lá cờ Tổ quốc rộng 108m2",
+      "Nhà trưng bày 'Vĩ tuyến 17 và khát vọng thống nhất' lưu giữ hàng trăm hiện vật quý giá",
+      "Dịch vụ taxi đưa đón trọn gói tuyến Cầu Hiền Lương - Địa đạo Vịnh Mốc chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+        caption: "Cây cầu Hiền Lương lịch sử bắc qua dòng sông Bến Hải êm đềm",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/c/c8/C%E1%BB%ADa_s%E1%BB%91_13_c%E1%BB%A7a_%C4%91%E1%BB%8Ba_%C4%91%E1%BA%A1o_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+        caption: "Địa đạo Vịnh Mốc kề bên - Cùng nằm trên tuyến du lịch Vĩ tuyến 17",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg",
+        caption: "Non sông gấm vóc Quảng Trị ngày nay xanh tươi ngút ngàn",
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG",
+        caption: "Sông Thạch Hãn và Bến Hải - Hai dòng sông huyền thoại của mảnh đất anh hùng",
+      },
+    ],
+    sections: [
+      {
+        heading: "1. Vĩ tuyến 17 và nỗi đau chia cắt hơn 20 năm ròng rã",
+        content: `Theo Hiệp định Genève năm 1954, dòng sông Bến Hải chảy dọc theo Vĩ tuyến 17 được chọn làm giới tuyến quân sự tạm thời chia cắt Việt Nam thành hai miền. Ranh giới ấy ngỡ chỉ kéo dài 2 năm để chờ ngày tổng tuyển cử, nhưng lại kéo dài đằng đẵng hơn 20 năm (1954 - 1975) với biết bao máu xương và nước mắt của đồng bào hai miền.
+
+Dòng sông Bến Hải hiền hòa bỗng chốc trở thành ranh giới ngăn cách mẹ xa con, vợ xa chồng. Nhưng chính tại nơi đây, ý chí sắt đá 'Nước Việt Nam là một, dân tộc Việt Nam là một, sông có thể cạn, núi có thể mòn, song chân lý ấy không bao giờ thay đổi' đã tỏa sáng rực rỡ hơn bao giờ hết.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+        imageCaption: "Cầu Hiền Lương nối hai bờ Nam - Bắc sông Bến Hải - Biểu tượng bất diệt cho hòa bình và thống nhất",
+        tips: [
+          "Nên đi bộ chậm rãi trên cầu gỗ Hiền Lương để cảm nhận vạch sơn trắng phân định giới tuyến giữa hai màu sơn xanh và vàng.",
+        ],
+      },
+      {
+        heading: "2. Cột cờ giới tuyến bờ Bắc và cuộc chiến âm thanh huyền thoại",
+        content: `Nổi bật bên bờ Bắc là Cột cờ Hiền Lương cao 38m kiêu hãnh tung bay lá đại kỳ đỏ sao vàng rộng 108m2. Trong những năm tháng chiến tranh, nơi đây diễn ra cuộc chiến 'chọi cờ' vô cùng quyết liệt: địch nâng cột cờ bờ Nam cao thêm vài mét, quân ta lập tức nâng cột cờ bờ Bắc cao hơn. Dù bom đạn Mỹ bắn phá làm gãy đổ hàng chục lần, lá cờ Tổ quốc bên bờ Bắc chưa từng một ngày ngừng tung bay.
+
+Cạnh đó là hệ thống giàn loa phóng thanh công suất 500W khổng lồ. Cuộc 'đấu loa' phát đi tiếng hát quê hương, lời kêu gọi hòa bình sang bờ Nam đã trở thành câu chuyện huyền thoại độc nhất vô nhị trong lịch sử chiến tranh thế giới.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg",
+        imageCaption: "Quần thể di tích Đôi bờ Hiền Lương lưu giữ những kỷ vật hào hùng của lịch sử giải phóng dân tộc",
+        tips: [
+          "Bên trong Nhà trưng bày Vĩ tuyến 17 có mô hình giàn loa phóng thanh và các tài liệu mật thời chiến rất đáng xem.",
+        ],
+      },
+      {
+        heading: "3. Tượng đài Khát Vọng Thống Nhất lắng đọng bờ Nam",
+        content: `Bước sang bờ Nam sông Bến Hải, du khách sẽ bắt gặp cụm Tượng đài 'Khát vọng thống nhất' tạc hình tượng người mẹ miền Nam bồng con ngóng về bờ Bắc. Ánh mắt đau đáu, da diết hướng về dòng sông chở nặng phù sa gợi nhắc bao nỗi niềm ly tán thời chiến.
+
+Đứng bên tượng đài trong tiếng gió lộng bờ sông, bất kỳ ai cũng rưng rưng xúc động trước cái giá quá đắt của nền độc lập hôm nay, để thêm trân quý từng phút giây hòa bình trên non sông đất mẹ.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG",
+        imageCaption: "Dòng nước êm ả bờ Nam sông Bến Hải nơi từng in đậm nỗi đau chia cắt đôi bờ",
+        tips: [
+          "Thời điểm chụp ảnh đẹp nhất tại Cột cờ và Cầu Hiền Lương là vào khoảng 08h00 - 09h30 sáng khi nắng sớm chiếu rọi lá cờ.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình Tour Vĩ Tuyến 17 - Hiền Lương - Vịnh Mốc 1 Ngày",
+        content: `Hành trình trọn vẹn khám phá cụm di tích lịch sử Vĩnh Linh trong 1 ngày:
+• 07:30: Xe Taxi 24H đón quý khách tại khách sạn ở TP. Đông Hà hoặc Đồng Hới.
+• 08:30 - 10:30: Tham quan Cụm di tích Đôi bờ Hiền Lương - Sông Bến Hải, Cột cờ bờ Bắc, Nhà trưng bày và Cụm loa phóng thanh.
+• 10:45 - 12:30: Di chuyển về Địa đạo Vịnh Mốc (cách 14km), trải nghiệm đường hầm 3 tầng trong lòng đất mát lạnh.
+• 12:30 - 14:00: Nghỉ ngơi và thưởng thức hải sản tươi rói tại bãi biển Cửa Tùng.
+• 14:30 - 16:30: Tham quan Nghĩa trang Liệt sĩ Quốc gia Trường Sơn hoặc Cồn Cỏ vọng cảnh.
+• 17:00: Xe đưa đoàn về lại điểm hẹn an toàn.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/C%E1%BB%ADa_s%E1%BB%91_13_c%E1%BB%A7a_%C4%91%E1%BB%8Ba_%C4%91%E1%BA%A1o_V%E1%BB%8Bnh_M%E1%BB%91c.JPG",
+        imageCaption: "Địa đạo Vịnh Mốc - Điểm dừng chân kết hợp tiếp theo trên cung đường Vĩ tuyến 17",
+        tips: [
+          "Nên đặt xe trọn gói khứ hồi với Taxi Quảng Trị 24H để bác tài chở thẳng tuyến tour không cần lo đổi xe dọc đường.",
+        ],
+      },
+      {
+        heading: "5. Thưởng thức đặc sản ẩm thực Vĩnh Linh trứ danh",
+        content: `Mảnh đất Vĩnh Linh kiên cường sở hữu nét văn hóa ẩm thực mộc mạc mà khó quên:
+• Hải sản Cửa Tùng: Mực nhảy nướng than, tôm tít hấp sả, cua biển chắc thịt chấm muối tiêu chanh cay nồng.
+• Bánh đúc rau câu Vĩnh Linh: Món ăn thanh mát nấu từ rau câu thiên nhiên giải nhiệt ngày nắng.
+• Gà đồi luộc chấm muối ớt tiêu rừng thơm nức mũi.
+• Tiêu đen Vĩnh Linh và nước mắm Cửa Tùng: Quà tặng đậm đà phong vị đất miền Trung.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Bãi biển Cửa Tùng thanh bình nơi du khách thưởng thức hải sản sau chuyến thăm di tích",
+        tips: [
+          "Bác tài Taxi 24H sẽ gợi ý những quán hải sản bình dân ngon chuẩn vị của bà con ngư dân Cửa Tùng.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị 24H: Đưa đón tận nơi, an toàn & chu đáo",
+        content: `Taxi Quảng Trị - Quảng Bình 24H tự hào phục vụ hàng ngàn chuyến xe đưa đón cựu chiến binh và du khách về nguồn:
+• Dòng xe 4 - 7 chỗ đời mới nội thất sạch bóng, máy lạnh mát sâu.
+• Bác tài người bản địa tận tâm, am hiểu cặn kẽ từng câu chuyện lịch sử Vĩ tuyến 17.
+• Giá cước trọn gói cam kết chỉ từ 12.000đ/km, ưu đãi chiều về tới 50%, Hotline 0877.669.555 phục vụ 24/7.`,
+        image: "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG",
+        imageCaption: "Đội xe Taxi Quảng Trị 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường lịch sử",
+        tips: [
+          "Gọi ngay Hotline 0877.669.555 trước 30 phút để nhận ưu đãi giá xe trọn gói trong ngày tốt nhất.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Từ TP. Đông Hà hoặc Đồng Hới đi taxi đến Cầu Hiền Lương mất bao xa?",
+        answer: "Từ Đông Hà đến Cầu Hiền Lương khoảng 24km (25 phút đi taxi). Từ Đồng Hới đến Cầu Hiền Lương khoảng 70km (65 phút đi taxi). Tuyến đường QL1A trải nhựa rất êm ái.",
+      },
+      {
+        question: "Vé tham quan Cụm di tích Đôi bờ Hiền Lương là bao nhiêu?",
+        answer: "Giá vé tham quan hiện tại là 50.000đ/người lớn (bao gồm vé qua cầu Hiền Lương, Cột cờ và Nhà trưng bày Vĩ tuyến 17). Trẻ em được miễn phí.",
+      },
+      {
+        question: "Có thể kết hợp Cầu Hiền Lương với Địa đạo Vịnh Mốc trong cùng chuyến đi không?",
+        answer: "Rất thuận tiện! Cầu Hiền Lương và Địa đạo Vịnh Mốc chỉ cách nhau 14km, Taxi 24H luôn có gói tour kết hợp 2 điểm này với giá ưu đãi đặc biệt.",
+      },
+    ],
+  },
+  {
     slug: "kinh-nghiem-du-lich-thung-lung-hava-quang-binh",
     title: "Kinh Nghiệm Du Lịch Thung Lũng Hava Quảng Bình 2026: Thiên Đường Check-in Sông Chày Mát Lạnh",
     metaTitle: "Kinh Nghiệm Du Lịch Thung Lũng Hava Quảng Bình 2026 | Taxi 24H",
@@ -530,22 +691,105 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
     taxiFare6Seats: "700.000 VNĐ",
     ticketPrice: "150.000đ - 250.000đ/người (Tùy gói trò chơi)",
     bestTimeToVisit: "Tháng 3 đến tháng 9",
-    readTime: "5 phút đọc",
+    readTime: "8 phút đọc",
     highlights: [
-      "Làn nước sông Chày xanh biếc tự nhiên mát lạnh xua tan cái nắng hè",
-      "Đường trượt siêu tốc zipline đáp nước dài 600m mang lại cảm giác cực đã",
-      "Chèo thuyền kayak, thuyền SUP ngắm phong cảnh núi non trập trùng như tranh thủy mặc",
+      "Làn nước sông Chày xanh biếc tự nhiên mát lạnh xua tan cái nắng hè gay gắt",
+      "Đường trượt siêu tốc zipline đáp nước dài 600m mang lại cảm giác cực đã và sảng khoái",
+      "Chèo thuyền kayak, thuyền SUP len lỏi qua các hẻm núi đá vôi kỳ vĩ như tranh thủy mặc",
+      "Bờ cát vàng thoai thoải tắm mát an toàn cho cả gia đình và trẻ nhỏ",
+      "Dịch vụ taxi đưa đón 2 chiều tận khách sạn chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        caption: "Làn nước xanh màu ngọc bích đặc trưng của sông Chày tại Thung lũng Hava",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
+        caption: "Trải nghiệm chèo thuyền SUP len lỏi giữa hai bờ vách đá vôi kỳ vĩ",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80",
+        caption: "Cây cầu gỗ và các chòi nghỉ ngơi râm mát bên dòng suối mát lành",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        caption: "Mẹt gà đồi nướng than và cá suối chiên giòn thơm lừng tại Hava",
+      },
     ],
     sections: [
       {
-        heading: "1. Những trải nghiệm không thể bỏ qua tại Thung lũng ngọc bích Hava",
-        content: "Nằm kề bên Di sản Phong Nha - Kẻ Bàng, Hava sở hữu bờ cát vàng thoai thoải bên dòng sông Chày trong vắt. Đến đây, du khách thỏa sức thử thách bản thân với đường trượt zipline siêu dài đáp nước cực phấn khích, chèo thuyền SUP len lỏi qua các hẻm núi đá vôi, hoặc thư giãn trên những chiếc võng êm ái dưới bóng cây rừng râm mát.",
-        tips: ["Nên mua vé trọn gói bao gồm tất cả các trò chơi và chèo thuyền để tiết kiệm chi phí hơn so với mua vé lẻ."],
+        heading: "1. Thung lũng ngọc bích Hava - Viên ngọc giải nhiệt bên dòng sông Chày",
+        content: `Nằm kề bên vùng lõi Di sản Phong Nha - Kẻ Bàng, Thung lũng Hava được mệnh danh là thiên đường giải nhiệt mùa hè của Quảng Bình. Sở hữu dòng nước sông Chày xanh màu ngọc bích trong vắt nhìn thấy đáy, bao bọc xung quanh là những dãy núi đá vôi sừng sững rợp bóng cây rừng cổ thụ.
+
+Không gian tại Hava khoáng đạt, trong lành và hoang sơ, mang đến cho du khách cảm giác tách biệt hoàn toàn khỏi phố thị ồn ào. Dù vào những ngày hè miền Trung đổ lửa, khi đặt chân đến Hava, bạn sẽ lập tức cảm nhận luồng khí mát rượi 20 - 22°C tỏa ra từ mặt nước và khe núi đá.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Thung lũng Hava với làn nước ngọc bích mát lạnh quyến rũ giữa lòng di sản",
+        tips: [
+          "Nên mang theo đồ bơi, kính bơi và khăn tắm cá nhân để thỏa thích tắm suối mát.",
+        ],
       },
       {
-        heading: "2. Hướng dẫn di chuyển và dịch vụ đưa đón taxi tận nơi",
-        content: "Cách TP. Đồng Hới chỉ 50km theo hướng Tây Bắc, đường đi rải nhựa phẳng phiu uốn lượn qua những cánh rừng xanh ngút ngàn. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H chuyên phục vụ các chuyến đi chơi tour Hava trong ngày, xe gia đình đón tận sảnh khách sạn hoặc ga tàu, điều hòa mát lạnh và sẵn sàng đợi đưa đón 2 chiều.",
-        tips: ["Nên đi theo nhóm từ 4-7 người để đi taxi vừa thoải mái vừa chia tiền cước cực rẻ."],
+        heading: "2. Chuỗi trò chơi nước mạo hiểm: Zipline đáp nước & Chèo thuyền SUP",
+        content: `Điểm nhấn thu hút giới trẻ tại Hava là hệ thống trò chơi dưới nước đầy hào hứng:
+• Đường trượt Zipline siêu tốc 600m: Bay lượn trên không trung ngắm trọn phong cảnh núi rừng trước khi đáp thẳng xuống làn nước xanh mát rượi.
+• Chèo thuyền Kayak và SUP: Tự tay chèo thuyền xuôi dòng sông Chày, len lỏi qua các hẻm đá vôi và chụp những bức ảnh check-in triệu view.
+• Cầu trượt nước mạo hiểm và bạt nhún lò xo trên sông: Nơi các nhóm bạn cùng nhau vui cười sảng khoái với những cú nhảy nước điệu nghệ.`,
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Chèo SUP và đu dây Zipline trên sông Chày là hoạt động yêu thích của du khách tại Hava",
+        tips: [
+          "Nên mua vé trọn gói bao gồm tất cả các trò chơi để tiết kiệm chi phí hơn so với mua vé lẻ từng trò.",
+        ],
+      },
+      {
+        heading: "3. Thư thái giữa thiên nhiên hoang sơ và các góc check-in tuyệt đẹp",
+        content: `Không chỉ dành cho những ai mê trò chơi cảm giác mạnh, Hava còn là chốn dừng chân lý tưởng cho người lớn tuổi và trẻ nhỏ muốn thư giãn. Những chiếc chòi tranh lợp cọ, dãy võng dù mắc dưới bóng cây rừng râm mát bên bờ suối là nơi hoàn hảo để nhâm nhi tách cà phê, đọc sách và lắng nghe tiếng chim rừng hót véo von.
+
+Bãi cát vàng thoai thoải nông nước ở khúc sông kề bên là bể bơi tự nhiên an toàn tuyệt đối cho trẻ nhỏ thỏa sức vẫy vùng.`,
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Góc check-in cầu gỗ và chòi nghỉ thơ mộng giữa thiên nhiên hoang sơ",
+        tips: [
+          "Thời điểm check-in ánh sáng đẹp nhất là từ 08h30 - 10h30 sáng và 14h30 - 16h30 chiều.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình Tour Hava - Động Thiên Đường 1 Ngày siêu hấp dẫn",
+        content: `Cung đường kết hợp 1 ngày vui chơi khám phá Phong Nha hoàn hảo nhất:
+• 07:30 - 08:30: Xe đón tại khách sạn Đồng Hới khởi hành lên Phong Nha theo đường Hồ Chí Minh nhánh Tây.
+• 08:45 - 11:30: Tham quan Động Thiên Đường - 'Hoàng cung trong lòng đất' với cầu gỗ dài 1.000m chiêm ngưỡng thạch nhũ kỳ vĩ.
+• 11:45 - 13:30: Di chuyển sang Thung lũng Hava (cách chỉ 7km), thưởng thức bữa trưa mẹt gà nướng muối cheo bên bờ sông.
+• 13:30 - 16:30: Trải nghiệm đu zipline đáp nước, chèo thuyền SUP, bơi lội tắm suối xua tan cái nóng mùa hè.
+• 16:45: Xe Taxi Quảng Trị - Quảng Bình 24H đón quý khách đưa về khách sạn hoặc bãi biển Nhật Lệ nghỉ ngơi.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Mẹt ẩm thực gà đồi nướng than và xôi ba màu đặc trưng phục vụ ngay tại Hava",
+        tips: [
+          "Đặt xe taxi phục vụ trọn gói cả ngày để thoải mái thời gian chơi nước mà không phải gọi xe nhiều lần.",
+        ],
+      },
+      {
+        heading: "5. Thưởng thức mẹt gà đồi nướng muối cheo & cá suối chiên giòn",
+        content: `Ẩm thực tại Thung lũng Hava nổi tiếng với những mẹt đồ nướng đậm chất núi rừng Quảng Bình:
+• Gà đồi nướng than hoa: Gà bản thả rông thịt dai ngọt, nướng vừa tới vàng ruộm thơm nức mũi.
+• Muối cheo Phong Nha: Gia vị chấm thần thánh làm từ ớt xanh rừng, lá chanh và hạt dổi cay the nồng nàn.
+• Cá suối sông Chày chiên giòn: Cá sông tự nhiên béo ngậy, chiên giòn rụm chấm nước mắm ớt gừng.
+• Xôi nếp nương ba màu: Hạt xôi bóng bẩy, dẻo thơm quyện cùng thịt nướng ăn no bụng cả buổi vui chơi.`,
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Bữa tiệc giữa thiên nhiên núi rừng sông nước đem lại trải nghiệm khó quên",
+        tips: [
+          "Nên đặt món trước khi xuống tắm sông 30 phút để lên bờ có ngay đồ ăn nóng hổi.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Đưa đón tận nơi chu đáo",
+        content: `Taxi Quảng Trị - Quảng Bình 24H là sự lựa chọn hàng đầu cho các chuyến đi tour Thung lũng Hava:
+• Xe 4 chỗ và 7 chỗ đời mới trang bị điều hòa mát lạnh, khoang hành lý rộng rãi chứa đồ bơi và phao bơi thoải mái.
+• Giá cước trọn gói từ Đồng Hới đi Hava chỉ từ 12.000đ/km, giảm tới 50% cho chiều về khi đặt khứ hồi 2 chiều.
+• Đội ngũ bác tài bản địa lái xe điềm đạm, sẵn sàng chờ đợi bạn vui chơi cả buổi mà không tính phí chờ phụ trội.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Dịch vụ Taxi 24H luôn túc trực đưa đón quý khách an toàn trên cung đường Phong Nha",
+        tips: [
+          "Gọi Hotline 0877.669.555 để đặt xe trước và yêu cầu bác tài chuẩn bị nước khoáng lạnh miễn phí trên xe.",
+        ],
       },
     ],
     faqs: [
@@ -557,13 +801,17 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
         question: "Đến Hava ăn gì ngon?",
         answer: "Món ăn đặc sản trứ danh tại Hava là mẹt gà đồi nướng than chấm muối cheo Phong Nha, cá suối chiên giòn và xôi ba màu thơm dẻo.",
       },
+      {
+        question: "Cước taxi 4 chỗ từ Đồng Hới đi Hava bao nhiêu tiền?",
+        answer: "Giá taxi 4 chỗ khoảng 550.000đ/chuyến 1 chiều. Khi đặt tour trọn gói khứ hồi 2 chiều bao gồm thời gian chờ, giá chỉ từ 950.000đ - 1.050.000đ rất tiết kiệm.",
+      },
     ],
   },
   {
     slug: "kinh-nghiem-du-lich-cong-vien-ozo-treetop-park-quang-binh",
     title: "Kinh Nghiệm Du Lịch Công Viên Ozo Treetop Park Quảng Bình 2026: Thử Thách Rừng Nguyên Sinh",
     metaTitle: "Kinh Nghiệm Khám Phá Công Viên Ozo Quảng Bình 2026 | Taxi 24H",
-    metaDescription: "Cẩm nang du lịch Công viên Ozo Treetop Park Quảng Bình 2026: Trải nghiệm công viên trên cây đầu tiên tại Việt Nam, chèo kayak suối Ozo và dịch vụ taxi đón tiễn giá rẻ.",
+    metaDescription: "Cẩm nang du lịch Công viên Ozo Treetop Park Quảng Bình 2026: Trải nghiệm công viên trên cây đầu tiên tại Việt Nam, chèo kayak suối Ozo, ẩm thực rừng và dịch vụ taxi đón tiễn giá rẻ.",
     excerpt: "Công viên Ozo Treetop Park với hệ thống trò chơi trên cây độc đáo giữa rừng nguyên sinh Phong Nha - Kẻ Bàng là điểm dừng chân hấp dẫn cho những ai yêu thiên nhiên và phiêu lưu mạo hiểm.",
     category: "Điểm Đến Du Lịch Hot",
     coverImage: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=80",
@@ -573,22 +821,99 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
     taxiFare6Seats: "720.000 VNĐ",
     ticketPrice: "200.000đ/người lớn (Bao gồm tắm suối & trò chơi trên cây)",
     bestTimeToVisit: "Tháng 4 đến tháng 9",
-    readTime: "5 phút đọc",
+    readTime: "8 phút đọc",
     highlights: [
       "Công viên trò chơi trên cây giữa rừng nguyên sinh đầu tiên và dài nhất Việt Nam (800m)",
       "Hệ thống cầu gỗ đi bộ uốn lượn xuyên rừng dài hàng cây số check-in siêu đẹp",
       "Tắm suối Ozo mát lạnh tự nhiên và thưởng thức bữa tiệc rừng nướng thơm phức",
+      "Khu vui chơi suối cạn an toàn cho trẻ nhỏ và gia đình trải nghiệm dã ngoại",
+      "Dịch vụ taxi đưa đón tận cổng vườn quốc gia Phong Nha chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80",
+        caption: "Cầu gỗ uốn lượn dưới tán rừng nguyên sinh xanh mướt tại Công viên Ozo",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        caption: "Hệ thống trò chơi đu dây và thăng bằng trên ngọn cây mạo hiểm",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        caption: "Dòng suối Ozo trong vắt mát lạnh chảy qua lòng công viên",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
+        caption: "Không gian dã ngoại cắm trại lý tưởng giữa thiên nhiên hoang dã",
+      },
     ],
     sections: [
       {
         heading: "1. Thử thách lòng can đảm với hệ thống trò chơi trên cây Ozo",
-        content: "Với diện tích gần 5ha nằm trọn trong lòng rừng nguyên sinh, Công viên Ozo sở hữu chuỗi trò chơi liên hoàn trên cây gồm 16 chặng thử thách: đi cầu thăng bằng, đu dây zipline qua tán rừng, bước chân ninja và trượt ván trên không. Mỗi du khách đều được trang bị đai bảo hộ đạt chuẩn châu Âu dưới sự giám sát chặt chẽ của các huấn luyện viên chuyên nghiệp.",
-        tips: ["Du khách nên mặc trang phục thể thao năng động, giày thể thao ôm chân để thuận tiện leo trèo và vận động."],
+        content: `Với diện tích gần 5ha nằm trọn trong lòng rừng nguyên sinh Phong Nha - Kẻ Bàng, Công viên Ozo sở hữu chuỗi trò chơi liên hoàn trên cây gồm 16 chặng thử thách: đi cầu thăng bằng, đu dây zipline qua tán rừng, bước chân ninja và trượt ván trên không. Mỗi du khách đều được trang bị đai bảo hộ đạt chuẩn châu Âu dưới sự giám sát chặt chẽ của các huấn luyện viên chuyên nghiệp.
+
+Cảm giác lướt đi giữa những vòm cây cổ thụ râm mát, hít thở không khí trong lành thoang thoảng mùi nhựa thông và hoa rừng là một trải nghiệm giải phóng năng lượng tuyệt vời.`,
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Hệ thống trò chơi trên cây Ozo Treetop Park đạt chuẩn an toàn quốc tế",
+        tips: [
+          "Du khách nên mặc trang phục thể thao năng động, mang giày thể thao ôm chân chống trượt để thuận tiện leo trèo.",
+        ],
       },
       {
-        heading: "2. Thuê taxi trọn gói từ Đồng Hới đi Công viên Ozo",
-        content: "Cung đường 20 Quyết Thắng dẫn vào Công viên Ozo là một trong những cung đường rừng đẹp nhất miền Trung. Để tận hưởng trọn vẹn cảnh sắc mà không lo lắng về tay lái đường đèo dốc, thuê taxi gia đình 4 - 7 chỗ của Taxi Quảng Trị 24H là lựa chọn tối ưu nhất. Xe luôn sạch sẽ thơm tho, tài xế rành đường và nhiệt tình giới thiệu các điểm dừng chân ngắm cảnh dọc đường.",
-        tips: ["Hãy gọi Hotline 0877.669.555 để đặt xe đi và về, bác tài sẽ túc trực đón bạn ngay khi kết thúc chuyến vui chơi."],
+        heading: "2. Cầu gỗ xuyên rừng và dòng suối Ozo nguyên sơ mát lạnh",
+        content: `Men theo dòng suối Ozo là hệ thống cầu gỗ uốn lượn dài gần 1km dẫn lối du khách vào sâu trong khu rừng nguyên sinh rậm rạp. Dưới gầm cầu, dòng nước suối đá trong veo nhìn thấu từng hòn cuội cuộn tròn theo dòng chảy.
+
+Du khách có thể dừng chân tại các chòi gỗ ven suối, ngâm đôi bàn chân mỏi mệt vào làn nước mát rượi hoặc tham gia chèo thuyền kayak xuôi theo dòng suối ngắm hoa lan rừng nở rộ hai bên bờ.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Dòng suối Ozo trong vắt uốn lượn dưới tán rừng rậm rạp",
+        tips: [
+          "Đoạn suối nông phía hạ lưu rất thích hợp cho trẻ em tắm mát dưới sự quan sát của cha mẹ.",
+        ],
+      },
+      {
+        heading: "3. Khám phá hệ sinh thái động thực vật phong phú",
+        content: `Là một phần của Di sản Thiên nhiên Thế giới, Ozo là ngôi nhà chung của hàng trăm loài thực vật quý hiếm như gõ lau, sến, táu cùng các loài bướm rừng ngũ sắc bay lượn rợp trời. Tiếng ve sầu râm ran hòa cùng tiếng suối róc rách tạo nên bản hòa ca du dương của đại ngàn mà bạn khó lòng tìm thấy ở bất kỳ khu du lịch nhân tạo nào.`,
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Hệ sinh thái rừng nguyên sinh được bảo tồn nguyên vẹn tại Ozo",
+        tips: [
+          "Nên bôi thuốc chống côn trùng trước khi vào rừng để có chuyến đi trọn vẹn nhất.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình Tour Ozo - Suối Nước Moọc 1 Ngày xả stress",
+        content: `Lịch trình dã ngoại cuối tuần cực 'chill' cho gia đình và nhóm bạn:
+• 07:30 - 08:30: Xe đón tại TP. Đồng Hới khởi hành đi Phong Nha dọc theo đường 20 Quyết Thắng rợp bóng cây.
+• 08:45 - 12:00: Chinh phục chuỗi trò chơi trên cây Ozo Treetop Park, chụp ảnh check-in cầu gỗ và tắm suối mát.
+• 12:00 - 13:30: Thưởng thức bữa trưa BBQ tiệc nướng nhà rông bên bờ suối với gà nướng than, sườn heo bản và cơm lam.
+• 13:45 - 16:30: Di chuyển sang Suối Nước Moọc hoặc Hang Tối (cách 8km) tắm bùn tự nhiên và chèo thuyền kayak.
+• 17:00: Xe đón đoàn trở về TP. Đồng Hới an toàn.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Bữa tiệc ẩm thực nhà rông mộc mạc thơm lừng bên bờ suối",
+        tips: [
+          "Liên hệ Taxi Quảng Trị - Quảng Bình 24H để đặt xe trọn gói đi đường 20 Quyết Thắng đèo dốc cực an toàn.",
+        ],
+      },
+      {
+        heading: "5. Thưởng thức tiệc nướng nhà rông Ozo đậm đà phong vị núi rừng",
+        content: `Bữa trưa tại nhà hàng Ozo mang đậm phong cách dã ngoại ngoài trời:
+• Gà nướng bản chấm muối kiến vàng: Vị chua dịu của muối kiến kết hợp cùng thịt gà đồi săn chắc tạo nên hương vị bùng nổ.
+• Sườn nướng mật ong rừng: Từng dải sườn vàng óng quyện mật ong rừng Phong Nha ngọt thanh đậm đà.
+• Cơm lam nướng ống tre: Dẻo thơm mùi nếp nương và tre tươi nướng trên than hồng.
+• Nước chè xanh om đá: Thức uống mộc mạc đập tan mệt mỏi sau những giờ leo trèo vận động.`,
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Thưởng thức ẩm thực giữa không gian nhà rông mở thoáng mát giữa rừng",
+        tips: [
+          "Có thể đặt trước các set ăn theo nhóm để nhà hàng chuẩn bị sẵn sàng ngay khi kết thúc trò chơi.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H đưa đón Ozo giá rẻ",
+        content: `Cung đường 20 Quyết Thắng dẫn vào Công viên Ozo là một trong những cung đường rừng đẹp nhất miền Trung. Để tận hưởng trọn vẹn cảnh sắc mà không lo lắng về tay lái đường đèo dốc, thuê taxi gia đình 4 - 7 chỗ của Taxi Quảng Trị 24H là lựa chọn tối ưu nhất. Xe luôn sạch sẽ thơm tho, tài xế rành đường và nhiệt tình giới thiệu các điểm dừng chân ngắm cảnh dọc đường.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Đội xe Taxi 24H luôn phục vụ quý khách chu đáo trên mọi nẻo đường rừng",
+        tips: [
+          "Hãy gọi Hotline 0877.669.555 để đặt xe đi và về, bác tài sẽ túc trực đón bạn ngay khi kết thúc chuyến vui chơi.",
+        ],
       },
     ],
     faqs: [
@@ -599,6 +924,10 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
       {
         question: "Cước taxi 4 chỗ từ Đồng Hới đi Ozo là bao nhiêu?",
         answer: "Giá taxi 4 chỗ khoảng 550.000đ - 580.000đ/chuyến 1 chiều. Khi đặt khứ hồi 2 chiều, bạn sẽ nhận được mức ưu đãi giảm giá lên đến 50% cho chiều về.",
+      },
+      {
+        question: "Thời gian mở cửa của Công viên Ozo là mấy giờ?",
+        answer: "Công viên Ozo mở cửa đón khách từ 07h30 sáng đến 16h30 chiều tất cả các ngày trong tuần.",
       },
     ],
   },
@@ -616,22 +945,100 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
     taxiFare6Seats: "780.000 VNĐ",
     ticketPrice: "Theo gói tắm Onsen từ 250.000đ - 650.000đ/người",
     bestTimeToVisit: "Quanh năm, đặc biệt mùa thu đông mát mẻ",
-    readTime: "6 phút đọc",
+    readTime: "8 phút đọc",
     highlights: [
       "Suối nước khoáng nóng lộ thiên duy nhất tại Việt Nam có nhiệt độ sôi tự nhiên 105°C",
       "Khu nghỉ dưỡng Bang Onsen Spa & Resort chuẩn Nhật Bản với hồ tắm khoáng đa dạng",
       "Trải nghiệm tự tay luộc trứng chín lòng đào bằng nguồn nước khoáng nguyên chất giàu vi chất",
+      "Cung đường kết hợp viếng Nhà lưu niệm Đại tướng Võ Nguyên Giáp tại Lệ Thủy",
+      "Dịch vụ taxi 4-7 chỗ đón tận nơi từ Đồng Hới hoặc Đông Hà chỉ từ 12.000đ/km",
+    ],
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+        caption: "Hồ tắm khoáng nóng ngoài trời giữa thung lũng nguyên sinh xanh mát",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        caption: "Làn khói khoáng nghi ngút bốc lên từ mạch nguồn nước nóng 105 độ C",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=800&q=80",
+        caption: "Kiến trúc khu nghỉ dưỡng Bang Onsen chuẩn phong cách Nhật Bản thanh lịch",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80",
+        caption: "Dòng suối Bang chảy êm đềm giữa rừng thông đại ngàn Lệ Thủy",
+      },
     ],
     sections: [
       {
-        heading: "1. Tác dụng diệu kỳ của nguồn khoáng nóng Bang đối với sức khỏe",
-        content: "Nguồn khoáng nóng Bang chứa hàm lượng lưu huỳnh và các khoáng chất quý hiếm cao, có tác dụng trị liệu tuyệt vời cho các bệnh về xương khớp, da liễu và giúp phục hồi năng lượng tinh thần. Ngâm mình trong dòng khoáng nóng giữa thung lũng nguyên sinh xanh mát sẽ mang lại cảm giác thư thái tột cùng, xua tan mọi mệt mỏi sau những ngày làm việc căng thẳng.",
-        tips: ["Không nên ngâm khoáng nóng quá 20 phút mỗi lần và cần bổ sung nước lọc ấm đầy đủ trước và sau khi tắm."],
+        heading: "1. Kỳ quan suối khoáng nóng Bang 105°C lộ thiên độc nhất vô nhị",
+        content: `Nằm ẩn mình giữa thung lũng nguyên sinh thuộc xã Kim Thủy, huyện Lệ Thủy, Suối khoáng nóng Bang giữ kỷ lục là nguồn nước khoáng lộ thiên duy nhất tại Việt Nam có nhiệt độ tại lỗ phun lên đến 105°C. Đứng giữa thung lũng, du khách ngỡ ngàng như lạc vào chốn bồng lai khi từng cột khói hơi nước trắng xóa bốc lên nghi ngút giữa màu xanh bát ngát của rừng già.
+
+Nguồn nước khoáng Bang chứa hàm lượng lưu huỳnh, silic và các khoáng chất quý hiếm cực cao, có giá trị trị liệu sức khỏe vượt trội được các nhà khoa học đánh giá sánh ngang với những suối khoáng hàng đầu thế giới.`,
+        image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Khu tắm khoáng Bang Onsen đẳng cấp giữa thung lũng xanh mướt",
+        tips: [
+          "Nên ngâm khoáng nóng từ các hồ có nhiệt độ thấp (38°C) trước khi chuyển sang hồ ấm hơn (40 - 42°C).",
+        ],
       },
       {
-        heading: "2. Hướng dẫn lộ trình di chuyển và thuê xe taxi từ Đồng Hới hoặc Đông Hà",
-        content: "Suối Bang thuộc huyện Lệ Thủy, nằm gần ranh giới giữa Quảng Bình và Quảng Trị. Du khách từ TP. Đồng Hới (khoảng 60km) hoặc TP. Đông Hà (khoảng 70km) đều có thể di chuyển bằng đường tránh QL1A hoặc đường Hồ Chí Minh Đông rất thuận tiện. Taxi Quảng Trị 24H chuyên nhận hợp đồng đưa đón khách đi nghỉ dưỡng Suối Bang, đưa đón tận nhà đúng giờ với chi phí trọn gói hợp lý.",
-        tips: ["Có thể kết hợp ghé thăm Nhà lưu niệm Đại tướng Võ Nguyên Giáp tại làng An Xá, Lệ Thủy trên đường đi."],
+        heading: "2. Trải nghiệm luộc trứng tại nguồn sôi và tắm Onsen chuẩn Nhật",
+        content: `Một trong những hoạt động thú vị nhất mà bất kỳ du khách nào cũng háo hức thử là tự tay thả những chiếc giỏ trứng gà xuống dòng suối sôi sùng sục. Chỉ sau khoảng 8 - 10 phút, những quả trứng chín tới với phần lòng đào béo ngậy, thấm đượm vi chất khoáng tự nhiên thơm ngon lạ kỳ.
+
+Hiện nay, khu nghỉ dưỡng Bang Onsen Spa & Resort đã được đầu tư bài bản với hệ thống bể ngâm Onsen ngoài trời và trong nhà chuẩn phong cách Nhật Bản. Các liệu trình ngâm khoáng, xông hơi đá muối Himalaya và massage bấm huyệt mang đến sự tái sinh kỳ diệu cho cơ thể.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Trải nghiệm luộc trứng khoáng nóng 105 độ C độc đáo tại nguồn sôi",
+        tips: [
+          "Không nên ngâm khoáng nóng quá 20 phút mỗi hiệp và cần bổ sung nước ấm đầy đủ sau khi tắm.",
+        ],
+      },
+      {
+        heading: "3. Tác dụng phục hồi sức khỏe và thư giãn tinh thần tuyệt vời",
+        content: `Khoáng nóng Bang có tác dụng kỳ diệu trong việc hỗ trợ điều trị các bệnh về cơ xương khớp, thần kinh tọa, phục hồi làn da và đào thải độc tố cơ thể. Sau những ngày làm việc mệt mỏi, được ngâm mình trong dòng nước ấm áp giữa tiếng thông reo rì rào, mọi căng thẳng âu lo dường như tan biến theo từng làn hơi nước.`,
+        image: "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Không gian tĩnh dưỡng thanh bình mang lại sự an yên cho tâm hồn",
+        tips: [
+          "Người có tiền sử huyết áp cao hoặc tim mạch nên tham khảo hướng dẫn viên tại bể ngâm để chọn hồ có nhiệt độ vừa phải.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình Tour Suối Bang - Nhà Đại Tướng Võ Nguyên Giáp 1 Ngày",
+        content: `Cung đường kết hợp ý nghĩa khám phá vùng quê sông nước Lệ Thủy:
+• 07:30: Xe Taxi 24H đón tại Đồng Hới hoặc Đông Hà, khởi hành theo đường tránh QL1A hoặc đường Hồ Chí Minh Đông đi Lệ Thủy.
+• 08:30 - 10:00: Ghé thăm Nhà lưu niệm Đại tướng Võ Nguyên Giáp tại làng An Xá, xã Lộc Thủy bên bờ sông Kiến Giang hiền hòa.
+• 10:30 - 12:30: Di chuyển đến Suối khoáng nóng Bang (cách 20km), nhận vé và trải nghiệm các hồ ngâm khoáng Onsen thư giãn.
+• 12:30 - 14:00: Ăn trưa đặc sản đồng quê Lệ Thủy tại nhà hàng Onsen.
+• 14:30 - 16:30: Thử thách luộc trứng khoáng nóng, dạo bộ ngắm cảnh thung lũng rừng thông nguyên sinh.
+• 17:00: Xe đón đoàn trở về lại khách sạn an toàn.`,
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Cảnh sắc quê hương Lệ Thủy thanh bình trên cung đường đến Suối Bang",
+        tips: [
+          "Đặt xe taxi khứ hồi 2 chiều với Taxi Quảng Trị 24H để bác tài đợi đoàn trong suốt thời gian ngâm khoáng.",
+        ],
+      },
+      {
+        heading: "5. Thưởng thức đặc sản ẩm thực đồng quê Lệ Thủy đậm đà",
+        content: `Đến Lệ Thủy, du khách sẽ say lòng trước những món ăn dân dã thấm đượm ân tình quê lúa:
+• Cá lóc đồng kho nghệ: Cá lóc tươi bắt từ đầm sen Lệ Thủy rim cùng củ nghệ vàng óng và ớt xiêm cay nồng đậm đà.
+• Cháo cá đầm An Mã: Nấu từ hạt gạo Lệ Thủy thơm dẻo quyện thịt cá béo ngọt và rau thì là thơm lừng.
+• Gà đồi Kiến Giang nướng lá chanh: Gà thả đồi thịt dai chắc ngọt lịm chấm muối tiêu chanh cay xé.
+• Bánh bèo tôm cháy Lệ Thủy: Từng chén bánh bèo mỏng tang phủ đầy tôm cháy đỏ au giòn rụm.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Hương vị ẩm thực miền quê lúa Lệ Thủy đậm đà khó quên",
+        tips: [
+          "Bác tài Taxi 24H sẽ chở bạn đến đúng những quán ăn đồng quê nức tiếng gần ngã ba Cam Liên giá cả rất bình dân.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Đón tiễn chu đáo, trọn gói",
+        content: `Suối Bang thuộc huyện Lệ Thủy, nằm ở vị trí giáp ranh giữa Quảng Bình và Quảng Trị. Du khách từ TP. Đồng Hới (khoảng 60km) hoặc TP. Đông Hà (khoảng 70km) đều có thể di chuyển bằng dịch vụ Taxi Quảng Trị - Quảng Bình 24H vô cùng thuận tiện. Xe luôn sạch sẽ thơm tho, tài xế rành đường và nhiệt tình hỗ trợ suốt chuyến đi.`,
+        image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Taxi Quảng Bình 24H luôn đồng hành đưa đón quý khách nghỉ dưỡng tận tâm",
+        tips: [
+          "Liên hệ Hotline 0877.669.555 để nhận ưu đãi gói tour taxi trọn gói cả ngày rẻ hơn 30% so với taxi truyền thống.",
+        ],
       },
     ],
     faqs: [
@@ -642,6 +1049,10 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
       {
         question: "Cước taxi đi Suối Bang từ Đồng Hới giá bao nhiêu?",
         answer: "Giá xe 4 chỗ đón tận nơi từ Đồng Hới đi Suối Bang khoảng 600.000đ - 650.000đ. Đặt khứ hồi sẽ có giá ưu đãi trọn gói cả ngày chỉ từ 1.100.000đ.",
+      },
+      {
+        question: "Suối Bang mở cửa vào mùa nào đẹp nhất?",
+        answer: "Suối Bang mở cửa quanh năm, nhưng thời điểm tắm khoáng tuyệt vời nhất là từ tháng 9 đến tháng 3 năm sau khi tiết trời miền Trung mát mẻ, se se lạnh.",
       },
     ],
   },
@@ -659,22 +1070,100 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
     taxiFare6Seats: "120.000 - 140.000 VNĐ",
     ticketPrice: "Theo vé máy bay",
     bestTimeToVisit: "24/7 theo tất cả các chuyến bay",
-    readTime: "5 phút đọc",
+    readTime: "8 phút đọc",
     highlights: [
       "Đón nhanh sau 5 phút tại sảnh đến Sân bay Đồng Hới, có biển đón tên nếu yêu cầu",
       "Giá cước niêm yết rõ ràng chỉ từ 12.000đ/km, không thu thêm phí phụ trội sân bay",
       "Nhận chạy thẳng từ sân bay lên các khách sạn tại Động Phong Nha chỉ 45 phút",
+      "Hệ thống xe 4-7 chỗ đời mới sạch sẽ, cốp rộng chứa trọn vẹn hành lý",
+      "Tài xế bản xứ am hiểu mọi điểm du lịch và quán ăn ngon tại Đồng Hới",
+    ],
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
+        caption: "Cảng hàng không Đồng Hới - Cửa ngõ đón du khách thập phương đến Quảng Bình",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80",
+        caption: "Đội xe Taxi 24H đời mới túc trực đón trả khách tại sảnh sân bay",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        caption: "Bờ biển Nhật Lệ thơ mộng cách sân bay Đồng Hới chỉ 10 phút đi xe",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        caption: "Ẩm thực bánh lọc và cháo canh Đồng Hới đón chào du khách",
+      },
     ],
     sections: [
       {
-        heading: "1. Bảng giá cước Taxi từ Sân bay Đồng Hới đi các địa điểm nổi tiếng",
-        content: "Khoảng cách từ Sân bay Đồng Hới về trung tâm thành phố (các khách sạn trên đường Trương Pháp, Quách Xuân Kỳ, Lý Thường Kiệt) chỉ khoảng 6-8km với giá cước taxi 4 chỗ dao động từ 80.000đ đến 100.000đ. Nếu du khách có kế hoạch đi thẳng lên Phong Nha (45km), giá trọn gói chỉ khoảng 450.000đ - 540.000đ cho xe 4 chỗ và 650.000đ cho xe 7 chỗ rộng rãi.",
-        tips: ["Đặt xe trước khi máy bay cất cánh, tài xế sẽ theo dõi lịch trình chuyến bay thực tế để căn giờ có mặt chính xác ngay khi bạn hạ cánh."],
+        heading: "1. Vị trí Cảng hàng không Đồng Hới và nhu cầu di chuyển kết nối",
+        content: `Cảng hàng không Đồng Hới (mã sân bay: VDH) tọa lạc tại xã Lộc Ninh, TP. Đồng Hới, tỉnh Quảng Bình. Nằm ngay sát trục Quốc lộ 1A và kề bên bờ biển Nhật Lệ thơ mộng, sân bay chỉ cách trung tâm thành phố khoảng 6km về phía Bắc và cách Di sản Phong Nha - Kẻ Bàng khoảng 45km.
+
+Với lượng khách du lịch đổ về ngày càng đông qua các chuyến bay hàng ngày của Vietnam Airlines, Vietjet Air và Bamboo Airways, nhu cầu thuê xe taxi đón tiễn nhanh chóng, minh bạch về giá cả luôn là ưu tiên hàng đầu của mọi du khách.`,
+        image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Cảng hàng không Đồng Hới hiện đại và thuận tiện cho du khách đáp chuyến bay",
+        tips: [
+          "Sau khi máy bay hạ cánh và nhận hành lý, hãy gọi ngay Hotline 0877.669.555 để tài xế đánh xe vào đúng cột sảnh đón bạn.",
+        ],
       },
       {
-        heading: "2. Cách nhận biết và tránh taxi dù chèo kéo tại sảnh sân bay",
-        content: "Vào các khung giờ cao điểm có nhiều chuyến bay hạ cánh cùng lúc, khu vực ngoài sảnh thường có hiện tượng tài xế chèo kéo khách với giá mập mờ hoặc chạy lòng vòng bấm đồng hồ sai lệch. Để đảm bảo an toàn và chuyến đi thoải mái, hãy liên hệ tổng đài Taxi Quảng Trị - Quảng Bình 24H qua Hotline 0877.669.555 hoặc Zalo 0398.567.070 để được điều xe biển số rõ ràng và báo giá trọn gói trước khi khởi hành.",
-        tips: ["Lưu lại số hotline 0877.669.555 vào danh bạ trước chuyến bay để gọi ngay khi vừa bật điện thoại."],
+        heading: "2. Bảng giá cước Taxi từ Sân bay Đồng Hới đi các địa điểm nổi tiếng",
+        content: `Khoảng cách từ Sân bay Đồng Hới về trung tâm thành phố (các khách sạn trên đường Trương Pháp, Quách Xuân Kỳ, Lý Thường Kiệt) chỉ khoảng 6-8km với giá cước taxi 4 chỗ dao động từ 80.000đ đến 100.000đ. Nếu du khách có kế hoạch đi thẳng lên Phong Nha (45km), giá trọn gói chỉ khoảng 450.000đ - 540.000đ cho xe 4 chỗ và 650.000đ cho xe 7 chỗ rộng rãi.`,
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Dòng xe đời mới sang trọng, cốp rộng rãi đón khách tại sảnh sân bay",
+        tips: [
+          "Đặt xe trước khi máy bay cất cánh, tài xế sẽ theo dõi lịch trình chuyến bay thực tế để căn giờ có mặt chính xác ngay khi bạn hạ cánh.",
+        ],
+      },
+      {
+        heading: "3. Mẹo nhận biết và tránh taxi dù chèo kéo chặt chém",
+        content: `Vào các khung giờ cao điểm có nhiều chuyến bay hạ cánh cùng lúc, khu vực ngoài sảnh thường có hiện tượng tài xế chèo kéo khách với giá mập mờ hoặc chạy lòng vòng bấm đồng hồ sai lệch. Để đảm bảo an toàn và chuyến đi thoải mái, hãy liên hệ tổng đài Taxi Quảng Trị - Quảng Bình 24H qua Hotline 0877.669.555 hoặc Zalo 0398.567.070 để được điều xe biển số rõ ràng và báo giá trọn gói trước khi khởi hành.`,
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Tận hưởng chuyến xe an toàn ngắm trọn phong cảnh ven biển Nhật Lệ",
+        tips: [
+          "Lưu lại số hotline 0877.669.555 vào danh bạ trước chuyến bay để gọi ngay khi vừa bật điện thoại.",
+        ],
+      },
+      {
+        heading: "4. Lịch trình di chuyển thẳng từ Sân bay đi tour Phong Nha 1 Ngày",
+        content: `Nhiều du khách có quỹ thời gian ngắn thường chọn phương án đi thẳng từ sân bay lên Phong Nha để tiết kiệm một ngày di chuyển:
+• 08:30: Xe đón tại sân bay Đồng Hới ngay khi chuyến bay hạ cánh.
+• 09:30: Đến thị trấn Phong Nha, gửi hành lý tại khách sạn và lên thuyền máy khám phá Động Phong Nha.
+• 12:00: Ăn trưa mẹt gà đồi nướng than và cá trắm sông Son.
+• 13:30 - 16:30: Tham quan Động Thiên Đường hoặc Suối Nước Moọc tắm mát.
+• 17:00: Xe đưa đoàn về khách sạn nhận phòng nghỉ ngơi, kết thúc một ngày trọn vẹn không lãng phí phút giây nào.`,
+        image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Cung đường di chuyển thẳng lên Phong Nha tiết kiệm tối đa thời gian",
+        tips: [
+          "Báo trước số lượng hành lý để tài xế sắp xếp xe 7 chỗ có cốp gập phù hợp nếu đoàn có nhiều vali lớn.",
+        ],
+      },
+      {
+        heading: "5. Khám phá ẩm thực Đồng Hới nức tiếng ngay sau khi hạ cánh",
+        content: `Nếu về trung tâm thành phố, đừng bỏ lỡ cơ hội thưởng thức ngay những món ăn làm nên thương hiệu ẩm thực Đồng Hới:
+• Bánh bột lọc Mệ Xuân: Nổi tiếng nhất Quảng Bình với vỏ bánh trong veo dẻo dai bọc tôm sông đậm đà chấm mắm ớt cay nồng.
+• Cháo canh cá lóc Đồng Hới: Bát cháo sợi mềm quyện nước dùng cá lóc đồng ngọt thanh thơm mùi hành ngò.
+• Bánh bèo tôm nhảy đường Cô Tám: Từng chén bánh bèo nóng hổi rưới nước mắm tôm rim thơm nức.
+• Hải sản bờ kè Nhật Lệ: Thưởng thức mực nhảy, sò điệp nướng mỡ hành ngay bên bờ sông Nhật Lệ lộng gió.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Thưởng thức đĩa bánh lọc Mệ Xuân trứ danh ngay khi về đến trung tâm thành phố",
+        tips: [
+          "Bác tài Taxi 24H sẽ chở bạn ghé ăn nhẹ tại quán Mệ Xuân trước khi về nhận phòng khách sạn.",
+        ],
+      },
+      {
+        heading: "6. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Đón nhanh 5 phút, giá tốt nhất",
+        content: `Taxi Quảng Trị - Quảng Bình 24H cam kết mang đến dịch vụ đón tiễn sân bay chất lượng cao nhất:
+• Xe đời mới sạch sẽ, không mùi xe, trang bị đầy đủ khăn lạnh và nước suối.
+• Tài xế văn minh lịch sự, lái xe an toàn, có biển đón tên chu đáo nếu có yêu cầu.
+• Giá cước trọn gói cam kết không phụ phí cầu đường hay phí đỗ xe sân bay.`,
+        image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: "Tổng đài Taxi 24H túc trực 24/7 phục vụ mọi chuyến bay ngày và đêm",
+        tips: [
+          "Gọi Hotline 0877.669.555 để được giữ xe đời mới nhất và nhận ưu đãi giảm giá chiều về tới 50%.",
+        ],
       },
     ],
     faqs: [
@@ -685,6 +1174,10 @@ Vào những ngày thường, Thánh địa cử hành thánh lễ hàng ngày v
       {
         question: "Có phải trả thêm tiền vé vào cổng sân bay không?",
         answer: "Giá báo trọn gói của Taxi Quảng Trị 24H đã bao gồm vé cầu đường và vé vào cổng sân bay, quý khách hoàn toàn không phát sinh chi phí phụ trội.",
+      },
+      {
+        question: "Thời gian taxi chạy từ sân bay về các khách sạn đường Trương Pháp bao lâu?",
+        answer: "Chỉ mất khoảng 8 đến 10 phút chạy xe vì đường Trương Pháp nằm ngay kề sân bay dọc theo bãi biển Nhật Lệ.",
       },
     ],
   },
@@ -766,9 +1259,290 @@ function escapeHtml(text: string) {
 }
 
 /**
- * Tự động tạo bài viết chuẩn SEO mới (sử dụng Gemini AI nếu có key, hoặc kho chủ đề chuyên sâu)
+ * BỘ BẢO VỆ CHUẨN VÀNG (QUALITY GUARD):
+ * Đảm bảo 100% bài viết (dù sinh từ Gemini AI hay từ kho dự phòng) BẮT BUỘC phải tuân thủ đúng
+ * Mẫu Chuẩn Vàng 6 Phần, có ảnh minh họa từng phần, có gallery 4-5 ảnh, lịch trình tour 1 ngày,
+ * ẩm thực bản địa và dịch vụ Taxi 24H.
  */
-export async function generateAndPublishSeoArticle(customTopic?: string): Promise<{
+export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
+  const result: TopicSeed = { ...seed };
+
+  // 1. Kiểm tra và bổ sung Gallery nếu chưa đủ 4 ảnh
+  if (!result.gallery || result.gallery.length < 3) {
+    result.gallery = [
+      {
+        url: result.coverImage || "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
+        caption: `Toàn cảnh thắng cảnh ${result.destination} - Điểm đến không thể bỏ qua`,
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg",
+        caption: `Không gian di tích lịch sử thiêng liêng và thơ mộng tại ${result.destination}`,
+      },
+      {
+        url: "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+        caption: "Cung đường di chuyển tham quan thuận tiện kết nối các điểm du lịch lân cận",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        caption: "Ẩm thực đặc sản bản địa trứ danh làm say lòng du khách",
+      },
+    ];
+  }
+
+  // 2. Kiểm tra và bổ sung Sections nếu chưa đủ 6 phần
+  const sections = [...(result.sections || [])];
+
+  // Đảm bảo các sections hiện có đều có ảnh và chú thích
+  sections.forEach((sec, idx) => {
+    if (!sec.image) {
+      sec.image = result.gallery && result.gallery[idx % result.gallery.length]?.url
+        ? result.gallery[idx % result.gallery.length].url
+        : result.coverImage;
+    }
+    if (!sec.imageCaption) {
+      sec.imageCaption = `Hình ảnh minh họa ${sec.heading.replace(/^[0-9.]+\s*/, "")} tại ${result.destination}`;
+    }
+    if (!sec.tips || sec.tips.length === 0) {
+      sec.tips = ["Quý khách nên liên hệ Taxi Quảng Trị - Quảng Bình 24H để được bác tài tư vấn thời điểm tham quan đẹp nhất."];
+    }
+  });
+
+  // Nếu thiếu phần 4 (Lịch trình Tour 1 ngày)
+  const hasTourSection = sections.some((s) => s.heading.toLowerCase().includes("lịch trình") || s.heading.toLowerCase().includes("tour"));
+  if (!hasTourSection || sections.length < 4) {
+    sections.push({
+      heading: `${sections.length + 1}. Gợi ý lịch trình Tour ${result.destination} 1 Ngày trọn vẹn`,
+      content: `Hành trình tham quan lý tưởng trong ngày cùng Taxi Quảng Trị - Quảng Bình 24H:
+
+• 07:30 - 08:30: Xe đón tại khách sạn/ga tàu hoặc sân bay, di chuyển đến ${result.destination}.
+• 08:30 - 11:30: Thong thả tham quan các công trình biểu tượng, chụp ảnh lưu niệm và lắng nghe những câu chuyện văn hóa lịch sử hào hùng.
+• 11:45 - 13:30: Thưởng thức bữa trưa đặc sản bản địa thơm ngon nức tiếng tại nhà hàng chuẩn vị gần điểm đến.
+• 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng cung đường thuận tiện.
+• 17:00: Xe đưa đoàn trở về điểm hẹn an toàn, kết thúc chuyến đi trọn vẹn và ý nghĩa.`,
+      image: "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG",
+      imageCaption: `Cung đường di chuyển thuận lợi và lịch trình tour 1 ngày kết nối các điểm đến nổi tiếng`,
+      tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H để bác tài đồng hành suốt hành trình, tiết kiệm tới 50% cước chiều về."],
+    });
+  }
+
+  // Nếu thiếu phần 5 (Ẩm thực)
+  const hasFoodSection = sections.some((s) => s.heading.toLowerCase().includes("ẩm thực") || s.heading.toLowerCase().includes("đặc sản"));
+  if (!hasFoodSection || sections.length < 5) {
+    sections.push({
+      heading: `${sections.length + 1}. Thưởng thức đặc sản ẩm thực nức tiếng bản địa`,
+      content: `Khám phá văn hóa ẩm thực đậm đà bản sắc của vùng đất miền Trung:
+
+• Bánh bột lọc trứ danh: Vỏ bánh dai giòn trong suốt bọc tôm sông óng ả và thịt ba chỉ đậm vị, chấm nước mắm ớt cay xé lưỡi.
+• Cháo bột cá lóc (Bánh canh): Sợi bột dai mềm quyện nước dùng cá lóc đồng rim nghệ vàng ươm ngào ngạt hương thơm.
+• Gà đồi nướng than hoa: Gà thả đồi săn chắc nướng vừa tới chấm muối cheo cay the nồng nàn.
+• Hải sản tươi sống: Thưởng thức mực nhảy, cá bớp, nghêu hấp thơm ngọt tươi rói đánh bắt trong ngày.`,
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+      imageCaption: `Văn hóa ẩm thực miền Trung đậm đà với những món ngon dân dã khó quên`,
+      tips: ["Bác tài Taxi 24H luôn sẵn sàng đưa bạn đến đúng quán ăn gốc địa phương lâu năm, giá bình dân không lo chặt chém."],
+    });
+  }
+
+  // Nếu thiếu phần 6 (Dịch vụ Taxi 24H)
+  const hasTaxiSection = sections.some((s) => s.heading.toLowerCase().includes("taxi") || s.heading.toLowerCase().includes("dịch vụ"));
+  if (!hasTaxiSection || sections.length < 6) {
+    sections.push({
+      heading: `${sections.length + 1}. Dịch vụ Taxi Quảng Trị - Quảng Bình 24H: Đồng hành chu đáo & an toàn`,
+      content: `Taxi Quảng Trị - Quảng Bình 24H tự hào là người bạn đồng hành tin cậy của mọi chuyến đi:
+
+• Đội xe 4 - 7 chỗ đời mới (Vios, Accent, Xpander, Veloz, Fortuner) nội thất sạch sẽ, điều hòa mát rượi.
+• Tài xế bản xứ am hiểu từng cung đường, lái xe điềm đạm, hỗ trợ xách hành lý và tư vấn điểm ăn chơi miễn phí.
+• Giá cước trọn gói công khai chỉ từ 12.000đ/km, cam kết không phát sinh phụ phí ẩn, đưa đón tận nơi 24/7.
+• Hotline tổng đài đặt xe nhanh 24/7: 0877.669.555 (Zalo: 0398.567.070).`,
+      image: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg",
+      imageCaption: `Đội xe Taxi Quảng Trị - Quảng Bình 24H sẵn sàng phục vụ quý khách chu đáo trên mọi nẻo đường`,
+      tips: ["Gọi Hotline 0877.669.555 trước 30 phút để đặt xe và nhận ưu đãi giảm giá lên tới 50% cho chiều về."],
+    });
+  }
+
+  result.sections = sections;
+
+  // 3. Đảm bảo có ít nhất 5 highlights
+  if (!result.highlights || result.highlights.length < 4) {
+    result.highlights = [
+      `Điểm đến nổi tiếng ${result.destination} với bề dày lịch sử và vẻ đẹp thiên nhiên đặc sắc`,
+      "Cung đường di chuyển thuận lợi bằng xe ô tô taxi đưa đón tận nơi",
+      "Lịch trình tour 1 ngày khoa học kết nối các điểm du lịch hot nhất trong khu vực",
+      "Thưởng thức nền ẩm thực bản địa phong phú với các món ngon khó cưỡng",
+      "Dịch vụ taxi 4 - 7 chỗ giá rẻ chỉ từ 12.000đ/km, đón nhanh sau 5 - 10 phút gọi",
+    ];
+  }
+
+  // 4. Đảm bảo có 3 FAQs
+  if (!result.faqs || result.faqs.length < 3) {
+    result.faqs = [
+      {
+        question: `Từ Đồng Hới hoặc Đông Hà đi taxi đến ${result.destination} mất bao lâu?`,
+        answer: `Thời gian di chuyển bằng taxi chỉ mất khoảng ${result.distanceFromDongHoi || "45 - 60 phút"}. Tuyến đường trải nhựa bằng phẳng, xe chạy êm ái.`,
+      },
+      {
+        question: `Giá cước thuê xe taxi đưa đón ${result.destination} là bao nhiêu?`,
+        answer: `Giá taxi 4 chỗ trọn gói dao động từ ${result.taxiFare4Seats || "550.000 VNĐ"}, xe 7 chỗ từ ${result.taxiFare6Seats || "750.000 VNĐ"}. Đặt khứ hồi 2 chiều được giảm ngay 50% chiều về.`,
+      },
+      {
+        question: `Làm thế nào để đặt xe taxi nhanh nhất?`,
+        answer: "Quý khách chỉ cần liên hệ Hotline 0877.669.555 hoặc Zalo 0398.567.070, tài xế sẽ có mặt đón tận nơi sau 5 - 10 phút.",
+      },
+    ];
+  }
+
+  return result;
+}
+
+/**
+ * ĐỘNG CƠ SINH NỘI DUNG CHUẨN VÀNG TỰ ĐỘNG (GOLDEN BLUEPRINT SYNTHESIZER):
+ * Tự động phân tích chủ đề bất kỳ do người dùng nhập (kể cả khi không có Gemini API Key)
+ * và xây dựng bài viết hoàn chỉnh 100% theo đúng Mẫu Chuẩn Vàng 6 Phần của Thành Cổ Quảng Trị.
+ */
+export function synthesizeCustomGoldenTopic(rawTopic: string): TopicSeed {
+  const cleanTopic = rawTopic.trim();
+  const slug = cleanTopic
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[đĐ]/g, "d")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+  const isQuangTri = /quảng trị|la vang|thành cổ|vịnh mốc|hiền lương|bến hải|cồn cỏ|đông hà|khe sanh|lao bảo/i.test(cleanTopic);
+  const region = isQuangTri ? "Quảng Trị" : "Quảng Bình";
+
+  const title = `Kinh Nghiệm Du Lịch ${cleanTopic} 2026: Cẩm Nang Chi Tiết & Thuê Xe Taxi Trọn Gói`;
+  const metaTitle = `Kinh Nghiệm Khám Phá ${cleanTopic} 2026 | Taxi ${region} 24H`.slice(0, 65);
+  const metaDescription = `Cẩm nang khám phá ${cleanTopic} ${region} 2026: Lịch trình tour 1 ngày chi tiết, kinh nghiệm tham quan, ẩm thực đặc sản và dịch vụ thuê xe taxi đưa đón trọn gói giá rẻ.`.slice(0, 160);
+  const excerpt = `Khám phá ${cleanTopic} - điểm đến hấp dẫn và ý nghĩa bậc nhất tại ${region}. Nơi đây hội tụ vẻ đẹp thiên nhiên độc đáo, chiều sâu văn hóa lịch sử hào hùng và lòng hiếu khách của con người miền Trung.`;
+
+  const coverImage = isQuangTri
+    ? "https://upload.wikimedia.org/wikipedia/commons/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg"
+    : "https://upload.wikimedia.org/wikipedia/commons/1/16/Son_Doong_Cave_DB_%282%29.jpg";
+
+  const rawSeed: TopicSeed = {
+    slug,
+    title,
+    metaTitle,
+    metaDescription,
+    excerpt,
+    category: isQuangTri ? "Di Tích Lịch Sử Tâm Linh" : "Điểm Đến Du Lịch Hot",
+    coverImage,
+    destination: cleanTopic,
+    distanceFromDongHoi: isQuangTri ? "75 km (khoảng 70 phút đi xe)" : "50 km (khoảng 50 phút đi xe)",
+    taxiFare4Seats: isQuangTri ? "750.000 VNĐ" : "550.000 VNĐ",
+    taxiFare6Seats: isQuangTri ? "950.000 VNĐ" : "700.000 VNĐ",
+    ticketPrice: "Theo quy định điểm tham quan",
+    bestTimeToVisit: "Quanh năm, đẹp nhất từ tháng 3 đến tháng 9",
+    readTime: "8 phút đọc",
+    highlights: [
+      `Khám phá vẻ đẹp độc đáo và giá trị văn hóa lịch sử sâu sắc tại ${cleanTopic}`,
+      `Không gian thiên nhiên trong lành, thanh bình của vùng đất ${region}`,
+      "Lịch trình tour 1 ngày khoa học kết nối thuận tiện các điểm tham quan lân cận",
+      "Thưởng thức nền ẩm thực bản địa trứ danh đậm đà phong vị miền Trung",
+      "Dịch vụ taxi đưa đón tận nơi giá niêm yết chỉ từ 12.000đ/km, phục vụ 24/7",
+    ],
+    gallery: [
+      {
+        url: coverImage,
+        caption: `Toàn cảnh vẻ đẹp kỳ vĩ của ${cleanTopic} nhìn từ trên cao`,
+      },
+      {
+        url: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
+          : "https://upload.wikimedia.org/wikipedia/commons/f/fa/Son_Doong_Cave_DB_%283%29.jpg",
+        caption: `Không gian ấn tượng thu hút đông đảo du khách ghé thăm ${cleanTopic}`,
+      },
+      {
+        url: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG"
+          : "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        caption: "Cung đường di chuyển bằng phẳng, thuận lợi cho mọi hành trình",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        caption: "Hương vị ẩm thực miền Trung làm say lòng du khách thập phương",
+      },
+    ],
+    sections: [
+      {
+        heading: `1. Khám phá vẻ đẹp và ý nghĩa sâu sắc của ${cleanTopic}`,
+        content: `${cleanTopic} là một trong những điểm đến nổi bật của vùng đất ${region}, nơi lưu giữ những nét đẹp thiên nhiên và giá trị văn hóa độc đáo. Đặt chân đến đây, du khách sẽ ngay lập tức cảm nhận được sự giao hòa tuyệt vời giữa cảnh sắc thiên nhiên hữu tình và chiều sâu lắng đọng của thời gian.\n\nVùng đất này đã chứng kiến bao biến thiên lịch sử, là niềm tự hào của người dân địa phương và luôn mở rộng vòng tay đón chào du khách từ khắp mọi miền Tổ quốc đến chiêm ngưỡng và khám phá.`,
+        image: coverImage,
+        imageCaption: `Vẻ đẹp ấn tượng của ${cleanTopic} chào đón du khách đến tham quan`,
+        tips: ["Quý khách nên chuẩn bị máy ảnh hoặc điện thoại đầy pin để ghi lại những khoảnh khắc đẹp."],
+      },
+      {
+        heading: `2. Những trải nghiệm và điểm check-in không thể bỏ lỡ tại ${cleanTopic}`,
+        content: `Đến với ${cleanTopic}, du khách sẽ có cơ hội hòa mình vào không gian kiến trúc độc đáo, chiêm ngưỡng những góc cảnh sắc thiên nhiên tuyệt tác và tận hưởng bầu không khí trong lành, thư thái.\n\nTừng góc nhỏ nơi đây đều mang một nét duyên thầm riêng biệt, từ những lối đi rợp bóng cây xanh, các công trình biểu tượng cho đến khung cảnh thơ mộng khiến bất kỳ ai cũng muốn dừng chân thật lâu để lưu lại những bức hình kỷ niệm.`,
+        image: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
+          : "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg",
+        imageCaption: `Những góc check-in tuyệt đẹp và công trình đặc trưng tại ${cleanTopic}`,
+        tips: ["Nên đi vào buổi sáng sớm hoặc xế chiều để có ánh sáng đẹp nhất và thời tiết mát mẻ."],
+      },
+      {
+        heading: `3. Cảm xúc lắng đọng và giá trị tinh thần bất tận`,
+        content: `Mỗi chuyến đi đến ${cleanTopic} không chỉ đơn thuần là một chuyến du lịch ngắm cảnh, mà còn là hành trình tìm về với sự bình yên trong tâm hồn. Lắng nghe những câu chuyện kể từ người dân bản xứ, ngắm nhìn nhịp sống bình dị trôi qua bên dòng sông hay triền núi, bạn sẽ cảm nhận rõ rệt tình yêu quê hương đất nước nồng nàn và trân quý hơn từng phút giây của cuộc sống.`,
+        image: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG"
+          : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: `Không gian tĩnh lặng và cảm xúc sâu lắng tại điểm đến`,
+        tips: ["Hãy dành một khoảng lặng để lắng nghe tiếng gió và tận hưởng không gian thanh tịnh."],
+      },
+      {
+        heading: `4. Gợi ý lịch trình Tour ${cleanTopic} 1 Ngày trọn vẹn`,
+        content: `Một hành trình khoa học và tiện lợi nhất khi thuê xe Taxi ${region} 24H:\n\n• 07:30 - 08:30: Xe đón quý khách tại khách sạn/ga tàu hoặc sân bay, khởi hành đi ${cleanTopic}.\n• 08:30 - 11:30: Tham quan chi tiết các điểm nhấn chính của ${cleanTopic}, chụp ảnh lưu niệm và tìm hiểu câu chuyện bản xứ.\n• 11:45 - 13:30: Thưởng thức bữa trưa đặc sản nức tiếng tại nhà hàng địa phương uy tín.\n• 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng trục đường.\n• 17:00: Xe đưa đoàn trở về điểm hẹn ban đầu an toàn, kết thúc chuyến đi đầy ắp kỷ niệm đẹp.`,
+        image: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
+          : "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
+        imageCaption: `Cung đường di chuyển thuận lợi kết nối tour 1 ngày hoàn hảo`,
+        tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H để không phải lo lắng việc tìm xe hay đổi xe giữa đường."],
+      },
+      {
+        heading: `5. Thưởng thức đặc sản ẩm thực ${region} thơm ngon khó cưỡng`,
+        content: `Ẩm thực ${region} luôn làm say lòng du khách với những món ăn đậm đà, mộc mạc mang trọn hồn quê:\n• Bánh bột lọc trứ danh với vỏ trong veo dai giòn bọc tôm sông thịt mỡ chấm mắm ớt cay nồng.\n• Cháo bột cá lóc (bánh canh) nóng hổi ngọt lịm từ nước hầm xương cá đồng.\n• Gà đồi nướng than chấm muối cheo thơm lừng mùi lá rừng.\n• Hải sản tươi sống cập bến hàng ngày ngọt đậm đà vị biển miền Trung.`,
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: `Mâm đặc sản ẩm thực miền Trung đậm đà hương vị quê hương`,
+        tips: ["Bác tài Taxi 24H sẽ gợi ý những quán ăn ngon đúng điệu của người bản địa, giá cả rất bình dân."],
+      },
+      {
+        heading: `6. Dịch vụ Taxi ${region} 24H: Đưa đón chu đáo, an toàn, giá tốt nhất`,
+        content: `Taxi ${region} 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường:\n• Đội xe đời mới từ 4 chỗ đến 7 chỗ sang trọng, nội thất sạch sẽ, điều hòa mát rượi.\n• Tài xế bản xứ thân thiện, rành đường, hỗ trợ hành lý chu đáo và tư vấn miễn phí suốt hành trình.\n• Giá cước niêm yết rõ ràng chỉ từ 12.000đ/km, ưu đãi giảm tới 50% cho chiều về khi đặt khứ hồi.\n• Tổng đài đặt xe nhanh 24/7: Hotline 0877.669.555 (Zalo: 0398.567.070).`,
+        image: isQuangTri
+          ? "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg"
+          : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        imageCaption: `Đội xe Taxi ${region} 24H luôn túc trực phục vụ quý khách tận tình`,
+        tips: ["Gọi ngay Hotline 0877.669.555 trước 30 phút để giữ xe đời mới nhất cho hành trình của bạn."],
+      },
+    ],
+    faqs: [
+      {
+        question: `Từ trung tâm đi taxi đến ${cleanTopic} mất bao lâu?`,
+        answer: `Thời gian di chuyển bằng taxi chỉ khoảng ${isQuangTri ? "20 - 45 phút" : "30 - 50 phút"} tùy điểm xuất phát, đường đi rất êm ái và thuận tiện.`,
+      },
+      {
+        question: "Cước thuê xe taxi đưa đón trọn gói giá bao nhiêu?",
+        answer: "Giá xe 4 chỗ trọn gói chỉ từ 12.000đ/km. Đặt khứ hồi trong ngày được giảm ngay 50% cước chiều về.",
+      },
+      {
+        question: "Cần lưu ý trang phục gì khi tham quan?",
+        answer: "Quý khách nên mặc trang phục lịch sự, gọn gàng và mang giày thể thao thoải mái để thuận tiện đi bộ ngắm cảnh.",
+      },
+    ],
+  };
+
+  return ensureGoldenBlueprintQuality(rawSeed);
+}
+
+/**
+ * Tự động tạo bài viết chuẩn SEO mới (hỗ trợ Gemini AI, Động cơ Chuẩn Vàng & Kho dữ liệu 6 phần)
+ */
+export async function generateAndPublishSeoArticle(
+  customTopic?: string,
+  overrideApiKey?: string
+): Promise<{
   success: boolean;
   guide?: TravelGuide;
   message: string;
@@ -778,32 +1552,44 @@ export async function generateAndPublishSeoArticle(customTopic?: string): Promis
     const existingSlugs = new Set(existingGuides.map((g) => g.slug));
 
     let chosenSeed: TopicSeed | null = null;
+    const geminiKey = overrideApiKey || process.env.GEMINI_API_KEY;
 
-    // 1. Nếu có Gemini API Key và người dùng yêu cầu chủ đề tùy chỉnh -> sinh bằng Gemini AI
-    const geminiKey = process.env.GEMINI_API_KEY;
-    if (geminiKey && customTopic) {
-      const aiGenerated = await generateWithGemini(geminiKey, customTopic);
-      if (aiGenerated) {
-        chosenSeed = aiGenerated;
+    // 1. Nếu có chủ đề tùy chỉnh
+    if (customTopic && customTopic.trim()) {
+      const topicStr = customTopic.trim();
+      // 1.1 Nếu có Gemini API Key -> gọi Gemini AI
+      if (geminiKey) {
+        try {
+          const aiGenerated = await generateWithGemini(geminiKey, topicStr);
+          if (aiGenerated) {
+            chosenSeed = ensureGoldenBlueprintQuality(aiGenerated);
+          }
+        } catch (e) {
+          console.warn("Gemini call failed, falling back to Golden Synthesizer:", e);
+        }
+      }
+
+      // 1.2 Nếu chưa có seed (không có key hoặc Gemini lỗi) -> dùng Động cơ Chuẩn Vàng Synthesizer
+      if (!chosenSeed) {
+        chosenSeed = synthesizeCustomGoldenTopic(topicStr);
       }
     }
 
-    // 2. Nếu chưa có chosenSeed -> tìm chủ đề tiếp theo trong kho chưa từng được đăng
+    // 2. Nếu không có chủ đề tùy chỉnh -> lấy bài tiếp theo trong kho SEO_TOPICS_DATABASE
     if (!chosenSeed) {
       const availableSeeds = SEO_TOPICS_DATABASE.filter((s) => !existingSlugs.has(s.slug));
       if (availableSeeds.length > 0) {
-        // Chọn bài tiếp theo chưa đăng
-        chosenSeed = availableSeeds[0];
+        chosenSeed = ensureGoldenBlueprintQuality(availableSeeds[0]);
       } else {
-        // Nếu đã đăng hết -> chọn ngẫu nhiên 1 bài và tạo phiên bản cập nhật 2026 mới
+        // Đã đăng hết -> chọn ngẫu nhiên và làm mới phiên bản 2026
         const randomSeed = SEO_TOPICS_DATABASE[Math.floor(Math.random() * SEO_TOPICS_DATABASE.length)];
         const timestamp = Date.now().toString().slice(-4);
-        chosenSeed = {
+        chosenSeed = ensureGoldenBlueprintQuality({
           ...randomSeed,
           slug: `${randomSeed.slug}-${timestamp}`,
           title: `${randomSeed.title.replace(/2026/g, "").trim()} Mới Nhất 2026`,
           publishedDate: new Date().toISOString().split("T")[0],
-        };
+        });
       }
     }
 
@@ -811,7 +1597,7 @@ export async function generateAndPublishSeoArticle(customTopic?: string): Promis
       return { success: false, message: "Không tìm thấy chủ đề phù hợp để xuất bản bài viết!" };
     }
 
-    // Chuẩn hóa thành TravelGuide đầy đủ
+    // Chuẩn hóa thành TravelGuide đầy đủ chuẩn mẫu vàng
     const newGuide: TravelGuide = {
       slug: chosenSeed.slug,
       title: chosenSeed.title,
@@ -828,7 +1614,7 @@ export async function generateAndPublishSeoArticle(customTopic?: string): Promis
       bestTimeToVisit: chosenSeed.bestTimeToVisit,
       author: "Ban Biên Tập Taxi Quảng Trị - Quảng Bình 24H",
       publishedDate: new Date().toISOString().split("T")[0],
-      readTime: chosenSeed.readTime || "6 phút đọc",
+      readTime: chosenSeed.readTime || "8 phút đọc",
       rating: 5.0,
       reviewsCount: Math.floor(Math.random() * 50) + 110,
       highlights: chosenSeed.highlights,
@@ -849,7 +1635,7 @@ export async function generateAndPublishSeoArticle(customTopic?: string): Promis
     return {
       success: true,
       guide: newGuide,
-      message: `Đã tự động xuất bản bài viết '${newGuide.title}' thành công và thông báo qua Telegram!`,
+      message: `Đã tự động xuất bản bài viết '${newGuide.title}' theo Mẫu Chuẩn Vàng 6 Phần thành công và thông báo qua Telegram!`,
     };
   } catch (error: any) {
     console.error("Error generating and publishing SEO article:", error);

@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   ChevronRight,
   AlertTriangle,
+  Key,
 } from "lucide-react";
 
 export default function ArticlesManagementTab() {
@@ -47,8 +48,17 @@ export default function ArticlesManagementTab() {
   // AI Generator Modal State
   const [showAiModal, setShowAiModal] = useState(false);
   const [aiTopicInput, setAiTopicInput] = useState("");
+  const [geminiApiKey, setGeminiApiKey] = useState("");
+  const [showKeyConfig, setShowKeyConfig] = useState(false);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [aiResultMsg, setAiResultMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedKey = localStorage.getItem("admin_gemini_api_key") || "";
+      if (storedKey) setGeminiApiKey(storedKey);
+    }
+  }, []);
 
   // Form State
   const defaultFormState: TravelGuide = {
@@ -139,10 +149,16 @@ export default function ArticlesManagementTab() {
     setIsAiGenerating(true);
     setAiResultMsg(null);
     try {
+      if (typeof window !== "undefined" && geminiApiKey.trim()) {
+        localStorage.setItem("admin_gemini_api_key", geminiApiKey.trim());
+      }
       const res = await fetch("/api/cron/generate-article", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: aiTopicInput.trim() || undefined }),
+        body: JSON.stringify({
+          topic: aiTopicInput.trim() || undefined,
+          apiKey: geminiApiKey.trim() || undefined,
+        }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -653,13 +669,47 @@ export default function ArticlesManagementTab() {
             </div>
 
             <div className="p-6 space-y-4">
-              <div className="p-4 rounded-2xl bg-[#040E1C] border border-blue-500/30 text-xs text-slate-300 space-y-2">
+              {/* Tiêu chuẩn Mẫu Vàng được áp dụng */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 border border-amber-500/40 text-xs space-y-2">
+                <div className="flex items-center gap-2 font-black text-amber-400 uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>Tiêu Chuẩn Mẫu Vàng 6 Phần (Thành Cổ Quảng Trị Style):</span>
+                </div>
+                <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-slate-300">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>6 phần nội dung chuyên sâu</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Ảnh minh họa &amp; chú thích từng phần</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Lịch trình Tour 1 ngày (07:30 - 17:30)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Bộ sưu tập ảnh Gallery (4-5 ảnh)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Cẩm nang 4-5 món ẩm thực bản địa</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>Dịch vụ Taxi 24H &amp; Hotline tổng đài</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-[#040E1C] border border-blue-500/30 text-xs text-slate-300 space-y-1.5">
                 <div className="flex items-center gap-2 font-bold text-blue-400">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Đã kích hoạt Lịch chạy tự động mỗi ngày (Vercel Cron)</span>
+                  <span>Đã kích hoạt Lịch chạy tự động mỗi ngày (Vercel Cron 08:00 AM)</span>
                 </div>
-                <p className="text-slate-400">
-                  Hàng ngày vào lúc <b>08:00 sáng</b>, hệ thống sẽ tự động xuất bản 1 bài viết chuẩn SEO mới và gửi thông báo kèm nút chỉnh sửa về Telegram của bạn.
+                <p className="text-[11px] text-slate-400">
+                  Hàng ngày vào lúc <b>08:00 sáng</b>, hệ thống sẽ tự động xuất bản 1 bài viết chuẩn SEO mới và gửi thông báo kèm link xem &amp; nút chỉnh sửa về Telegram của bạn.
                 </p>
               </div>
 
@@ -669,15 +719,53 @@ export default function ArticlesManagementTab() {
                 </label>
                 <input
                   type="text"
-                  placeholder="VD: Kinh nghiệm đi tour Hang Sơn Đoòng, Viếng Thành Cổ Quảng Trị..."
+                  placeholder="VD: Tour Hang Sơn Đoòng, Cầu Hiền Lương, Động Phong Nha, Biển Nhật Lệ..."
                   value={aiTopicInput}
                   onChange={(e) => setAiTopicInput(e.target.value)}
                   disabled={isAiGenerating}
                   className="w-full bg-[#040E1C] border border-[#133863] focus:border-purple-400 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
-                  💡 <i>Nếu để trống, AI sẽ tự động chọn chủ đề du lịch &amp; đón tiễn taxi hot nhất chưa từng được đăng.</i>
+                  💡 <i>Nếu để trống, AI sẽ tự động chọn chủ đề du lịch &amp; đón tiễn taxi hot nhất tiếp theo trong kho.</i>
                 </p>
+              </div>
+
+              {/* Tùy chọn cấu hình Gemini API Key */}
+              <div className="rounded-xl border border-[#133863] bg-[#040E1C] p-3 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setShowKeyConfig(!showKeyConfig)}
+                  className="flex items-center justify-between w-full text-slate-400 hover:text-white transition font-medium text-left cursor-pointer"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Key className="w-3.5 h-3.5 text-purple-400" />
+                    <span>Cấu hình Google Gemini API Key (Tùy chọn)</span>
+                    {geminiApiKey ? (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                        Đã lưu key
+                      </span>
+                    ) : (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">
+                        Đang dùng Động cơ Chuẩn Vàng
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-[11px] text-purple-300">{showKeyConfig ? "▲ Thu gọn" : "▼ Cài đặt"}</span>
+                </button>
+                {showKeyConfig && (
+                  <div className="mt-2.5 pt-2.5 border-t border-[#133863] space-y-2">
+                    <input
+                      type="password"
+                      placeholder="Dán Gemini API Key tại đây (AIzaSy...)"
+                      value={geminiApiKey}
+                      onChange={(e) => setGeminiApiKey(e.target.value)}
+                      className="w-full bg-[#07172C] border border-[#133863] focus:border-purple-400 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
+                    />
+                    <p className="text-[10px] text-slate-400 leading-relaxed">
+                      💡 <i>Lấy API Key miễn phí tại <a href="https://aistudio.google.com" target="_blank" rel="noreferrer" className="text-purple-400 underline font-semibold">aistudio.google.com</a>. Nếu để trống, hệ thống sẽ tự động sử dụng Động cơ Kiến thức Du lịch Chuẩn Vàng tích hợp sẵn 100% chuẩn mẫu Thành Cổ Quảng Trị.</i>
+                    </p>
+                  </div>
+                )}
               </div>
 
               {aiResultMsg && (

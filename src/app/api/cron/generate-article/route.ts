@@ -64,14 +64,18 @@ export async function POST(request: Request) {
 
   try {
     let customTopic: string | undefined;
+    let apiKey: string | undefined;
     try {
       const body = await request.json();
       if (body?.topic && typeof body.topic === "string" && body.topic.trim()) {
         customTopic = body.topic.trim();
       }
+      if (body?.apiKey && typeof body.apiKey === "string" && body.apiKey.trim()) {
+        apiKey = body.apiKey.trim();
+      }
     } catch {}
 
-    const result = await generateAndPublishSeoArticle(customTopic);
+    const result = await generateAndPublishSeoArticle(customTopic, apiKey);
     return NextResponse.json(result);
   } catch (error: any) {
     console.error("POST Generate Article Error:", error);
