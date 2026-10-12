@@ -200,6 +200,15 @@ export default function AdminPage() {
 
   // Kiểm tra phiên đăng nhập thực tế từ máy chủ (Server-side HttpOnly Cookie)
   useEffect(() => {
+    // Tự động chuyển đến tab được chỉ định trong URL (VD: ?tab=articles từ Telegram link)
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      if (tabParam && ["orders", "drivers", "reports", "analytics", "articles", "settings"].includes(tabParam)) {
+        setActiveTab(tabParam as any);
+      }
+    }
+
     const checkServerAuth = async () => {
       try {
         const res = await fetch("/api/admin/auth", { cache: "no-store" });

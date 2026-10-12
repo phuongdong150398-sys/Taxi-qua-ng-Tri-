@@ -44,6 +44,12 @@ export default function ArticlesManagementTab() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  // AI Generator Modal State
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [aiTopicInput, setAiTopicInput] = useState("");
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
+  const [aiResultMsg, setAiResultMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
   // Form State
   const defaultFormState: TravelGuide = {
     slug: "",
@@ -109,6 +115,65 @@ export default function ArticlesManagementTab() {
   useEffect(() => {
     fetchGuides();
   }, []);
+
+  // Tự động mở Modal chỉnh sửa bài viết khi truy cập từ link Telegram (?tab=articles&edit=slug)
+  useEffect(() => {
+    if (typeof window !== "undefined" && guides.length > 0) {
+      const params = new URLSearchParams(window.location.search);
+      const editSlug = params.get("edit");
+      if (editSlug) {
+        const found = guides.find((g) => g.slug === editSlug);
+        if (found) {
+          handleOpenEditModal(found);
+          // Xóa param edit khỏi URL sau khi đã mở để tránh lặp lại khi đóng modal hoặc tải lại danh sách
+          const url = new URL(window.location.href);
+          url.searchParams.delete("edit");
+          window.history.replaceState({}, "", url.toString());
+        }
+      }
+    }
+  }, [guides]);
+
+  // Kích hoạt AI viết bài tự động
+  const handleTriggerAiGeneration = async () => {
+    setIsAiGenerating(true);
+    setAiResultMsg(null);
+    try {
+      const res = await fetch("/api/cron/generate-article", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic: aiTopicInput.trim() || undefined }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAiResultMsg({
+          type: "success",
+          text: `✓ ${data.message || "Đã xuất bản bài viết thành công!"}`,
+        });
+        await fetchGuides();
+        if (data.guide) {
+          setTimeout(() => {
+            setShowAiModal(false);
+            setAiTopicInput("");
+            setAiResultMsg(null);
+            handleOpenEditModal(data.guide);
+          }, 1500);
+        }
+      } else {
+        setAiResultMsg({
+          type: "error",
+          text: data.message || "Lỗi khi kích hoạt AI tạo bài viết!",
+        });
+      }
+    } catch (err: any) {
+      setAiResultMsg({
+        type: "error",
+        text: "Lỗi kết nối máy chủ khi tạo bài viết AI.",
+      });
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
 
   // Filter list
   const categories = Array.from(new Set(guides.map((g) => g.category).filter(Boolean)));
@@ -348,6 +413,14 @@ export default function ArticlesManagementTab() {
         {/* Action buttons */}
         <div className="flex flex-wrap items-center gap-3">
           <button
+            onClick={() => setShowAiModal(true)}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-purple-500/20 hover:scale-105 transition cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>✨ AI Viết Bài Tự Động</span>
+          </button>
+
+          <button
             onClick={handleOpenCreateModal}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-[#040E1C] font-black text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-amber-500/20 hover:scale-105 transition cursor-pointer"
           >
@@ -548,6 +621,105 @@ export default function ArticlesManagementTab() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* MODAL: AI TỰ ĐỘNG VIẾT BÀI CHUẨN SEO */}
+      {showAiModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#07172C] border-2 border-purple-500/50 rounded-3xl max-w-xl w-full shadow-2xl overflow-hidden my-6">
+            <div className="p-5 sm:p-6 border-b border-[#133863] flex items-center justify-between bg-[#040E1C]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-400">
+                  <Sparkles className="w-5 h-5 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-white uppercase">
+                    AI Viết Bài Chuẩn SEO Tự Động
+                  </h3>
+                  <p className="text-xs text-purple-300">
+                    Sử dụng Google Gemini AI &amp; Kho chủ đề du lịch Quảng Bình - Quảng Trị
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  if (!isAiGenerating) setShowAiModal(false);
+                }}
+                className="p-2 rounded-xl bg-[#0B2240] text-slate-400 hover:text-white transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="p-4 rounded-2xl bg-[#040E1C] border border-blue-500/30 text-xs text-slate-300 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-blue-400">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Đã kích hoạt Lịch chạy tự động mỗi ngày (Vercel Cron)</span>
+                </div>
+                <p className="text-slate-400">
+                  Hàng ngày vào lúc <b>08:00 sáng</b>, hệ thống sẽ tự động xuất bản 1 bài viết chuẩn SEO mới và gửi thông báo kèm nút chỉnh sửa về Telegram của bạn.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase">
+                  Nhập chủ đề muốn AI viết ngay (Tùy chọn):
+                </label>
+                <input
+                  type="text"
+                  placeholder="VD: Kinh nghiệm đi tour Hang Sơn Đoòng, Viếng Thành Cổ Quảng Trị..."
+                  value={aiTopicInput}
+                  onChange={(e) => setAiTopicInput(e.target.value)}
+                  disabled={isAiGenerating}
+                  className="w-full bg-[#040E1C] border border-[#133863] focus:border-purple-400 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none"
+                />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  💡 <i>Nếu để trống, AI sẽ tự động chọn chủ đề du lịch &amp; đón tiễn taxi hot nhất chưa từng được đăng.</i>
+                </p>
+              </div>
+
+              {aiResultMsg && (
+                <div
+                  className={`p-3 rounded-xl text-xs font-bold text-center ${
+                    aiResultMsg.type === "success"
+                      ? "bg-emerald-950/80 border border-emerald-700 text-emerald-300"
+                      : "bg-red-950/80 border border-red-700 text-red-300"
+                  }`}
+                >
+                  {aiResultMsg.text}
+                </div>
+              )}
+            </div>
+
+            <div className="p-5 sm:p-6 border-t border-[#133863] bg-[#040E1C] flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowAiModal(false)}
+                disabled={isAiGenerating}
+                className="px-5 py-2.5 rounded-xl bg-[#0B2240] hover:bg-[#133863] text-slate-300 text-xs sm:text-sm font-bold transition cursor-pointer disabled:opacity-50"
+              >
+                Đóng
+              </button>
+              <button
+                onClick={handleTriggerAiGeneration}
+                disabled={isAiGenerating}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-purple-600/30 transition cursor-pointer disabled:opacity-50"
+              >
+                {isAiGenerating ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Đang Tạo &amp; Đăng Bài...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Kích Hoạt AI Viết Ngay</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
