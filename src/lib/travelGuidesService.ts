@@ -6,6 +6,7 @@ import {
   getTravelGuidesFromDb,
   saveTravelGuideToDb,
   deleteTravelGuideFromDb,
+  getTravelGuideBySlugFromDb,
 } from "./firebaseDb";
 
 const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "data");
@@ -68,6 +69,18 @@ export async function getAllTravelGuidesAsync(): Promise<TravelGuide[]> {
 export function getTravelGuideBySlugSync(slug: string): TravelGuide | undefined {
   const list = getAllTravelGuides();
   return list.find((g) => g.slug === slug);
+}
+
+export async function getTravelGuideBySlugAsync(slug: string): Promise<TravelGuide | undefined> {
+  try {
+    const fromDb = await getTravelGuideBySlugFromDb(slug);
+    if (fromDb) {
+      return fromDb;
+    }
+  } catch (err) {
+    console.error("Error fetching travel guide by slug from DB:", err);
+  }
+  return getTravelGuideBySlugSync(slug);
 }
 
 export async function saveTravelGuide(guide: TravelGuide): Promise<{ success: boolean; message?: string }> {

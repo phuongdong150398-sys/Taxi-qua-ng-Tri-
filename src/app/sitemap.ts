@@ -1,12 +1,12 @@
 import { MetadataRoute } from "next";
-import { getAllTravelGuides } from "@/lib/travelGuidesService";
+import { getAllTravelGuidesAsync } from "@/lib/travelGuidesService";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taxiquangtri.com.vn";
-  const travelGuides = getAllTravelGuides();
+  const travelGuides = await getAllTravelGuidesAsync();
 
   const staticPages: MetadataRoute.Sitemap = [
     {

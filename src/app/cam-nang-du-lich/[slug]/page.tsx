@@ -4,7 +4,11 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
-import { getAllTravelGuides, getTravelGuideBySlugSync } from "@/lib/travelGuidesService";
+import {
+  getAllTravelGuides,
+  getAllTravelGuidesAsync,
+  getTravelGuideBySlugAsync,
+} from "@/lib/travelGuidesService";
 import { siteConfig } from "@/config/siteConfig";
 import {
   MapPin,
@@ -37,7 +41,7 @@ interface ArticlePageProps {
 }
 
 export async function generateStaticParams() {
-  const guides = getAllTravelGuides();
+  const guides = await getAllTravelGuidesAsync();
   return guides.map((guide) => ({
     slug: guide.slug,
   }));
@@ -45,7 +49,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const guide = getTravelGuideBySlugSync(slug);
+  const guide = await getTravelGuideBySlugAsync(slug);
 
   if (!guide) {
     return {
@@ -100,13 +104,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function TravelGuideDetailPage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const guide = getTravelGuideBySlugSync(slug);
+  const guide = await getTravelGuideBySlugAsync(slug);
 
   if (!guide) {
     notFound();
   }
 
-  const allGuides = getAllTravelGuides();
+  const allGuides = await getAllTravelGuidesAsync();
   // Lọc các bài viết liên quan
   const relatedGuides = allGuides.filter((g) => g.slug !== guide.slug).slice(0, 3);
 

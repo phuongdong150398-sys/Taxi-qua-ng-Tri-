@@ -3,7 +3,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
-import { getAllTravelGuides } from "@/lib/travelGuidesService";
+import { getAllTravelGuidesAsync } from "@/lib/travelGuidesService";
 import { siteConfig } from "@/config/siteConfig";
 import {
   MapPin,
@@ -47,8 +47,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TravelGuideHubPage() {
-  const travelGuides = getAllTravelGuides();
+export default async function TravelGuideHubPage() {
+  const travelGuides = await getAllTravelGuidesAsync();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
