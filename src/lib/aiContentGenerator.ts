@@ -1692,21 +1692,21 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
   "sections": [
     {
       "heading": "1. Tiêu đề phần 1",
-      "content": "Nội dung chi tiết 250-350 từ...",
+      "content": "Nội dung giàu cảm xúc, thấm đượm văn hóa lịch sử khoảng 120-180 từ...",
       "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
       "imageCaption": "Chú thích ảnh phần 1",
       "tips": ["Mẹo hữu ích từ bác tài bản địa"]
     },
     {
       "heading": "2. Tiêu đề phần 2",
-      "content": "Nội dung chi tiết 250-350 từ...",
+      "content": "Nội dung chi tiết 120-180 từ...",
       "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
       "imageCaption": "Chú thích ảnh phần 2",
       "tips": ["Mẹo phần 2"]
     },
     {
       "heading": "3. Tiêu đề phần 3",
-      "content": "Nội dung chi tiết 250-350 từ...",
+      "content": "Nội dung chi tiết 120-180 từ...",
       "image": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
       "imageCaption": "Chú thích ảnh phần 3",
       "tips": ["Mẹo phần 3"]
@@ -1739,7 +1739,7 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
 
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1747,7 +1747,8 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 3500,
+            responseMimeType: "application/json",
+            maxOutputTokens: 8192,
           },
         }),
       }
@@ -1757,7 +1758,13 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
     const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!rawText) return null;
 
-    const cleanJson = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+    const firstBrace = rawText.indexOf("{");
+    const lastBrace = rawText.lastIndexOf("}");
+    if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+      const cleanJson = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+      return JSON.parse(cleanJson);
+    }
+    const cleanJson = rawText.substring(firstBrace, lastBrace + 1);
     return JSON.parse(cleanJson);
   } catch (err) {
     console.error("Gemini API generation error:", err);

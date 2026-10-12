@@ -742,11 +742,11 @@ export default function ArticlesManagementTab() {
                     <span>Cấu hình Google Gemini API Key (Tùy chọn)</span>
                     {geminiApiKey ? (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
-                        Đã lưu key
+                        ✓ Đã nhập Key riêng
                       </span>
                     ) : (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">
-                        Đang dùng Động cơ Chuẩn Vàng
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                        ✓ Gemini 2.5 Flash Tích Hợp Sẵn
                       </span>
                     )}
                   </span>
@@ -756,7 +756,7 @@ export default function ArticlesManagementTab() {
                   <div className="mt-2.5 pt-2.5 border-t border-[#133863] space-y-2">
                     <input
                       type="password"
-                      placeholder="Dán Gemini API Key tại đây (AIzaSy...)"
+                      placeholder="Mặc định sử dụng GEMINI_API_KEY hệ thống (Dán key mới nếu muốn đổi)"
                       value={geminiApiKey}
                       onChange={(e) => setGeminiApiKey(e.target.value)}
                       className="w-full bg-[#07172C] border border-[#133863] focus:border-purple-400 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
