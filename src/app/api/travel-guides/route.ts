@@ -6,6 +6,7 @@ import {
   resetToDefaults,
 } from "@/lib/travelGuidesService";
 import { TravelGuide } from "@/data/travelGuides";
+import { getAdminSessionFromRequest } from "@/lib/adminAuth";
 
 export async function GET() {
   try {
@@ -20,6 +21,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để lưu bài viết!" },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
 
@@ -114,6 +122,13 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để xóa bài viết!" },
+      { status: 401 }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     let slug = searchParams.get("slug");
@@ -148,6 +163,13 @@ export async function DELETE(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên!" },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
     if (body.action === "reset_defaults") {

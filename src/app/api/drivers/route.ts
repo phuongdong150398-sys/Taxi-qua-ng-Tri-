@@ -7,18 +7,27 @@ import {
   getFleetSettings,
   saveFleetSettings,
   adjustDriverWallet,
-  getDriverById,
   loadFleetStateFromTelegramCloud,
   syncFleetStateToTelegramCloud,
 } from "@/lib/drivers";
 import { Driver } from "@/types";
+import { getAdminSessionFromRequest } from "@/lib/adminAuth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET() {
+/**
+ * GET: Lấy danh sách tài xế, giao dịch ví và cấu hình (Yêu cầu quyền Admin)
+ */
+export async function GET(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để xem danh sách tài xế!" },
+      { status: 401 }
+    );
+  }
+
   try {
-    // Tải dữ liệu mới nhất từ Telegram Cloud Storage
     await loadFleetStateFromTelegramCloud();
 
     const drivers = getDrivers();
@@ -41,7 +50,17 @@ export async function GET() {
   }
 }
 
+/**
+ * POST: Tạo tài khoản tài xế mới (Yêu cầu quyền Admin)
+ */
 export async function POST(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để thêm tài xế!" },
+      { status: 401 }
+    );
+  }
+
   try {
     await loadFleetStateFromTelegramCloud();
 
@@ -114,7 +133,17 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * PATCH: Nạp/rút tiền ví, cập nhật trạng thái, sửa cài đặt (Yêu cầu quyền Admin)
+ */
 export async function PATCH(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để chỉnh sửa thông tin!" },
+      { status: 401 }
+    );
+  }
+
   try {
     await loadFleetStateFromTelegramCloud();
 
@@ -186,7 +215,17 @@ export async function PATCH(request: Request) {
   }
 }
 
+/**
+ * DELETE: Xóa tài xế (Yêu cầu quyền Admin)
+ */
 export async function DELETE(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để xóa tài xế!" },
+      { status: 401 }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");

@@ -107,6 +107,7 @@ export default function AdminPage() {
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
   const [showChangePin, setShowChangePin] = useState(false);
+  const [currentPinInput, setCurrentPinInput] = useState("");
   const [newPin, setNewPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
   const [changePinMsg, setChangePinMsg] = useState("");
@@ -197,22 +198,28 @@ export default function AdminPage() {
   });
   const [configSaveMsg, setConfigSaveMsg] = useState("");
 
-  // Check login state from sessionStorage on mount & start live polling
+  // Kiểm tra phiên đăng nhập thực tế từ máy chủ (Server-side HttpOnly Cookie)
   useEffect(() => {
-    try {
-      const auth = sessionStorage.getItem("admin_auth_status");
-      if (auth === "verified") {
-        setIsAuthenticated(true);
-        fetchBookings();
-        fetchDriversData();
-        fetchAnalytics();
-        setTrackingConfig(getAnalyticsConfig());
-      } else {
+    const checkServerAuth = async () => {
+      try {
+        const res = await fetch("/api/admin/auth", { cache: "no-store" });
+        const data = await res.json();
+        if (data.success && data.authenticated) {
+          setIsAuthenticated(true);
+          fetchBookings();
+          fetchDriversData();
+          fetchAnalytics();
+          setTrackingConfig(getAnalyticsConfig());
+        } else {
+          setIsAuthenticated(false);
+          setLoading(false);
+        }
+      } catch (e) {
+        setIsAuthenticated(false);
         setLoading(false);
       }
-    } catch (e) {
-      setLoading(false);
-    }
+    };
+    checkServerAuth();
   }, []);
 
   // Tự động làm mới dữ liệu thời gian thực mỗi 6 giây khi đang đăng nhập Admin
@@ -240,12 +247,9 @@ export default function AdminPage() {
       });
       const data = await res.json();
 
-      if (data.success) {
+      if (res.ok && data.success) {
         setIsAuthenticated(true);
-        try {
-          sessionStorage.setItem("admin_auth_status", "verified");
-          localStorage.setItem("admin_security_pin", pinInput.trim());
-        } catch (err) {}
+        setPinInput("");
         fetchBookings();
         fetchDriversData();
         fetchAnalytics();
@@ -254,28 +258,27 @@ export default function AdminPage() {
         setPinError(data.message || "Mã PIN không chính xác! Vui lòng thử lại.");
         setPinInput("");
       }
-    } catch (err) {
-      // Fallback kiểm tra cục bộ nếu mất kết nối mạng
-      const localPin = typeof window !== "undefined" ? localStorage.getItem("admin_security_pin") || "8888" : "8888";
-      if (pinInput.trim() === localPin) {
-        setIsAuthenticated(true);
-        try { sessionStorage.setItem("admin_auth_status", "verified"); } catch (e) {}
-        fetchBookings();
-        fetchDriversData();
-      } else {
-        setPinError("Mã PIN không chính xác! Vui lòng thử lại.");
-        setPinInput("");
-      }
+    } catch (err: any) {
+      setPinError("Lỗi kết nối máy chủ xác thực. Vui lòng thử lại!");
+      setPinInput("");
     } finally {
       setAuthLoading(false);
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "logout" }),
+      });
+    } catch (err) {}
     setIsAuthenticated(false);
     setPinInput("");
     try {
       sessionStorage.removeItem("admin_auth_status");
+      localStorage.removeItem("admin_security_pin");
     } catch (err) {}
   };
 
@@ -283,7 +286,12 @@ export default function AdminPage() {
     e.preventDefault();
     setChangePinMsg("");
 
-    if (newPin.length < 4) {
+    if (!currentPinInput) {
+      setChangePinMsg("Vui lòng nhập mã PIN hiện tại!");
+      return;
+    }
+
+    if (newPin.length < 4 || !/^\d+$/.test(newPin)) {
       setChangePinMsg("Mã PIN mới phải có ít nhất 4 chữ số!");
       return;
     }
@@ -299,18 +307,17 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "change_pin",
+          currentPin: currentPinInput.trim(),
           newPin: newPin.trim(),
         }),
       });
       const data = await res.json();
 
-      if (data.success) {
-        try {
-          localStorage.setItem("admin_security_pin", newPin.trim());
-        } catch (e) {}
+      if (res.ok && data.success) {
         setChangePinMsg("✓ Đổi mã PIN thành công! Mã PIN mới đã đồng bộ lên toàn bộ thiết bị (Điện thoại & Máy tính).");
         setTimeout(() => {
           setShowChangePin(false);
+          setCurrentPinInput("");
           setNewPin("");
           setConfirmPin("");
           setChangePinMsg("");
@@ -319,14 +326,7 @@ export default function AdminPage() {
         setChangePinMsg(data.message || "Có lỗi xảy ra khi đổi mã PIN!");
       }
     } catch (err: any) {
-      try { localStorage.setItem("admin_security_pin", newPin.trim()); } catch (e) {}
-      setChangePinMsg("✓ Đã cập nhật mã PIN!");
-      setTimeout(() => {
-        setShowChangePin(false);
-        setNewPin("");
-        setConfirmPin("");
-        setChangePinMsg("");
-      }, 1500);
+      setChangePinMsg("Lỗi kết nối máy chủ khi đổi mã PIN.");
     }
   };
 
@@ -345,6 +345,10 @@ export default function AdminPage() {
         cache: "no-store",
         headers: { "Cache-Control": "no-cache" },
       });
+      if (res.status === 401) {
+        setIsAuthenticated(false);
+        return;
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) {
         serverBookings = data.data;
@@ -391,6 +395,10 @@ export default function AdminPage() {
 
     try {
       const res = await fetch("/api/drivers", { cache: "no-store" });
+      if (res.status === 401) {
+        setIsAuthenticated(false);
+        return;
+      }
       const data = await res.json();
       if (data.success && data.data) {
         serverDrivers = (data.data.drivers || []).filter((d: Driver) => d && d.id && !MOCK_IDS.has(d.id));
@@ -449,6 +457,10 @@ export default function AdminPage() {
     setLoadingAnalytics(true);
     try {
       const res = await fetch("/api/analytics");
+      if (res.status === 401) {
+        setIsAuthenticated(false);
+        return;
+      }
       const data = await res.json();
       if (data.success && data.data) {
         setAnalyticsData(data.data);
@@ -1086,6 +1098,18 @@ export default function AdminPage() {
               <KeyRound className="w-4 h-4" /> ĐỔI MÃ PIN QUẢN TRỊ VIÊN
             </h3>
             <form onSubmit={handleChangePin} className="space-y-3">
+              <div>
+                <label className="text-[11px] text-slate-400 block mb-1">Mã PIN hiện tại:</label>
+                <input
+                  type="password"
+                  maxLength={6}
+                  required
+                  value={currentPinInput}
+                  onChange={(e) => setCurrentPinInput(e.target.value)}
+                  placeholder="Nhập mã PIN đang dùng..."
+                  className="w-full bg-[#040E1C] border border-[#133863] rounded-xl px-3 py-2 text-sm text-white focus:border-amber-400 focus:outline-none"
+                />
+              </div>
               <div>
                 <label className="text-[11px] text-slate-400 block mb-1">Mã PIN mới (tối thiểu 4 số):</label>
                 <input

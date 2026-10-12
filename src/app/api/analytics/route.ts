@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getAdminSessionFromRequest } from "@/lib/adminAuth";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -69,7 +70,14 @@ function detectDevice(userAgent = ""): "iOS" | "Android" | "Desktop" | "Other" {
 /**
  * API GET: Tổng hợp báo cáo Phân tích Chuyển đổi & Chân dung khách hàng
  */
-export async function GET() {
+export async function GET(request: Request) {
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để xem báo cáo phân tích!" },
+      { status: 401 }
+    );
+  }
+
   const events = getStoredEvents();
 
   // 1. THỐNG KÊ SỐ LIỆU TỔNG QUAN & PHỄU CHUYỂN ĐỔI

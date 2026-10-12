@@ -10,6 +10,7 @@ import {
 } from "@/lib/security";
 import { getFleetSettings, loadFleetStateFromTelegramCloud } from "@/lib/drivers";
 import { getBookingsFromDb, saveBookingToDb, updateBookingInDb } from "@/lib/firebaseDb";
+import { getAdminSessionFromRequest } from "@/lib/adminAuth";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -253,7 +254,15 @@ ${booking.notes ? `📝 <b>Ghi chú:</b> ${escapeHtml(booking.notes)}\n` : ""}�
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  // BẢO MẬT: Bắt buộc phiên đăng nhập Admin mới được phép đọc danh sách đơn đặt xe
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để xem danh sách đơn!" },
+      { status: 401 }
+    );
+  }
+
   try {
     let bookings = await getBookingsFromDb();
     if (!bookings || bookings.length === 0) {
@@ -411,6 +420,14 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  // BẢO MẬT: Bắt buộc phiên đăng nhập Admin mới được cập nhật trạng thái đơn
+  if (!getAdminSessionFromRequest(request)) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized: Yêu cầu quyền Quản trị viên để sửa đơn!" },
+      { status: 401 }
+    );
+  }
+
   try {
     const { id, status, driverId, driverName, driverPhone, driverPlate } = await request.json();
 
