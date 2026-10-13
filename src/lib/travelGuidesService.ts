@@ -8,6 +8,7 @@ import {
   deleteTravelGuideFromDb,
   getTravelGuideBySlugFromDb,
 } from "./firebaseDb";
+import { isReliableImageUrl, getVerifiedImageForTopic } from "./verifiedImages";
 
 const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "data");
 const GUIDES_FILE = path.join(DATA_DIR, "travel_guides.json");
@@ -27,6 +28,40 @@ function ensureDataFile() {
   }
 }
 
+export function sanitizeGuide(guide: TravelGuide): TravelGuide {
+  if (!guide) return guide;
+  const destination = guide.destination || "";
+  let coverImage = guide.coverImage;
+  if (!isReliableImageUrl(coverImage)) {
+    coverImage = getVerifiedImageForTopic(destination, guide.title, 0);
+  }
+
+  const sections = Array.isArray(guide.sections)
+    ? guide.sections.map((sec, idx) => ({
+        ...sec,
+        image: isReliableImageUrl(sec.image)
+          ? sec.image
+          : getVerifiedImageForTopic(destination, sec.heading, idx),
+      }))
+    : guide.sections;
+
+  const gallery = Array.isArray(guide.gallery)
+    ? guide.gallery.map((g, idx) => ({
+        ...g,
+        url: isReliableImageUrl(g.url)
+          ? g.url
+          : getVerifiedImageForTopic(destination, g.caption, idx),
+      }))
+    : guide.gallery;
+
+  return {
+    ...guide,
+    coverImage,
+    sections,
+    gallery,
+  };
+}
+
 export function getAllTravelGuides(): TravelGuide[] {
   try {
     ensureDataFile();
@@ -34,18 +69,18 @@ export function getAllTravelGuides(): TravelGuide[] {
       const data = fs.readFileSync(GUIDES_FILE, "utf-8");
       const parsed = JSON.parse(data);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        inMemoryGuides = parsed;
-        return parsed;
+        inMemoryGuides = parsed.map(sanitizeGuide);
+        return inMemoryGuides;
       }
     }
     if (inMemoryGuides && inMemoryGuides.length > 0) {
-      return inMemoryGuides;
+      return inMemoryGuides.map(sanitizeGuide);
     }
-    inMemoryGuides = [...initialTravelGuides];
+    inMemoryGuides = initialTravelGuides.map(sanitizeGuide);
     return inMemoryGuides;
   } catch (error) {
     console.error("Error reading travel guides file:", error);
-    return inMemoryGuides || initialTravelGuides;
+    return (inMemoryGuides || initialTravelGuides).map(sanitizeGuide);
   }
 }
 
@@ -53,12 +88,13 @@ export async function getAllTravelGuidesAsync(): Promise<TravelGuide[]> {
   try {
     const listFromDb = await getTravelGuidesFromDb();
     if (listFromDb && listFromDb.length > 0) {
-      inMemoryGuides = listFromDb;
+      const sanitized = listFromDb.map(sanitizeGuide);
+      inMemoryGuides = sanitized;
       ensureDataFile();
       try {
-        fs.writeFileSync(GUIDES_FILE, JSON.stringify(listFromDb, null, 2), "utf-8");
+        fs.writeFileSync(GUIDES_FILE, JSON.stringify(sanitized, null, 2), "utf-8");
       } catch (e) {}
-      return listFromDb;
+      return sanitized;
     }
   } catch (err) {
     console.error("Error getting guides from Firestore:", err);
@@ -68,14 +104,15 @@ export async function getAllTravelGuidesAsync(): Promise<TravelGuide[]> {
 
 export function getTravelGuideBySlugSync(slug: string): TravelGuide | undefined {
   const list = getAllTravelGuides();
-  return list.find((g) => g.slug === slug);
+  const found = list.find((g) => g.slug === slug);
+  return found ? sanitizeGuide(found) : undefined;
 }
 
 export async function getTravelGuideBySlugAsync(slug: string): Promise<TravelGuide | undefined> {
   try {
     const fromDb = await getTravelGuideBySlugFromDb(slug);
     if (fromDb) {
-      return fromDb;
+      return sanitizeGuide(fromDb);
     }
   } catch (err) {
     console.error("Error fetching travel guide by slug from DB:", err);

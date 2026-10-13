@@ -4,6 +4,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
+import ArticleImage from "@/components/ui/ArticleImage";
 import {
   getAllTravelGuides,
   getAllTravelGuidesAsync,
@@ -259,7 +260,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
           <div className="lg:col-span-8 space-y-8">
             {/* Featured Image */}
             <div className="relative rounded-3xl overflow-hidden border border-[#133863] shadow-2xl">
-              <img
+              <ArticleImage
                 src={guide.coverImage}
                 alt={guide.title}
                 className="w-full h-72 sm:h-96 object-cover"
@@ -357,11 +358,10 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                   {section.image && (
                     <div className="my-5 rounded-3xl overflow-hidden border border-[#133863] shadow-xl bg-[#07172C] group">
                       <div className="overflow-hidden">
-                        <img
+                        <ArticleImage
                           src={section.image}
                           alt={section.imageCaption || section.heading}
                           className="w-full h-64 sm:h-80 md:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
                         />
                       </div>
                       {section.imageCaption && (
@@ -418,11 +418,10 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                       className="group relative rounded-2xl overflow-hidden border border-[#133863] bg-[#07172C] shadow-lg flex flex-col"
                     >
                       <div className="h-48 sm:h-56 overflow-hidden">
-                        <img
+                        <ArticleImage
                           src={img.url}
                           alt={img.caption || `${guide.destination} hình ảnh ${gIdx + 1}`}
                           className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                          loading="lazy"
                         />
                       </div>
                       {img.caption && (

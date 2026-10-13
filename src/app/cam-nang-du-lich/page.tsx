@@ -3,6 +3,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
+import ArticleImage from "@/components/ui/ArticleImage";
 import { getAllTravelGuidesAsync } from "@/lib/travelGuidesService";
 import { siteConfig } from "@/config/siteConfig";
 import {
@@ -165,11 +166,10 @@ export default async function TravelGuideHubPage() {
             >
               {/* Cover Image */}
               <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-900">
-                <img
+                <ArticleImage
                   src={guide.coverImage}
                   alt={guide.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#07172C] via-transparent to-black/30" />
                 

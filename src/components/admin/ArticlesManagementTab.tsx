@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { TravelGuide } from "@/data/travelGuides";
+import ArticleImage from "@/components/ui/ArticleImage";
 import {
   BookOpen,
   Plus,
@@ -557,7 +558,7 @@ export default function ArticlesManagementTab() {
               <div>
                 {/* Thumbnail */}
                 <div className="relative h-44 w-full bg-slate-900 overflow-hidden">
-                  <img
+                  <ArticleImage
                     src={guide.coverImage}
                     alt={guide.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -1003,7 +1004,7 @@ export default function ArticlesManagementTab() {
                     />
                     {formData.coverImage && (
                       <div className="mt-2 h-32 rounded-2xl overflow-hidden border border-[#133863]">
-                        <img src={formData.coverImage} alt="Preview" className="w-full h-full object-cover" />
+                        <ArticleImage src={formData.coverImage} alt="Preview" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
