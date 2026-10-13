@@ -194,6 +194,15 @@ export async function searchTravelImages(
     try {
       const wikiResults = await searchWikimediaImages(cleanQuery, limit - allResults.length);
       for (const item of wikiResults) {
+        const u = item.url.toLowerCase();
+        if (
+          u.includes(".pdf") ||
+          u.includes(".tif") ||
+          u.includes(".djvu") ||
+          u.includes(".svg")
+        ) {
+          continue;
+        }
         addUnique({
           url: item.url,
           thumbUrl: item.thumbUrl || item.url,
