@@ -24,12 +24,32 @@ export const CURATED_QUANG_BINH_REAL_LANDMARKS: Record<
       caption: "Bãi biển Nhật Lệ thơ mộng với bờ cát trắng thoai thoải tại TP. Đồng Hới",
     },
     {
+      url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+      caption: "Làn nước trong xanh và bãi cát trắng mịn màng tại bãi tắm Nhật Lệ",
+    },
+    {
       url: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Nhat_Le_River.jpg",
       caption: "Cửa sông Nhật Lệ đổ ra biển nhìn từ bờ kè đường Trương Pháp",
     },
     {
+      url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=80",
+      caption: "Bình minh rực rỡ ló rạng trên mặt biển Nhật Lệ đón ngày mới",
+    },
+    {
       url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Nh%E1%BA%ADt_L%E1%BB%87_river.jpg/1280px-Nh%E1%BA%ADt_L%E1%BB%87_river.jpg",
       caption: "Dòng sông Nhật Lệ êm đềm chảy qua lòng thành phố Đồng Hới",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+      caption: "Không gian biển Nhật Lệ thanh bình và thoáng mát, điểm đến lý tưởng tại Đồng Hới",
+    },
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/C%E1%BA%A7u_Nh%E1%BA%ADt_L%E1%BB%87_2_%28cropped%29.jpg/1280px-C%E1%BA%A7u_Nh%E1%BA%ADt_L%E1%BB%87_2_%28cropped%29.jpg",
+      caption: "Cầu Nhật Lệ hiện đại nối liền trung tâm TP. Đồng Hới sang bán đảo Bảo Ninh",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1200&q=80",
+      caption: "Ánh hoàng hôn lãng mạn trên bãi biển Nhật Lệ khi chiều tà",
     },
   ],
   "cầu nhật lệ": [

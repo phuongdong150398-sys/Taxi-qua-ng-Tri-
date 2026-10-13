@@ -6,10 +6,7 @@
  * 3. Kho ảnh thực tế đã kiểm chứng nội bộ (Curated Local Repository)
  */
 
-import {
-  CURATED_QUANG_BINH_REAL_LANDMARKS,
-  searchWikimediaImages,
-} from "./wikimediaService";
+import { CURATED_QUANG_BINH_REAL_LANDMARKS } from "./wikimediaService";
 
 export interface TravelImageResult {
   url: string;
@@ -189,34 +186,7 @@ export async function searchTravelImages(
     }
   }
 
-  // 4. Tìm kiếm từ Wikimedia Commons API (miễn phí, không cần API Key, hoạt động 100% trên Vercel)
-  if (allResults.length < limit) {
-    try {
-      const wikiResults = await searchWikimediaImages(cleanQuery, limit - allResults.length);
-      for (const item of wikiResults) {
-        const u = item.url.toLowerCase();
-        if (
-          u.includes(".pdf") ||
-          u.includes(".tif") ||
-          u.includes(".djvu") ||
-          u.includes(".svg")
-        ) {
-          continue;
-        }
-        addUnique({
-          url: item.url,
-          thumbUrl: item.thumbUrl || item.url,
-          title: item.title,
-          caption: item.caption,
-          source: "curated",
-        });
-      }
-    } catch (e) {
-      console.warn("Fallback to Wikimedia Commons failed:", e);
-    }
-  }
-
-  // 5. Nếu vẫn chưa có kết quả (từ khóa lạ/không tìm thấy), trả về các danh lam thắng cảnh Đồng Hới nổi bật
+  // 4. Nếu vẫn chưa có kết quả (từ khóa lạ/không tìm thấy), trả về các danh lam thắng cảnh Đồng Hới nổi bật
   if (allResults.length === 0) {
     const defaultHighlights = [
       "biển nhật lệ",
