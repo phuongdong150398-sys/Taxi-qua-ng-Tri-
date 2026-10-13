@@ -60,6 +60,51 @@ async function searchGoogleCustomSearch(query: string, limit: number): Promise<T
 }
 
 /**
+ * Tìm kiếm hình ảnh trực tiếp từ Google Images thông qua Serper API
+ */
+async function searchSerperImages(query: string, limit: number): Promise<TravelImageResult[]> {
+  const apiKey =
+    process.env.SERPER_API_KEY ||
+    process.env.NEXT_PUBLIC_SERPER_API_KEY;
+
+  if (!apiKey) return [];
+
+  try {
+    const res = await fetch("https://google.serper.dev/images", {
+      method: "POST",
+      headers: {
+        "X-API-KEY": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        q: query,
+        gl: "vn",
+        hl: "vi",
+        num: Math.min(limit, 20),
+      }),
+    });
+
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    const images = data.images || [];
+
+    return images.map((item: any) => ({
+      url: item.imageUrl,
+      thumbUrl: item.thumbnailUrl || item.imageUrl,
+      title: item.title || query,
+      caption: item.title || `Hình ảnh du lịch đẹp về ${query}`,
+      source: "google" as const,
+      width: item.imageWidth,
+      height: item.imageHeight,
+    }));
+  } catch (error) {
+    console.warn("Serper Images API error:", error);
+    return [];
+  }
+}
+
+/**
  * Tìm kiếm ảnh du lịch chất lượng cao từ các trang báo & tạp chí du lịch Việt Nam
  */
 async function searchTravelWebImages(query: string, limit: number): Promise<TravelImageResult[]> {
@@ -153,13 +198,21 @@ export async function searchTravelImages(
     }
   };
 
-  // 1. Thử lấy từ Google Custom Search API nếu có cấu hình API Key & CX
-  const googleResults = await searchGoogleCustomSearch(cleanQuery, limit);
-  for (const item of googleResults) {
+  // 1. Thử lấy từ Serper API (Google Images chính thống trực tiếp)
+  const serperResults = await searchSerperImages(cleanQuery, limit);
+  for (const item of serperResults) {
     addUnique(item);
   }
 
-  // 2. Tra cứu kho ảnh thực tế chuẩn xác của TP. Đồng Hới & Quảng Bình (Fuzzy Matching)
+  // 2. Thử lấy từ Google Custom Search API nếu có cấu hình API Key & CX
+  if (allResults.length < limit) {
+    const googleResults = await searchGoogleCustomSearch(cleanQuery, limit - allResults.length);
+    for (const item of googleResults) {
+      addUnique(item);
+    }
+  }
+
+  // 3. Tra cứu kho ảnh thực tế chuẩn xác của TP. Đồng Hới & Quảng Bình (Fuzzy Matching)
   for (const [key, list] of Object.entries(CURATED_QUANG_BINH_REAL_LANDMARKS)) {
     const keyWords = key.split(" ").filter((w) => w.length > 2);
     const isDirectMatch = lower.includes(key) || key.includes(lower);
