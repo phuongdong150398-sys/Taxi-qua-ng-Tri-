@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { TravelGuide } from "@/data/travelGuides";
 import ArticleImage from "@/components/ui/ArticleImage";
+import ImagePickerModal from "@/components/admin/ImagePickerModal";
 import {
   BookOpen,
   Plus,
@@ -42,9 +43,18 @@ export default function ArticlesManagementTab() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
-  const [modalTab, setModalTab] = useState<"basic" | "pricing" | "content" | "faqs">("basic");
+  const [modalTab, setModalTab] = useState<"basic" | "pricing" | "content" | "gallery" | "faqs">("basic");
   const [isSaving, setIsSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Wikimedia Image Picker Modal State
+  const [imagePickerOpen, setImagePickerOpen] = useState(false);
+  const [imagePickerTarget, setImagePickerTarget] = useState<{
+    type: "cover" | "section" | "gallery";
+    sectionIndex?: number;
+    galleryIndex?: number;
+    initialQuery?: string;
+  }>({ type: "cover", initialQuery: "Biển Nhật Lệ" });
 
   // AI Generator Modal State
   const [showAiModal, setShowAiModal] = useState(false);
@@ -359,7 +369,11 @@ export default function ArticlesManagementTab() {
     });
   };
 
-  const handleUpdateSection = (idx: number, field: "heading" | "content", val: string) => {
+  const handleUpdateSection = (
+    idx: number,
+    field: "heading" | "content" | "image" | "imageCaption",
+    val: string
+  ) => {
     const list = [...(formData.sections || [])];
     list[idx] = { ...list[idx], [field]: val };
     setFormData({ ...formData, sections: list });
@@ -390,6 +404,70 @@ export default function ArticlesManagementTab() {
   const handleRemoveSection = (idx: number) => {
     const list = formData.sections.filter((_, i) => i !== idx);
     setFormData({ ...formData, sections: list });
+  };
+
+  // Gallery helpers
+  const handleAddGalleryItem = () => {
+    setFormData({
+      ...formData,
+      gallery: [...(formData.gallery || []), { url: "", caption: "" }],
+    });
+  };
+
+  const handleUpdateGalleryItem = (idx: number, field: "url" | "caption", val: string) => {
+    const list = [...(formData.gallery || [])];
+    list[idx] = { ...list[idx], [field]: val };
+    setFormData({ ...formData, gallery: list });
+  };
+
+  const handleRemoveGalleryItem = (idx: number) => {
+    const list = (formData.gallery || []).filter((_, i) => i !== idx);
+    setFormData({ ...formData, gallery: list });
+  };
+
+  // Image Picker Helpers
+  const openImagePicker = (
+    type: "cover" | "section" | "gallery",
+    initialQuery: string = "",
+    sectionIndex?: number,
+    galleryIndex?: number
+  ) => {
+    setImagePickerTarget({
+      type,
+      sectionIndex,
+      galleryIndex,
+      initialQuery: initialQuery || formData.destination || formData.title || "Biển Nhật Lệ",
+    });
+    setImagePickerOpen(true);
+  };
+
+  const handleImageSelected = (url: string, caption?: string) => {
+    if (imagePickerTarget.type === "cover") {
+      setFormData((prev) => ({ ...prev, coverImage: url }));
+    } else if (imagePickerTarget.type === "section" && typeof imagePickerTarget.sectionIndex === "number") {
+      const sIdx = imagePickerTarget.sectionIndex;
+      const nextSections = [...(formData.sections || [])];
+      if (nextSections[sIdx]) {
+        nextSections[sIdx] = {
+          ...nextSections[sIdx],
+          image: url,
+          imageCaption: caption || nextSections[sIdx].imageCaption || "",
+        };
+        setFormData((prev) => ({ ...prev, sections: nextSections }));
+      }
+    } else if (imagePickerTarget.type === "gallery") {
+      const nextGallery = [...(formData.gallery || [])];
+      if (typeof imagePickerTarget.galleryIndex === "number" && nextGallery[imagePickerTarget.galleryIndex]) {
+        nextGallery[imagePickerTarget.galleryIndex] = {
+          ...nextGallery[imagePickerTarget.galleryIndex],
+          url,
+          caption: caption || nextGallery[imagePickerTarget.galleryIndex].caption || "",
+        };
+      } else {
+        nextGallery.push({ url, caption: caption || "" });
+      }
+      setFormData((prev) => ({ ...prev, gallery: nextGallery }));
+    }
   };
 
   const handleAddFaq = () => {
@@ -876,10 +954,11 @@ export default function ArticlesManagementTab() {
             {/* Modal Subtabs */}
             <div className="bg-[#0B2240] px-6 py-2 border-b border-[#133863] flex space-x-2 overflow-x-auto">
               {[
-                { id: "basic", label: "1. Thông Tin Cơ Bản & Ảnh" },
+                { id: "basic", label: "1. Thông Tin Cơ Bản & Ảnh Bìa" },
                 { id: "pricing", label: "2. Cự Ly & Cước Taxi" },
                 { id: "content", label: "3. Nội Dung Chi Tiết" },
-                { id: "faqs", label: "4. FAQs & SEO Google" },
+                { id: "gallery", label: "4. Bộ Sưu Tập Ảnh" },
+                { id: "faqs", label: "5. FAQs & SEO Google" },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -992,19 +1071,39 @@ export default function ArticlesManagementTab() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-200 block mb-1">
-                      Link ảnh đại diện bài viết (Cover Image URL):
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-bold text-slate-200">
+                        Ảnh đại diện bài viết (Cover Image):
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => openImagePicker("cover", formData.destination || formData.title || "Biển Nhật Lệ")}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition"
+                      >
+                        <ImageIcon className="w-3.5 h-3.5" />
+                        <span>🔍 Chọn / Tìm ảnh Wikimedia</span>
+                      </button>
+                    </div>
                     <input
                       type="url"
-                      placeholder="https://images.unsplash.com/..."
+                      placeholder="https://..."
                       value={formData.coverImage}
                       onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
                       className="w-full bg-[#040E1C] border border-[#133863] focus:border-amber-400 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none font-mono"
                     />
                     {formData.coverImage && (
-                      <div className="mt-2 h-32 rounded-2xl overflow-hidden border border-[#133863]">
+                      <div className="mt-2.5 relative h-40 sm:h-48 rounded-2xl overflow-hidden border border-[#133863] group">
                         <ArticleImage src={formData.coverImage} alt="Preview" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition duration-300">
+                          <button
+                            type="button"
+                            onClick={() => openImagePicker("cover", formData.destination || formData.title || "Biển Nhật Lệ")}
+                            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#040E1C] font-black text-xs flex items-center gap-1.5 shadow-lg"
+                          >
+                            <ImageIcon className="w-3.5 h-3.5" />
+                            <span>Thay đổi ảnh bìa</span>
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1232,6 +1331,62 @@ export default function ArticlesManagementTab() {
                           />
                         </div>
 
+                        {/* Section Image & Caption with Wikimedia Picker */}
+                        <div className="bg-[#07172C] p-3.5 rounded-2xl border border-[#133863] space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                              <ImageIcon className="w-4 h-4 text-amber-400" />
+                              <span>Hình ảnh minh họa cho mục này:</span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => openImagePicker("section", sec.heading || formData.destination || "Quảng Bình", sIdx)}
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400 hover:text-amber-300 bg-[#040E1C] px-2.5 py-1 rounded-lg border border-amber-500/30 transition cursor-pointer"
+                            >
+                              <span>🔍 Chọn ảnh từ Wikimedia</span>
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] text-slate-400 font-medium block mb-1">Đường dẫn ảnh (URL):</label>
+                              <input
+                                type="text"
+                                value={sec.image || ""}
+                                onChange={(e) => handleUpdateSection(sIdx, "image", e.target.value)}
+                                placeholder="https://..."
+                                className="w-full bg-[#040E1C] border border-[#133863] rounded-xl px-3 py-1.5 text-xs text-white font-mono"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-slate-400 font-medium block mb-1">Chú thích ảnh:</label>
+                              <input
+                                type="text"
+                                value={sec.imageCaption || ""}
+                                onChange={(e) => handleUpdateSection(sIdx, "imageCaption", e.target.value)}
+                                placeholder="VD: Khung cảnh thực tế tại điểm tham quan..."
+                                className="w-full bg-[#040E1C] border border-[#133863] rounded-xl px-3 py-1.5 text-xs text-white"
+                              />
+                            </div>
+                          </div>
+
+                          {sec.image && (
+                            <div className="relative h-32 rounded-xl overflow-hidden border border-[#133863] group">
+                              <ArticleImage src={sec.image} alt={sec.imageCaption || sec.heading} className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                                <button
+                                  type="button"
+                                  onClick={() => openImagePicker("section", sec.heading || formData.destination || "Quảng Bình", sIdx)}
+                                  className="px-3 py-1.5 rounded-lg bg-amber-500 text-[#040E1C] font-black text-xs flex items-center gap-1 shadow cursor-pointer"
+                                >
+                                  <ImageIcon className="w-3.5 h-3.5" />
+                                  <span>Đổi ảnh này</span>
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
                         {/* Tips */}
                         <div className="pt-2 border-t border-[#133863]/60 space-y-2">
                           <div className="flex items-center justify-between">
@@ -1272,7 +1427,107 @@ export default function ArticlesManagementTab() {
                 </div>
               )}
 
-              {/* TAB 4: FAQS & SEO GOOGLE */}
+              {/* TAB 4: PHOTO GALLERY (BỘ SƯU TẬP ẢNH) */}
+              {modalTab === "gallery" && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-bold text-white uppercase flex items-center gap-1.5">
+                        <ImageIcon className="w-4 h-4 text-amber-400" />
+                        <span>Bộ Sưu Tập Hình Ảnh Về Điểm Đến (Gallery):</span>
+                      </h4>
+                      <p className="text-[11px] text-slate-400">
+                        Hiển thị dạng album ảnh đặc sắc góc nhìn đẹp tại cuối bài viết.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openImagePicker("gallery", formData.destination || "Quảng Bình")}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-[#0B2240] px-3 py-1.5 rounded-xl border border-amber-500/40 hover:bg-[#133863] cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" /> <span>Tìm & Thêm ảnh Wikimedia</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleAddGalleryItem}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-white bg-[#0B2240] px-3 py-1.5 rounded-xl border border-[#133863] hover:bg-[#133863] cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> <span>Thêm ô ảnh</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {(formData.gallery || []).map((img, gIdx) => (
+                      <div
+                        key={gIdx}
+                        className="bg-[#040E1C] p-4 rounded-2xl border border-[#133863] space-y-3 flex flex-col justify-between"
+                      >
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-amber-400">Ảnh #{gIdx + 1}</span>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => openImagePicker("gallery", img.caption || formData.destination || "Quảng Bình", undefined, gIdx)}
+                                className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
+                              >
+                                <ImageIcon className="w-3 h-3" /> Đổi ảnh
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveGalleryItem(gIdx)}
+                                className="text-xs text-red-400 hover:text-red-300 p-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+
+                          {img.url ? (
+                            <div className="h-36 rounded-xl overflow-hidden border border-[#133863]">
+                              <ArticleImage src={img.url} alt={img.caption || `Ảnh ${gIdx + 1}`} className="w-full h-full object-cover" />
+                            </div>
+                          ) : (
+                            <div
+                              onClick={() => openImagePicker("gallery", formData.destination || "Quảng Bình", undefined, gIdx)}
+                              className="h-36 rounded-xl border border-dashed border-[#133863] hover:border-amber-400 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-amber-400 cursor-pointer transition"
+                            >
+                              <ImageIcon className="w-6 h-6" />
+                              <span className="text-xs font-bold">Bấm để chọn ảnh từ Wikimedia</span>
+                            </div>
+                          )}
+
+                          <div>
+                            <label className="text-[10px] text-slate-400 font-medium block mb-1">Link ảnh:</label>
+                            <input
+                              type="text"
+                              value={img.url}
+                              onChange={(e) => handleUpdateGalleryItem(gIdx, "url", e.target.value)}
+                              placeholder="https://..."
+                              className="w-full bg-[#07172C] border border-[#133863] rounded-xl px-3 py-1.5 text-xs text-white font-mono"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-slate-400 font-medium block mb-1">Chú thích (Caption):</label>
+                            <input
+                              type="text"
+                              value={img.caption || ""}
+                              onChange={(e) => handleUpdateGalleryItem(gIdx, "caption", e.target.value)}
+                              placeholder="VD: Cửa động nhìn từ trên cao..."
+                              className="w-full bg-[#07172C] border border-[#133863] rounded-xl px-3 py-1.5 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: FAQS & SEO GOOGLE */}
               {modalTab === "faqs" && (
                 <div className="space-y-6">
                   {/* FAQs list */}
@@ -1384,6 +1639,21 @@ export default function ArticlesManagementTab() {
           </div>
         </div>
       )}
+
+      {/* Wikimedia Commons Image Picker Modal */}
+      <ImagePickerModal
+        isOpen={imagePickerOpen}
+        onClose={() => setImagePickerOpen(false)}
+        onSelectImage={handleImageSelected}
+        initialQuery={imagePickerTarget.initialQuery || formData.destination || "Biển Nhật Lệ"}
+        modalTitle={
+          imagePickerTarget.type === "cover"
+            ? "Chọn Ảnh Bìa Bài Viết (Wikimedia Commons)"
+            : imagePickerTarget.type === "section"
+            ? `Chọn Ảnh Minh Họa Mục #${(imagePickerTarget.sectionIndex ?? 0) + 1}`
+            : "Chọn Ảnh Cho Bộ Sưu Tập (Gallery)"
+        }
+      />
     </div>
   );
 }
