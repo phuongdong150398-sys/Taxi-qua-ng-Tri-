@@ -1078,10 +1078,10 @@ export default function ArticlesManagementTab() {
                       <button
                         type="button"
                         onClick={() => openImagePicker("cover", formData.destination || formData.title || "Biển Nhật Lệ")}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition cursor-pointer"
                       >
                         <ImageIcon className="w-3.5 h-3.5" />
-                        <span>🔍 Chọn / Tìm ảnh Wikimedia</span>
+                        <span>🔍 Tìm ảnh Google &amp; Tải từ máy</span>
                       </button>
                     </div>
                     <input
@@ -1343,7 +1343,7 @@ export default function ArticlesManagementTab() {
                               onClick={() => openImagePicker("section", sec.heading || formData.destination || "Quảng Bình", sIdx)}
                               className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400 hover:text-amber-300 bg-[#040E1C] px-2.5 py-1 rounded-lg border border-amber-500/30 transition cursor-pointer"
                             >
-                              <span>🔍 Chọn ảnh từ Wikimedia</span>
+                              <span>🔍 Tìm ảnh Google &amp; Tải từ máy</span>
                             </button>
                           </div>
 
@@ -1446,7 +1446,7 @@ export default function ArticlesManagementTab() {
                         onClick={() => openImagePicker("gallery", formData.destination || "Quảng Bình")}
                         className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-[#0B2240] px-3 py-1.5 rounded-xl border border-amber-500/40 hover:bg-[#133863] cursor-pointer"
                       >
-                        <Sparkles className="w-3.5 h-3.5" /> <span>Tìm & Thêm ảnh Wikimedia</span>
+                        <Sparkles className="w-3.5 h-3.5" /> <span>🔍 Tìm ảnh Google &amp; Tải từ máy</span>
                       </button>
                       <button
                         type="button"
@@ -1648,10 +1648,10 @@ export default function ArticlesManagementTab() {
         initialQuery={imagePickerTarget.initialQuery || formData.destination || "Biển Nhật Lệ"}
         modalTitle={
           imagePickerTarget.type === "cover"
-            ? "Chọn Ảnh Bìa Bài Viết (Wikimedia Commons)"
+            ? "Chọn / Tải Ảnh Bìa Bài Viết (Google Du Lịch & Thiết Bị)"
             : imagePickerTarget.type === "section"
-            ? `Chọn Ảnh Minh Họa Mục #${(imagePickerTarget.sectionIndex ?? 0) + 1}`
-            : "Chọn Ảnh Cho Bộ Sưu Tập (Gallery)"
+            ? `Chọn / Tải Ảnh Cho Mục #${(imagePickerTarget.sectionIndex ?? 0) + 1}`
+            : "Chọn / Tải Ảnh Cho Bộ Sưu Tập (Gallery)"
         }
       />
     </div>
