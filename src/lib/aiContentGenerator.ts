@@ -1,5 +1,5 @@
 import { TravelGuide } from "@/data/travelGuides";
-import { saveTravelGuide, getAllTravelGuidesAsync } from "@/lib/travelGuidesService";
+import { saveTravelGuide, getAllTravelGuidesAsync, sanitizeGuide } from "@/lib/travelGuidesService";
 import { getVerifiedImageForTopic, DEFAULT_FALLBACK_IMAGE, isReliableImageUrl } from "@/lib/verifiedImages";
 
 const TELEGRAM_BOT_TOKEN =
@@ -1651,7 +1651,7 @@ export async function generateAndPublishSeoArticle(
     }
 
     // Chuẩn hóa thành TravelGuide đầy đủ chuẩn mẫu vàng
-    const newGuide: TravelGuide = {
+    const rawGuide: TravelGuide = {
       slug: chosenSeed.slug,
       title: chosenSeed.title,
       metaTitle: chosenSeed.metaTitle,
@@ -1675,6 +1675,9 @@ export async function generateAndPublishSeoArticle(
       sections: chosenSeed.sections,
       faqs: chosenSeed.faqs,
     };
+
+    // Chuẩn hóa và gán ảnh thực tế đã kiểm chứng, loại bỏ 100% link Unsplash hỏng
+    const newGuide = sanitizeGuide(rawGuide);
 
     // Lưu vào database (Firestore + JSON backup)
     const saveRes = await saveTravelGuide(newGuide);

@@ -89,12 +89,18 @@ export function isReliableImageUrl(url?: string): boolean {
   if (!url || typeof url !== "string") return false;
   const trimmed = url.trim();
   if (!trimmed) return false;
-  // Chấp nhận mọi ảnh hợp lệ: đường dẫn nội bộ (bắt đầu bằng /) hoặc URL web hợp lệ (http://, https://)
-  if (
-    trimmed.startsWith("/") ||
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("https://")
-  ) {
+
+  // Local uploads and internal static paths are 100% reliable
+  if (trimmed.startsWith("/") || trimmed.startsWith("data:image/")) return true;
+
+  // Unsplash URLs: Only accept verified IDs that are guaranteed 200 OK
+  if (trimmed.includes("images.unsplash.com")) {
+    const isKnownGood = KNOWN_GOOD_PHOTO_IDS.some((id) => trimmed.includes(id));
+    if (!isKnownGood) return false;
+  }
+
+  // Accept valid web URLs
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     return true;
   }
   return false;
@@ -108,45 +114,74 @@ export function getVerifiedImageForTopic(
   contextText: string = "",
   index: number = 0
 ): string {
-  // 1. Ưu tiên tra cứu chính xác trong kho ảnh thực tế bản địa Quảng Bình
+  const contextLower = (contextText || "").toLowerCase();
+  const destLower = (destination || "").toLowerCase();
+  const combined = `${destLower} ${contextLower}`.trim();
+
+  // 1. ƯU TIÊN SỐ 1: Bám sát nội dung chi tiết của từng phần (Context Text / Section Heading)
+  // Ẩm thực & đặc sản (Bánh lọc, cháo canh, hải sản...)
+  if (/ẩm thực|đặc sản|món ăn|bánh lọc|bột lọc|cháo canh|hải sản|bánh bèo|mệ xuân|ăn uống|quán ăn|nhà hàng|chợ đồng hới|thịt trâu|bún hến/i.test(contextLower)) {
+    return VERIFIED_FOOD_IMAGES[index % VERIFIED_FOOD_IMAGES.length];
+  }
+
+  // Dịch vụ taxi, xe đưa đón, sân bay, ga tàu
+  if (/taxi|sân bay|ga tàu|ga đồng hới|đưa đón|tài xế|bác tài|xe đời mới|lộ trình|giá cước|chuyến bay/i.test(contextLower)) {
+    return VERIFIED_TAXI_IMAGES[index % VERIFIED_TAXI_IMAGES.length];
+  }
+
+  // Hang động & thạch nhũ (Phong Nha, Thiên Đường, Sơn Đoòng...)
+  if (/hang|động|thạch nhũ|núi đá|phong nha|thiên đường|sơn đoòng|tiên sơn|hang tối/i.test(contextLower)) {
+    return VERIFIED_CAVE_IMAGES[index % VERIFIED_CAVE_IMAGES.length];
+  }
+
+  // Suối, sông, thác, trò chơi nước (Sông Chày, Suối Moọc, Hava, Ozo...)
+  if (/suối|sông|thác|moọc|sông son|sông chày|sông thạch hãn|hava|ozo|chèo kayak|tắm suối|tắm bùn/i.test(contextLower)) {
+    return VERIFIED_STREAM_IMAGES[index % VERIFIED_STREAM_IMAGES.length];
+  }
+
+  // Tâm linh, di tích lịch sử (Mẹ Suốt, Quảng Bình Quan, Thành Cổ, La Vang, Vịnh Mốc, Mộ Đại Tướng...)
+  if (/mẹ suốt|quảng bình quan|vũng chùa|đảo yến|đại tướng|võ nguyên giáp|thành cổ|la vang|hiền lương|vịnh mốc|chiến tranh|tưởng niệm|dâng hương/i.test(contextLower)) {
+    return VERIFIED_HERITAGE_IMAGES[index % VERIFIED_HERITAGE_IMAGES.length];
+  }
+
+  // Biển, bãi tắm, bờ cát (Nhật Lệ, Bảo Ninh, Đá Nhảy, Quang Phú...)
+  if (/biển|nhật lệ|bảo ninh|đá nhảy|quang phú|bãi tắm|cát trắng|bờ kè/i.test(contextLower)) {
+    return VERIFIED_BEACH_IMAGES[index % VERIFIED_BEACH_IMAGES.length];
+  }
+
+  // 2. Tra cứu kho ảnh thực tế theo địa danh (Destination) nếu nội dung mục chưa xác định rõ
   const curatedMatch = matchCuratedRealImage(destination, contextText, index);
   if (curatedMatch && curatedMatch.url) {
     return curatedMatch.url;
   }
 
-  const combined = `${destination} ${contextText}`.toLowerCase();
-
-  // 2. Nếu là ẩm thực / đặc sản / bánh lọc / cháo canh
-  if (/ẩm thực|đặc sản|món ăn|bánh lọc|cháo canh|hải sản|bánh bèo|mệ xuân|ăn uống/i.test(combined)) {
+  // 3. Tra cứu theo toàn bộ từ khóa kết hợp
+  if (/ẩm thực|đặc sản|món ăn|bánh lọc|cháo canh|hải sản/i.test(combined)) {
     return VERIFIED_FOOD_IMAGES[index % VERIFIED_FOOD_IMAGES.length];
   }
-
-  // 3. Nếu là taxi / xe đưa đón / sân bay / ga tàu / cước phí
-  if (/taxi|sân bay|ga |đưa đón|tài xế|xe đời mới|chuyến bay|lộ trình|giá cước|bác tài/i.test(combined)) {
+  if (/taxi|sân bay|ga |đưa đón|tài xế/i.test(combined)) {
     return VERIFIED_TAXI_IMAGES[index % VERIFIED_TAXI_IMAGES.length];
   }
-
-  // 4. Nếu là hang động / Phong Nha / Thiên Đường / Sơn Đoòng
-  if (/hang|động|phong nha|thiên đường|sơn đoòng|thạch nhũ|núi đá|tiên sơn|hang tối/i.test(combined)) {
+  if (/hang|động|phong nha|thiên đường|sơn đoòng/i.test(combined)) {
     return VERIFIED_CAVE_IMAGES[index % VERIFIED_CAVE_IMAGES.length];
   }
-
-  // 5. Nếu là biển / Nhật Lệ / Bảo Ninh / Đá Nhảy
-  if (/biển|nhật lệ|bảo ninh|đá nhảy|cát trắng|bình minh|hoàng hôn|bãi tắm/i.test(combined)) {
+  if (/suối|sông|thác|moọc|sông chày|hava|ozo/i.test(combined)) {
+    return VERIFIED_STREAM_IMAGES[index % VERIFIED_STREAM_IMAGES.length];
+  }
+  if (/mẹ suốt|quảng bình quan|vũng chùa|đảo yến|thành cổ|la vang/i.test(combined)) {
+    return VERIFIED_HERITAGE_IMAGES[index % VERIFIED_HERITAGE_IMAGES.length];
+  }
+  if (/biển|nhật lệ|bảo ninh|đá nhảy/i.test(combined)) {
     return VERIFIED_BEACH_IMAGES[index % VERIFIED_BEACH_IMAGES.length];
   }
 
-  // 6. Nếu là suối / sông / thác / Moọc / Sông Chày / Hava / Ozo
-  if (/suối|sông|thác|moọc|sông chày|hava|ozo|chèo kayak|tắm suối/i.test(combined)) {
-    return VERIFIED_STREAM_IMAGES[index % VERIFIED_STREAM_IMAGES.length];
-  }
-
-  // 7. Nếu là tâm linh / di tích / Mẹ Suốt / Quảng Bình Quan / Mộ Đại Tướng
-  if (/mẹ suốt|quảng bình quan|vũng chùa|đảo yến|đại tướng|võ nguyên giáp|thành cổ|la vang/i.test(combined)) {
-    return VERIFIED_HERITAGE_IMAGES[index % VERIFIED_HERITAGE_IMAGES.length];
-  }
-
-  // Mặc định chọn xoay vòng theo danh mục biển thực tế Nhật Lệ
-  const genericPool = [...VERIFIED_BEACH_IMAGES, ...VERIFIED_CAVE_IMAGES, ...VERIFIED_HERITAGE_IMAGES];
+  // Xoay vòng qua kho ảnh phong phú để không bao giờ bị trùng lặp
+  const genericPool = [
+    ...VERIFIED_BEACH_IMAGES,
+    ...VERIFIED_CAVE_IMAGES,
+    ...VERIFIED_HERITAGE_IMAGES,
+    ...VERIFIED_FOOD_IMAGES,
+    ...VERIFIED_STREAM_IMAGES,
+  ];
   return genericPool[index % genericPool.length] || DEFAULT_FALLBACK_IMAGE;
 }

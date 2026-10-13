@@ -432,11 +432,16 @@ export default function ArticlesManagementTab() {
     sectionIndex?: number,
     galleryIndex?: number
   ) => {
+    // Làm sạch tiền tố dạng "1. ", "Mục 2: " để tìm kiếm ảnh chính xác hơn
+    const cleanQuery = (initialQuery || "")
+      .replace(/^(\d+[\.\:\-]\s*|phần\s*\d+[\.\:\-]\s*|mục\s*\d+[\.\:\-]\s*)/i, "")
+      .trim();
+
     setImagePickerTarget({
       type,
       sectionIndex,
       galleryIndex,
-      initialQuery: initialQuery || formData.destination || formData.title || "Biển Nhật Lệ",
+      initialQuery: cleanQuery || formData.destination || formData.title || "Biển Nhật Lệ",
     });
     setImagePickerOpen(true);
   };
@@ -450,31 +455,35 @@ export default function ArticlesManagementTab() {
       });
     } else if (imagePickerTarget.type === "section" && typeof imagePickerTarget.sectionIndex === "number") {
       const sIdx = imagePickerTarget.sectionIndex;
-      const nextSections = [...(formData.sections || [])];
-      if (nextSections[sIdx]) {
-        nextSections[sIdx] = {
-          ...nextSections[sIdx],
-          image: url,
-          imageCaption: caption || nextSections[sIdx].imageCaption || "",
-        };
-        setFormData((prev) => ({ ...prev, sections: nextSections }));
-        setSaveMsg({
-          type: "success",
-          text: `✓ Đã áp dụng ảnh cho mục #${sIdx + 1}! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.`,
-        });
-      }
+      setFormData((prev) => {
+        const nextSections = [...(prev.sections || [])];
+        if (nextSections[sIdx]) {
+          nextSections[sIdx] = {
+            ...nextSections[sIdx],
+            image: url,
+            imageCaption: caption || nextSections[sIdx].imageCaption || "",
+          };
+        }
+        return { ...prev, sections: nextSections };
+      });
+      setSaveMsg({
+        type: "success",
+        text: `✓ Đã áp dụng ảnh cho mục #${sIdx + 1}! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.`,
+      });
     } else if (imagePickerTarget.type === "gallery") {
-      const nextGallery = [...(formData.gallery || [])];
-      if (typeof imagePickerTarget.galleryIndex === "number" && nextGallery[imagePickerTarget.galleryIndex]) {
-        nextGallery[imagePickerTarget.galleryIndex] = {
-          ...nextGallery[imagePickerTarget.galleryIndex],
-          url,
-          caption: caption || nextGallery[imagePickerTarget.galleryIndex].caption || "",
-        };
-      } else {
-        nextGallery.push({ url, caption: caption || "" });
-      }
-      setFormData((prev) => ({ ...prev, gallery: nextGallery }));
+      setFormData((prev) => {
+        const nextGallery = [...(prev.gallery || [])];
+        if (typeof imagePickerTarget.galleryIndex === "number" && nextGallery[imagePickerTarget.galleryIndex]) {
+          nextGallery[imagePickerTarget.galleryIndex] = {
+            ...nextGallery[imagePickerTarget.galleryIndex],
+            url,
+            caption: caption || nextGallery[imagePickerTarget.galleryIndex].caption || "",
+          };
+        } else {
+          nextGallery.push({ url, caption: caption || "" });
+        }
+        return { ...prev, gallery: nextGallery };
+      });
       setSaveMsg({
         type: "success",
         text: "✓ Đã thêm ảnh vào bộ sưu tập! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.",

@@ -186,7 +186,10 @@ export async function searchTravelImages(
   query: string,
   limit: number = 16
 ): Promise<TravelImageResult[]> {
-  const cleanQuery = (query || "").trim();
+  // Lược bỏ tiền tố như "1. ", "Mục 2: ", "Phần 3: " để tìm kiếm chuẩn xác
+  const cleanQuery = (query || "")
+    .replace(/^(\d+[\.\:\-]\s*|phần\s*\d+[\.\:\-]\s*|mục\s*\d+[\.\:\-]\s*)/i, "")
+    .trim();
   const lower = cleanQuery.toLowerCase();
   const allResults: TravelImageResult[] = [];
   const seenUrls = new Set<string>();
@@ -197,6 +200,23 @@ export async function searchTravelImages(
       allResults.push(item);
     }
   };
+
+  // ƯU TIÊN ĐẶC BIỆT: Nếu tìm kiếm về Ẩm thực / Đặc sản Đồng Hới
+  if (/bánh lọc|bột lọc|cháo canh|ẩm thực|đặc sản|hải sản|bánh bèo|món ăn/i.test(lower)) {
+    const foodList = [
+      ...(CURATED_QUANG_BINH_REAL_LANDMARKS["đặc sản bánh lọc"] || []),
+      ...(CURATED_QUANG_BINH_REAL_LANDMARKS["cháo canh đồng hới"] || []),
+    ];
+    for (const item of foodList) {
+      addUnique({
+        url: item.url,
+        thumbUrl: item.url,
+        title: "ẨM THỰC ĐỒNG HỚI",
+        caption: item.caption,
+        source: "curated",
+      });
+    }
+  }
 
   // 1. Thử lấy từ Serper API (Google Images chính thống trực tiếp)
   const serperResults = await searchSerperImages(cleanQuery, limit);
@@ -212,10 +232,10 @@ export async function searchTravelImages(
     }
   }
 
-  // 3. Tra cứu kho ảnh thực tế chuẩn xác của TP. Đồng Hới & Quảng Bình (Fuzzy Matching)
+  // 3. Tra cứu kho ảnh thực tế chuẩn xác của TP. Đồng Hới & Quảng Bình
   for (const [key, list] of Object.entries(CURATED_QUANG_BINH_REAL_LANDMARKS)) {
-    const keyWords = key.split(" ").filter((w) => w.length > 2);
-    const isDirectMatch = lower.includes(key) || key.includes(lower);
+    const keyWords = key.toLowerCase().split(/\s+/).filter((w) => w.length >= 2);
+    const isDirectMatch = lower.includes(key);
     const isWordMatch = keyWords.length >= 2 && keyWords.every((w) => lower.includes(w));
 
     if (isDirectMatch || isWordMatch) {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { DEFAULT_FALLBACK_IMAGE } from "@/lib/verifiedImages";
+import { useState, useEffect, useMemo } from "react";
+import { DEFAULT_FALLBACK_IMAGE, getVerifiedImageForTopic } from "@/lib/verifiedImages";
 
 interface ArticleImageProps {
   src?: string;
@@ -14,19 +14,27 @@ export default function ArticleImage({
   src,
   alt,
   className = "",
-  fallbackSrc = DEFAULT_FALLBACK_IMAGE,
+  fallbackSrc,
 }: ArticleImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src || fallbackSrc);
+  // Tự động phân tích nội dung chú thích (alt) để chọn ảnh dự phòng tương ứng (ẩm thực, hang động, taxi...)
+  const smartFallback = useMemo(() => {
+    if (fallbackSrc && fallbackSrc !== DEFAULT_FALLBACK_IMAGE) {
+      return fallbackSrc;
+    }
+    return getVerifiedImageForTopic("", alt, 0) || DEFAULT_FALLBACK_IMAGE;
+  }, [fallbackSrc, alt]);
+
+  const [currentSrc, setCurrentSrc] = useState(src || smartFallback);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    setCurrentSrc(src || fallbackSrc);
+    setCurrentSrc(src || smartFallback);
     setHasError(false);
-  }, [src, fallbackSrc]);
+  }, [src, smartFallback]);
 
   return (
     <img
-      src={currentSrc || fallbackSrc}
+      src={currentSrc || smartFallback}
       alt={alt}
       className={className}
       loading="lazy"
@@ -34,7 +42,7 @@ export default function ArticleImage({
       onError={() => {
         if (!hasError) {
           setHasError(true);
-          setCurrentSrc(fallbackSrc);
+          setCurrentSrc(smartFallback);
         }
       }}
     />

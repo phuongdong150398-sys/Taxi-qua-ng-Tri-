@@ -10,6 +10,7 @@ import {
   getAllTravelGuidesAsync,
   getTravelGuideBySlugAsync,
 } from "@/lib/travelGuidesService";
+import { getVerifiedImageForTopic } from "@/lib/verifiedImages";
 import { siteConfig } from "@/config/siteConfig";
 import {
   MapPin,
@@ -264,6 +265,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                 src={guide.coverImage}
                 alt={guide.title}
                 className="w-full h-72 sm:h-96 object-cover"
+                fallbackSrc={getVerifiedImageForTopic(guide.destination, guide.title, 0)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#040E1C]/80 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-4 left-4 right-4 text-xs text-slate-200 bg-[#07172C]/90 backdrop-blur-sm p-3 rounded-2xl border border-[#133863]">
@@ -362,6 +364,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                           src={section.image}
                           alt={section.imageCaption || section.heading}
                           className="w-full h-64 sm:h-80 md:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+                          fallbackSrc={getVerifiedImageForTopic(guide.destination, section.heading, idx)}
                         />
                       </div>
                       {section.imageCaption && (
@@ -422,6 +425,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                           src={img.url}
                           alt={img.caption || `${guide.destination} hình ảnh ${gIdx + 1}`}
                           className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                          fallbackSrc={getVerifiedImageForTopic(guide.destination, img.caption, gIdx + 1)}
                         />
                       </div>
                       {img.caption && (

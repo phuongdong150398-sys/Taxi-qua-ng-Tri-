@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       category: body.category?.trim() || "Điểm Đến Du Lịch",
       coverImage:
         body.coverImage?.trim() ||
-        "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
+        "https://upload.wikimedia.org/wikipedia/commons/1/19/Nhat_Le_Beach.jpg",
       destination: body.destination.trim(),
       distanceFromDongHoi: body.distanceFromDongHoi?.trim() || "Đang cập nhật",
       taxiFare4Seats: body.taxiFare4Seats?.trim() || "Liên hệ hotline",
@@ -80,6 +80,7 @@ export async function POST(request: Request) {
       highlights: Array.isArray(body.highlights) && body.highlights.length > 0
         ? body.highlights.filter((h: string) => h && h.trim())
         : ["Không gian thiên nhiên trong lành, cảnh quan tuyệt đẹp", "Dịch vụ taxi đưa đón tận nơi an toàn, chu đáo"],
+      gallery: Array.isArray(body.gallery) ? body.gallery : [],
       sections: Array.isArray(body.sections) && body.sections.length > 0
         ? body.sections
         : [
