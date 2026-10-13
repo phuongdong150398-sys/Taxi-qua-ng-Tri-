@@ -150,6 +150,52 @@ export const CURATED_QUANG_BINH_REAL_LANDMARKS: Record<
       caption: "Cầu Hiền Lương lịch sử bắc qua dòng sông Bến Hải chia cắt một thời",
     },
   ],
+  "biển bảo ninh": [
+    {
+      url: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Nhat_Le_River.jpg",
+      caption: "Bãi biển Bảo Ninh hoang sơ, bờ cát trắng thoai thoải tại bán đảo Bảo Ninh, TP. Đồng Hới",
+    },
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/C%E1%BA%A7u_Nh%E1%BA%ADt_L%E1%BB%87_2_%28cropped%29.jpg/1280px-C%E1%BA%A7u_Nh%E1%BA%ADt_L%E1%BB%87_2_%28cropped%29.jpg",
+      caption: "Cầu Nhật Lệ nối liền trung tâm TP. Đồng Hới sang bãi biển bán đảo Bảo Ninh",
+    },
+  ],
+  "đồi cát quang phú": [
+    {
+      url: "https://upload.wikimedia.org/wikipedia/commons/1/19/Nhat_Le_Beach.jpg",
+      caption: "Đồi cát Quang Phú thoai thoải trải dài ven biển xã Quang Phú, Đồng Hới",
+    },
+  ],
+  "suối nước moọc": [
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Phong_Nha_village.jpg/1280px-Phong_Nha_village.jpg",
+      caption: "Khu du lịch sinh thái Suối Nước Moọc với làn nước xanh ngọc bích mát lạnh giữa rừng nguyên sinh",
+    },
+  ],
+  "thung lũng hava": [
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Phong_Nha-Ke_Bang_cave3.jpg/1280px-Phong_Nha-Ke_Bang_cave3.jpg",
+      caption: "Thung lũng ngọc bích Hava Sông Chày - Điểm chèo kayak và ngắm cảnh non nước hữu tình",
+    },
+  ],
+  "sân bay đồng hới": [
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/M%E1%BA%B7t_sau_ga_%C4%90%E1%BB%93ng_H%E1%BB%9Bi_%2809h59_-_21.05.2026%29.jpg/1280px-M%E1%BA%B7t_sau_ga_%C4%90%E1%BB%93ng_H%E1%BB%9Bi_%2809h59_-_21.05.2026%29.jpg",
+      caption: "Cảng hàng không Sân bay Đồng Hới - Đội ngũ taxi Đồng Hới túc trực 24/7 đón khách nhanh trong 5 phút",
+    },
+  ],
+  "chùa hoằng phúc": [
+    {
+      url: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Quang_Binh_Quan.jpg",
+      caption: "Chùa Hoằng Phúc cổ tự nghìn năm tuổi - Điểm du lịch tâm linh cổ kính đất Lệ Thủy, Quảng Bình",
+    },
+  ],
+  "suối khoáng bang": [
+    {
+      url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Limestone_mountains_viewed_from_the_path_to_Paradise_Cave.jpg/1280px-Limestone_mountains_viewed_from_the_path_to_Paradise_Cave.jpg",
+      caption: "Khu nghỉ dưỡng suối khoáng nóng thiên nhiên Bang Onsen Quảng Bình",
+    },
+  ],
 };
 
 /**

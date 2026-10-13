@@ -6,7 +6,10 @@
  * 3. Kho ảnh thực tế đã kiểm chứng nội bộ (Curated Local Repository)
  */
 
-import { CURATED_QUANG_BINH_REAL_LANDMARKS } from "./wikimediaService";
+import {
+  CURATED_QUANG_BINH_REAL_LANDMARKS,
+  searchWikimediaImages,
+} from "./wikimediaService";
 
 export interface TravelImageResult {
   url: string;
@@ -142,45 +145,93 @@ export async function searchTravelImages(
   limit: number = 16
 ): Promise<TravelImageResult[]> {
   const cleanQuery = (query || "").trim();
+  const lower = cleanQuery.toLowerCase();
   const allResults: TravelImageResult[] = [];
   const seenUrls = new Set<string>();
 
-  // 1. Thử lấy từ Google Custom Search API nếu có cấu hình
-  const googleResults = await searchGoogleCustomSearch(cleanQuery, limit);
-  for (const item of googleResults) {
+  const addUnique = (item: TravelImageResult) => {
     if (!seenUrls.has(item.url)) {
       seenUrls.add(item.url);
       allResults.push(item);
     }
+  };
+
+  // 1. Thử lấy từ Google Custom Search API nếu có cấu hình API Key & CX
+  const googleResults = await searchGoogleCustomSearch(cleanQuery, limit);
+  for (const item of googleResults) {
+    addUnique(item);
   }
 
-  // 2. Tìm kiếm ảnh du lịch chất lượng cao trên Travel Web (Mia, Traveloka, VnExpress...)
-  if (allResults.length < limit) {
-    const webResults = await searchTravelWebImages(cleanQuery, limit - allResults.length);
-    for (const item of webResults) {
-      if (!seenUrls.has(item.url)) {
-        seenUrls.add(item.url);
-        allResults.push(item);
+  // 2. Tra cứu kho ảnh thực tế chuẩn xác của TP. Đồng Hới & Quảng Bình (Fuzzy Matching)
+  for (const [key, list] of Object.entries(CURATED_QUANG_BINH_REAL_LANDMARKS)) {
+    const keyWords = key.split(" ").filter((w) => w.length > 2);
+    const isDirectMatch = lower.includes(key) || key.includes(lower);
+    const isWordMatch = keyWords.length >= 2 && keyWords.every((w) => lower.includes(w));
+
+    if (isDirectMatch || isWordMatch) {
+      for (const item of list) {
+        addUnique({
+          url: item.url,
+          thumbUrl: item.url,
+          title: key.toUpperCase(),
+          caption: item.caption,
+          source: "curated",
+        });
       }
     }
   }
 
-  // 3. Bổ sung từ kho ảnh chuẩn của địa phương nếu kết quả chưa đủ
-  const lower = cleanQuery.toLowerCase();
-  for (const [key, list] of Object.entries(CURATED_QUANG_BINH_REAL_LANDMARKS)) {
-    if (lower.includes(key) || key.includes(lower)) {
-      for (const item of list) {
-        if (!seenUrls.has(item.url)) {
-          seenUrls.add(item.url);
-          allResults.push({
-            url: item.url,
-            thumbUrl: item.url,
-            title: key.toUpperCase(),
-            caption: item.caption,
-            source: "curated",
-          });
-        }
+  // 3. Tìm kiếm ảnh du lịch từ Travel Web nếu chưa đủ
+  if (allResults.length < limit) {
+    const webResults = await searchTravelWebImages(cleanQuery, limit - allResults.length);
+    for (const item of webResults) {
+      addUnique(item);
+    }
+  }
+
+  // 4. Tìm kiếm từ Wikimedia Commons API (miễn phí, không cần API Key, hoạt động 100% trên Vercel)
+  if (allResults.length < limit) {
+    try {
+      const wikiResults = await searchWikimediaImages(cleanQuery, limit - allResults.length);
+      for (const item of wikiResults) {
+        addUnique({
+          url: item.url,
+          thumbUrl: item.thumbUrl || item.url,
+          title: item.title,
+          caption: item.caption,
+          source: "curated",
+        });
       }
+    } catch (e) {
+      console.warn("Fallback to Wikimedia Commons failed:", e);
+    }
+  }
+
+  // 5. Nếu vẫn chưa có kết quả (từ khóa lạ/không tìm thấy), trả về các danh lam thắng cảnh Đồng Hới nổi bật
+  if (allResults.length === 0) {
+    const defaultHighlights = [
+      "biển nhật lệ",
+      "bãi đá nhảy",
+      "động phong nha",
+      "cầu nhật lệ",
+      "tượng đài mẹ suốt",
+      "quảng bình quan",
+      "đồi cát quang phú",
+      "biển bảo ninh",
+    ];
+
+    for (const key of defaultHighlights) {
+      const list = CURATED_QUANG_BINH_REAL_LANDMARKS[key];
+      if (list && list[0]) {
+        addUnique({
+          url: list[0].url,
+          thumbUrl: list[0].url,
+          title: key.toUpperCase(),
+          caption: list[0].caption,
+          source: "curated",
+        });
+      }
+      if (allResults.length >= limit) break;
     }
   }
 

@@ -319,8 +319,44 @@ export default function ImagePickerModal({
                   ))}
                 </div>
               ) : (
-                <div className="py-20 text-center text-slate-400 text-xs">
-                  Không tìm thấy ảnh. Quý khách vui lòng thử từ khóa khác hoặc chuyển sang tab &quot;Tải ảnh từ máy&quot;.
+                <div className="py-12 px-4 text-center max-w-md mx-auto space-y-4">
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                    <ImageIcon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">Chưa tìm thấy ảnh phù hợp</h4>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Quý khách có thể thử chọn các danh lam thắng cảnh phổ biến bên dưới hoặc tải ảnh trực tiếp từ thiết bị:
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-2 pt-1">
+                    {["Biển Nhật Lệ Đồng Hới", "Bãi Đá Nhảy Bố Trạch", "Động Phong Nha Kẻ Bàng", "Đồi cát Quang Phú"].map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => {
+                          setSearchTerm(tag);
+                          handleSearch(tag);
+                        }}
+                        className="text-xs px-3 py-1.5 rounded-xl bg-[#040E1C] border border-[#133863] text-amber-400 hover:border-amber-400 transition cursor-pointer font-semibold"
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("upload")}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow-lg shadow-emerald-600/20"
+                    >
+                      <Upload className="w-4 h-4" />
+                      <span>Chuyển sang Tab: Tải ảnh từ máy / điện thoại</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-500 italic">
+                    💡 Mẹo: Nếu muốn tìm kiếm toàn bộ ảnh trên Google, quản trị viên có thể thêm Google Search API Key vào hệ thống.
+                  </p>
                 </div>
               )}
             </>
