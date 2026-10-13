@@ -87,10 +87,17 @@ export const KNOWN_GOOD_PHOTO_IDS = [
 
 export function isReliableImageUrl(url?: string): boolean {
   if (!url || typeof url !== "string") return false;
-  if (url.startsWith("/")) return true;
-  // Mọi ảnh từ wikimedia commons đều được xác nhận là ảnh thực tế và an toàn
-  if (url.includes("wikimedia.org") || url.includes("wikipedia.org")) return true;
-  return KNOWN_GOOD_PHOTO_IDS.some((id) => url.includes(id));
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  // Chấp nhận mọi ảnh hợp lệ: đường dẫn nội bộ (bắt đầu bằng /) hoặc URL web hợp lệ (http://, https://)
+  if (
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://")
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**

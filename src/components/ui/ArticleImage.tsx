@@ -30,6 +30,7 @@ export default function ArticleImage({
       alt={alt}
       className={className}
       loading="lazy"
+      referrerPolicy="no-referrer"
       onError={() => {
         if (!hasError) {
           setHasError(true);

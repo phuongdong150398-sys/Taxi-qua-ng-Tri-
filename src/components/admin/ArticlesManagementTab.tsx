@@ -444,6 +444,10 @@ export default function ArticlesManagementTab() {
   const handleImageSelected = (url: string, caption?: string) => {
     if (imagePickerTarget.type === "cover") {
       setFormData((prev) => ({ ...prev, coverImage: url }));
+      setSaveMsg({
+        type: "success",
+        text: "✓ Đã áp dụng ảnh bìa mới! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.",
+      });
     } else if (imagePickerTarget.type === "section" && typeof imagePickerTarget.sectionIndex === "number") {
       const sIdx = imagePickerTarget.sectionIndex;
       const nextSections = [...(formData.sections || [])];
@@ -454,6 +458,10 @@ export default function ArticlesManagementTab() {
           imageCaption: caption || nextSections[sIdx].imageCaption || "",
         };
         setFormData((prev) => ({ ...prev, sections: nextSections }));
+        setSaveMsg({
+          type: "success",
+          text: `✓ Đã áp dụng ảnh cho mục #${sIdx + 1}! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.`,
+        });
       }
     } else if (imagePickerTarget.type === "gallery") {
       const nextGallery = [...(formData.gallery || [])];
@@ -467,6 +475,10 @@ export default function ArticlesManagementTab() {
         nextGallery.push({ url, caption: caption || "" });
       }
       setFormData((prev) => ({ ...prev, gallery: nextGallery }));
+      setSaveMsg({
+        type: "success",
+        text: "✓ Đã thêm ảnh vào bộ sưu tập! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.",
+      });
     }
   };
 
