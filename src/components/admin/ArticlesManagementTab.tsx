@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { TravelGuide } from "@/data/travelGuides";
 import ArticleImage from "@/components/ui/ArticleImage";
 import ImagePickerModal from "@/components/admin/ImagePickerModal";
+import { upgradeToHttps } from "@/lib/textSanitizer";
 import {
   BookOpen,
   Plus,
@@ -419,7 +420,8 @@ export default function ArticlesManagementTab() {
 
   const handleUpdateGalleryItem = (idx: number, field: "url" | "caption", val: string) => {
     const list = [...(formData.gallery || [])];
-    list[idx] = { ...list[idx], [field]: val };
+    const safeVal = field === "url" ? upgradeToHttps(val) : val;
+    list[idx] = { ...list[idx], [field]: safeVal };
     setFormData({ ...formData, gallery: list });
   };
 
@@ -450,8 +452,9 @@ export default function ArticlesManagementTab() {
   };
 
   const handleImageSelected = (url: string, caption?: string) => {
+    const safeUrl = upgradeToHttps(url);
     if (imagePickerTarget.type === "cover") {
-      setFormData((prev) => ({ ...prev, coverImage: url }));
+      setFormData((prev) => ({ ...prev, coverImage: safeUrl }));
       setSaveMsg({
         type: "success",
         text: "✓ Đã áp dụng ảnh bìa mới! Hãy bấm 'LƯU & XUẤT BẢN NGAY' ở bên dưới để hoàn tất lưu.",
@@ -463,14 +466,14 @@ export default function ArticlesManagementTab() {
         if (nextSections[sIdx]) {
           nextSections[sIdx] = {
             ...nextSections[sIdx],
-            image: url,
+            image: safeUrl,
             imageCaption: caption || nextSections[sIdx].imageCaption || "",
           };
         } else {
           nextSections[sIdx] = {
             heading: `${sIdx + 1}. Phần nội dung`,
             content: "",
-            image: url,
+            image: safeUrl,
             imageCaption: caption || "",
           };
         }
@@ -486,11 +489,11 @@ export default function ArticlesManagementTab() {
         if (typeof imagePickerTarget.galleryIndex === "number" && nextGallery[imagePickerTarget.galleryIndex]) {
           nextGallery[imagePickerTarget.galleryIndex] = {
             ...nextGallery[imagePickerTarget.galleryIndex],
-            url,
+            url: safeUrl,
             caption: caption || nextGallery[imagePickerTarget.galleryIndex].caption || "",
           };
         } else {
-          nextGallery.push({ url, caption: caption || "" });
+          nextGallery.push({ url: safeUrl, caption: caption || "" });
         }
         return { ...prev, gallery: nextGallery };
       });
@@ -1461,6 +1464,18 @@ export default function ArticlesManagementTab() {
               {/* TAB 4: PHOTO GALLERY (BỘ SƯU TẬP ẢNH) */}
               {modalTab === "gallery" && (
                 <div className="space-y-4">
+                  {/* Banner hướng dẫn phân biệt vị trí ảnh */}
+                  <div className="p-4 bg-amber-500/10 border border-amber-500/40 rounded-2xl text-xs text-amber-200 flex items-start gap-3 shadow-md">
+                    <span className="text-xl leading-none flex-shrink-0">💡</span>
+                    <div className="space-y-1">
+                      <div className="font-black text-amber-300 text-sm uppercase">Lưu ý phân biệt vị trí hiển thị ảnh:</div>
+                      <p className="leading-relaxed text-slate-200 font-medium">
+                        Các ảnh tại tab này là <strong className="text-amber-400">Bộ Sưu Tập Hình Ảnh (Gallery)</strong> hiển thị ở khối album cuối chân trang bài viết.
+                        Nếu bạn muốn thay đổi ảnh minh họa xuất hiện xen kẽ giữa các đoạn văn (Ví dụ: mục Ẩm thực, Di tích lịch sử, Lộ trình tour...), vui lòng bấm sang <strong className="text-amber-400">Tab 3. Nội Dung Chi Tiết</strong> để đổi ảnh cho từng mục tương ứng!
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-bold text-white uppercase flex items-center gap-1.5">

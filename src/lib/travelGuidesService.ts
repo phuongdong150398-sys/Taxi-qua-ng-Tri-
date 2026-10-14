@@ -9,7 +9,7 @@ import {
   getTravelGuideBySlugFromDb,
 } from "./firebaseDb";
 import { isReliableImageUrl, getVerifiedImageForTopic } from "./verifiedImages";
-import { sanitizeGuideText, sanitizeDataForFirestore } from "./textSanitizer";
+import { sanitizeGuideText, sanitizeDataForFirestore, upgradeToHttps } from "./textSanitizer";
 
 const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "data");
 const GUIDES_FILE = path.join(DATA_DIR, "travel_guides.json");
@@ -38,9 +38,9 @@ export function sanitizeGuide(guide: TravelGuide): TravelGuide {
   const usedImages = new Set<string>();
 
   // 2. Chuẩn hóa Cover Image
-  let coverImage = textCleaned.coverImage;
+  let coverImage = upgradeToHttps(textCleaned.coverImage);
   if (!isReliableImageUrl(coverImage)) {
-    coverImage = getVerifiedImageForTopic(destination, textCleaned.title, 0, usedImages);
+    coverImage = upgradeToHttps(getVerifiedImageForTopic(destination, textCleaned.title, 0, usedImages));
   }
   if (coverImage) {
     usedImages.add(coverImage);
@@ -49,9 +49,9 @@ export function sanitizeGuide(guide: TravelGuide): TravelGuide {
   // 3. Chuẩn hóa Sections và đảm bảo không trùng lặp ảnh với nhau hoặc với ảnh bìa
   const sections = Array.isArray(textCleaned.sections)
     ? textCleaned.sections.map((sec, idx) => {
-        let secImg = sec.image;
+        let secImg = upgradeToHttps(sec.image);
         if (!secImg || !isReliableImageUrl(secImg) || usedImages.has(secImg)) {
-          secImg = getVerifiedImageForTopic(destination, sec.heading, idx + 1, usedImages);
+          secImg = upgradeToHttps(getVerifiedImageForTopic(destination, sec.heading, idx + 1, usedImages));
         }
         if (secImg) {
           usedImages.add(secImg);
@@ -67,9 +67,9 @@ export function sanitizeGuide(guide: TravelGuide): TravelGuide {
   // 4. Chuẩn hóa Gallery và đảm bảo không trùng lặp
   const gallery = Array.isArray(textCleaned.gallery)
     ? textCleaned.gallery.map((g, idx) => {
-        let galUrl = g.url;
+        let galUrl = upgradeToHttps(g.url);
         if (!galUrl || !isReliableImageUrl(galUrl) || usedImages.has(galUrl)) {
-          galUrl = getVerifiedImageForTopic(destination, g.caption || "thắng cảnh đẹp", idx + 7, usedImages);
+          galUrl = upgradeToHttps(getVerifiedImageForTopic(destination, g.caption || "thắng cảnh đẹp", idx + 7, usedImages));
         }
         if (galUrl) {
           usedImages.add(galUrl);

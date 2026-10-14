@@ -106,6 +106,58 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
+/**
+ * Render nội dung bài viết mượt mà, tự động xử lý:
+ * 1. Chuyển thẻ <br/> thành xuống dòng
+ * 2. Tô đậm các thẻ <b>...</b>, <strong>...</strong> hoặc **...** thành chữ đậm nổi bật màu vàng hổ phách (text-amber-200)
+ * 3. Chia các đoạn văn cách nhau rõ ràng, không bao giờ để lộ thẻ HTML thô
+ */
+function renderFormattedContent(rawContent: string) {
+  if (!rawContent) return null;
+
+  const normalized = rawContent
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>\s*<p>/gi, "\n\n")
+    .replace(/<p>/gi, "")
+    .replace(/<\/p>/gi, "\n");
+
+  const paragraphs = normalized.split(/\n+/);
+
+  return (
+    <div className="space-y-3.5 text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+      {paragraphs.map((para, pIdx) => {
+        const trimmed = para.trim();
+        if (!trimmed) return null;
+
+        const tokens = trimmed.split(/(\*\*.*?\*\*|<b>.*?<\/b>|<strong>.*?<\/strong>)/gi);
+
+        return (
+          <p key={pIdx}>
+            {tokens.map((token, tIdx) => {
+              if (
+                (token.startsWith("**") && token.endsWith("**")) ||
+                (token.toLowerCase().startsWith("<b>") && token.toLowerCase().endsWith("</b>")) ||
+                (token.toLowerCase().startsWith("<strong>") && token.toLowerCase().endsWith("</strong>"))
+              ) {
+                const boldText = token
+                  .replace(/^\*\*|\*\*$/g, "")
+                  .replace(/^<b[^>]*>|<\/b>$/gi, "")
+                  .replace(/^<strong[^>]*>|<\/strong>$/gi, "");
+                return (
+                  <strong key={tIdx} className="font-bold text-amber-200">
+                    {boldText}
+                  </strong>
+                );
+              }
+              return <span key={tIdx}>{token}</span>;
+            })}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export default async function TravelGuideDetailPage({ params }: ArticlePageProps) {
   const { slug } = await params;
   const rawGuide = await getTravelGuideBySlugAsync(slug);
@@ -355,9 +407,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                     {section.heading}
                   </h2>
 
-                  <div className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal whitespace-pre-line">
-                    {section.content}
-                  </div>
+                  {renderFormattedContent(section.content)}
 
                   {/* Section In-line Image */}
                   {section.image && (
