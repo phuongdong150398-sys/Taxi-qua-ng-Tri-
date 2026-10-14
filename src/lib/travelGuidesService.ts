@@ -9,6 +9,7 @@ import {
   getTravelGuideBySlugFromDb,
 } from "./firebaseDb";
 import { isReliableImageUrl, getVerifiedImageForTopic } from "./verifiedImages";
+import { sanitizeGuideText, sanitizeDataForFirestore } from "./textSanitizer";
 
 const DATA_DIR = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), "data");
 const GUIDES_FILE = path.join(DATA_DIR, "travel_guides.json");
@@ -30,32 +31,59 @@ function ensureDataFile() {
 
 export function sanitizeGuide(guide: TravelGuide): TravelGuide {
   if (!guide) return guide;
-  const destination = guide.destination || "";
-  let coverImage = guide.coverImage;
+  
+  // 1. Chuẩn hóa tiếng Việt NFC và giải mã toàn bộ HTML entities
+  const textCleaned = sanitizeGuideText(guide);
+  const destination = textCleaned.destination || "";
+  const usedImages = new Set<string>();
+
+  // 2. Chuẩn hóa Cover Image
+  let coverImage = textCleaned.coverImage;
   if (!isReliableImageUrl(coverImage)) {
-    coverImage = getVerifiedImageForTopic(destination, guide.title, 0);
+    coverImage = getVerifiedImageForTopic(destination, textCleaned.title, 0, usedImages);
+  }
+  if (coverImage) {
+    usedImages.add(coverImage);
   }
 
-  const sections = Array.isArray(guide.sections)
-    ? guide.sections.map((sec, idx) => ({
-        ...sec,
-        image: isReliableImageUrl(sec.image)
-          ? sec.image
-          : getVerifiedImageForTopic(destination, sec.heading, idx),
-      }))
-    : guide.sections;
+  // 3. Chuẩn hóa Sections và đảm bảo không trùng lặp ảnh với nhau hoặc với ảnh bìa
+  const sections = Array.isArray(textCleaned.sections)
+    ? textCleaned.sections.map((sec, idx) => {
+        let secImg = sec.image;
+        if (!secImg || !isReliableImageUrl(secImg) || usedImages.has(secImg)) {
+          secImg = getVerifiedImageForTopic(destination, sec.heading, idx + 1, usedImages);
+        }
+        if (secImg) {
+          usedImages.add(secImg);
+        }
+        return {
+          ...sec,
+          image: secImg,
+          imageCaption: sec.imageCaption || `Hình ảnh minh họa ${sec.heading.replace(/^[0-9.]+\s*/, "")} tại ${destination}`,
+        };
+      })
+    : textCleaned.sections;
 
-  const gallery = Array.isArray(guide.gallery)
-    ? guide.gallery.map((g, idx) => ({
-        ...g,
-        url: isReliableImageUrl(g.url)
-          ? g.url
-          : getVerifiedImageForTopic(destination, g.caption, idx),
-      }))
-    : guide.gallery;
+  // 4. Chuẩn hóa Gallery và đảm bảo không trùng lặp
+  const gallery = Array.isArray(textCleaned.gallery)
+    ? textCleaned.gallery.map((g, idx) => {
+        let galUrl = g.url;
+        if (!galUrl || !isReliableImageUrl(galUrl) || usedImages.has(galUrl)) {
+          galUrl = getVerifiedImageForTopic(destination, g.caption || "thắng cảnh đẹp", idx + 7, usedImages);
+        }
+        if (galUrl) {
+          usedImages.add(galUrl);
+        }
+        return {
+          ...g,
+          url: galUrl,
+          caption: g.caption || `Góc nhìn đẹp về ${destination}`,
+        };
+      })
+    : textCleaned.gallery;
 
   return {
-    ...guide,
+    ...textCleaned,
     coverImage,
     sections,
     gallery,
@@ -120,30 +148,49 @@ export async function getTravelGuideBySlugAsync(slug: string): Promise<TravelGui
   return getTravelGuideBySlugSync(slug);
 }
 
-export async function saveTravelGuide(guide: TravelGuide): Promise<{ success: boolean; message?: string }> {
+export async function saveTravelGuide(guide: TravelGuide): Promise<{ success: boolean; message?: string; data?: TravelGuide }> {
   try {
-    // 1. Save to Google Firestore
-    await saveTravelGuideToDb(guide).catch((err) => {
-      console.error("Error saving guide to Firestore:", err);
-    });
+    // 1. Chuẩn hóa tiếng Việt, loại bỏ HTML entities & gán ảnh thực tế không trùng lặp
+    const sanitized = sanitizeGuide(guide);
 
-    // 2. Save locally
-    ensureDataFile();
-    const list = getAllTravelGuides();
-    const existingIndex = list.findIndex((g) => g.slug === guide.slug);
-
-    if (existingIndex >= 0) {
-      list[existingIndex] = {
-        ...list[existingIndex],
-        ...guide,
+    // 2. Lưu trực tiếp lên Google Cloud Firestore
+    try {
+      await saveTravelGuideToDb(sanitized);
+    } catch (dbErr: any) {
+      console.error("[CRITICAL FIRESTORE ERROR] Could not save travel guide to Firestore:", dbErr);
+      return {
+        success: false,
+        message: `Lỗi kết nối cơ sở dữ liệu Firestore: ${dbErr?.message || "Không thể ghi dữ liệu"}`,
       };
-    } else {
-      list.unshift(guide);
     }
 
-    inMemoryGuides = list;
-    fs.writeFileSync(GUIDES_FILE, JSON.stringify(list, null, 2), "utf-8");
-    return { success: true };
+    // 3. Cập nhật bộ nhớ đệm In-Memory
+    if (inMemoryGuides) {
+      const idx = inMemoryGuides.findIndex((g) => g.slug === sanitized.slug);
+      if (idx >= 0) {
+        inMemoryGuides[idx] = sanitized;
+      } else {
+        inMemoryGuides.unshift(sanitized);
+      }
+    }
+
+    // 4. Lưu bản sao cục bộ vào GUIDES_FILE
+    try {
+      ensureDataFile();
+      const list = getAllTravelGuides();
+      const existingIndex = list.findIndex((g) => g.slug === sanitized.slug);
+      if (existingIndex >= 0) {
+        list[existingIndex] = sanitized;
+      } else {
+        list.unshift(sanitized);
+      }
+      inMemoryGuides = list;
+      fs.writeFileSync(GUIDES_FILE, JSON.stringify(list, null, 2), "utf-8");
+    } catch (fsErr) {
+      // Bỏ qua lỗi ghi đĩa trên môi trường serverless Vercel
+    }
+
+    return { success: true, data: sanitized };
   } catch (error: any) {
     console.error("Error saving travel guide:", error);
     return { success: false, message: error?.message || "Lỗi lưu bài viết" };

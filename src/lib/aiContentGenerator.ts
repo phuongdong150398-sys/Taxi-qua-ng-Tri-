@@ -1,6 +1,7 @@
 import { TravelGuide } from "@/data/travelGuides";
 import { saveTravelGuide, getAllTravelGuidesAsync, sanitizeGuide } from "@/lib/travelGuidesService";
 import { getVerifiedImageForTopic, DEFAULT_FALLBACK_IMAGE, isReliableImageUrl } from "@/lib/verifiedImages";
+import { cleanVietnameseText, sanitizeGuideText } from "@/lib/textSanitizer";
 
 const TELEGRAM_BOT_TOKEN =
   process.env.TELEGRAM_BOT_TOKEN ||
@@ -1267,38 +1268,61 @@ function escapeHtml(text: string) {
  * có gallery 4-5 ảnh, lịch trình tour 1 ngày, ẩm thực bản địa và dịch vụ Taxi 24H.
  */
 export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
-  const result: TopicSeed = { ...seed };
+  const result: TopicSeed = {
+    ...seed,
+    title: cleanVietnameseText(seed.title),
+    metaTitle: cleanVietnameseText(seed.metaTitle || seed.title),
+    metaDescription: cleanVietnameseText(seed.metaDescription || seed.excerpt),
+    excerpt: cleanVietnameseText(seed.excerpt),
+    category: cleanVietnameseText(seed.category),
+    destination: cleanVietnameseText(seed.destination),
+    distanceFromDongHoi: cleanVietnameseText(seed.distanceFromDongHoi),
+    taxiFare4Seats: cleanVietnameseText(seed.taxiFare4Seats),
+    taxiFare6Seats: cleanVietnameseText(seed.taxiFare6Seats),
+    ticketPrice: cleanVietnameseText(seed.ticketPrice),
+    bestTimeToVisit: cleanVietnameseText(seed.bestTimeToVisit),
+  };
+
+  const usedImages = new Set<string>();
 
   // 1. Kiểm tra ảnh đại diện (Cover Image)
   if (!isReliableImageUrl(result.coverImage)) {
-    result.coverImage = getVerifiedImageForTopic(result.destination, result.title, 0);
+    result.coverImage = getVerifiedImageForTopic(result.destination, result.title, 0, usedImages);
+  }
+  if (result.coverImage) {
+    usedImages.add(result.coverImage);
   }
 
-  // 2. Kiểm tra và chuẩn hóa Gallery (Đảm bảo 100% ảnh hoạt động)
-  const existingGallery = (result.gallery || []).map((img, idx) => ({
-    url: isReliableImageUrl(img.url) ? img.url : getVerifiedImageForTopic(result.destination, img.caption, idx),
-    caption: img.caption || `Hình ảnh đẹp về ${result.destination}`,
-  }));
+  // 2. Kiểm tra và chuẩn hóa Gallery (Đảm bảo 100% ảnh hoạt động và không trùng lặp)
+  const existingGallery = (result.gallery || []).map((img, idx) => {
+    let galUrl = img.url;
+    if (!isReliableImageUrl(galUrl) || usedImages.has(galUrl)) {
+      galUrl = getVerifiedImageForTopic(result.destination, img.caption || "thắng cảnh thiên nhiên", idx + 7, usedImages);
+    }
+    if (galUrl) {
+      usedImages.add(galUrl);
+    }
+    return {
+      url: galUrl,
+      caption: cleanVietnameseText(img.caption) || `Hình ảnh đẹp về ${result.destination}`,
+    };
+  });
 
   if (existingGallery.length < 4) {
-    result.gallery = [
-      {
-        url: getVerifiedImageForTopic(result.destination, "toàn cảnh biển thắng cảnh", 0),
-        caption: `Toàn cảnh vẻ đẹp kỳ vĩ của ${result.destination}`,
-      },
-      {
-        url: getVerifiedImageForTopic(result.destination, "không gian thiên nhiên", 1),
-        caption: `Không gian thiên nhiên và cảnh sắc thơ mộng tại ${result.destination}`,
-      },
-      {
-        url: getVerifiedImageForTopic(result.destination, "ẩm thực đặc sản", 2),
-        caption: `Thưởng thức ẩm thực đặc sản hấp dẫn khi du lịch ${result.destination}`,
-      },
-      {
-        url: getVerifiedImageForTopic(result.destination, "lộ trình taxi tour", 3),
-        caption: `Cung đường di chuyển thuận lợi và dịch vụ xe taxi đưa đón tận nơi`,
-      },
+    const galleryPrompts = [
+      "toàn cảnh vẻ đẹp kỳ vĩ",
+      "không gian thiên nhiên thơ mộng",
+      "ẩm thực đặc sản hấp dẫn",
+      "lộ trình taxi đưa đón",
     ];
+    result.gallery = galleryPrompts.map((p, idx) => {
+      const gUrl = getVerifiedImageForTopic(result.destination, p, idx + 8, usedImages);
+      if (gUrl) usedImages.add(gUrl);
+      return {
+        url: gUrl,
+        caption: `Góc nhìn đẹp về ${result.destination}`,
+      };
+    });
   } else {
     result.gallery = existingGallery;
   }
@@ -1306,22 +1330,33 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
   // 3. Kiểm tra và bổ sung Sections nếu chưa đủ 6 phần
   const sections = [...(result.sections || [])];
 
-  // Đảm bảo từng section đều có ảnh 100% hoạt động (khắc phục hoàn toàn lỗi 404 do AI sinh mã ngẫu nhiên)
+  // Đảm bảo từng section đều có ảnh 100% hoạt động và KHÔNG TRÙNG NHAU hoặc với ảnh bìa
   sections.forEach((sec, idx) => {
-    if (!isReliableImageUrl(sec.image)) {
-      sec.image = getVerifiedImageForTopic(result.destination, sec.heading, idx);
+    sec.heading = cleanVietnameseText(sec.heading);
+    sec.content = cleanVietnameseText(sec.content);
+    if (!isReliableImageUrl(sec.image) || usedImages.has(sec.image!)) {
+      sec.image = getVerifiedImageForTopic(result.destination, sec.heading, idx + 1, usedImages);
+    }
+    if (sec.image) {
+      usedImages.add(sec.image);
     }
     if (!sec.imageCaption) {
       sec.imageCaption = `Hình ảnh minh họa ${sec.heading.replace(/^[0-9.]+\s*/, "")} tại ${result.destination}`;
+    } else {
+      sec.imageCaption = cleanVietnameseText(sec.imageCaption);
     }
     if (!sec.tips || sec.tips.length === 0) {
       sec.tips = ["Quý khách nên liên hệ Taxi Quảng Bình - Đồng Hới 24H để được bác tài tư vấn thời điểm tham quan đẹp nhất."];
+    } else {
+      sec.tips = sec.tips.map(cleanVietnameseText).filter(Boolean);
     }
   });
 
   // Nếu thiếu phần 4 (Lịch trình Tour 1 ngày)
   const hasTourSection = sections.some((s) => s.heading.toLowerCase().includes("lịch trình") || s.heading.toLowerCase().includes("tour"));
   if (!hasTourSection || sections.length < 4) {
+    const tourImg = getVerifiedImageForTopic(result.destination, "lịch trình tour xe taxi", 4, usedImages);
+    if (tourImg) usedImages.add(tourImg);
     sections.push({
       heading: `${sections.length + 1}. Gợi ý lịch trình Tour ${result.destination} 1 Ngày trọn vẹn xuất phát từ TP. Đồng Hới`,
       content: `Hành trình tham quan lý tưởng trong ngày cùng Taxi Quảng Bình - Đồng Hới 24H:
@@ -1331,7 +1366,7 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
 • 11:45 - 13:30: Thưởng thức bữa trưa đặc sản bản địa thơm ngon nức tiếng tại nhà hàng chuẩn vị gần điểm đến.
 • 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng cung đường thuận tiện.
 • 17:00: Xe đưa đoàn trở về trung tâm TP. Đồng Hới an toàn, kết thúc chuyến đi trọn vẹn và ý nghĩa.`,
-      image: getVerifiedImageForTopic(result.destination, "lịch trình tour", 3),
+      image: tourImg,
       imageCaption: `Cung đường di chuyển thuận lợi và lịch trình tour 1 ngày kết nối các điểm đến nổi tiếng`,
       tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H để bác tài đồng hành suốt hành trình, tiết kiệm tới 50% cước chiều về."],
     });
@@ -1340,6 +1375,8 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
   // Nếu thiếu phần 5 (Ẩm thực)
   const hasFoodSection = sections.some((s) => s.heading.toLowerCase().includes("ẩm thực") || s.heading.toLowerCase().includes("đặc sản"));
   if (!hasFoodSection || sections.length < 5) {
+    const foodImg = getVerifiedImageForTopic(result.destination, "ẩm thực đặc sản bánh lọc cháo canh", 5, usedImages);
+    if (foodImg) usedImages.add(foodImg);
     sections.push({
       heading: `${sections.length + 1}. Thưởng thức đặc sản ẩm thực nức tiếng bản địa`,
       content: `Khám phá văn hóa ẩm thực đậm đà bản sắc của vùng đất miền Trung:
@@ -1348,7 +1385,7 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
 • Cháo bột cá lóc (Bánh canh): Sợi bột dai mềm quyện nước dùng cá lóc đồng rim nghệ vàng ươm ngào ngạt hương thơm.
 • Gà đồi nướng than hoa: Gà thả đồi săn chắc nướng vừa tới chấm muối cheo cay the nồng nàn.
 • Hải sản tươi sống: Thưởng thức mực nhảy, cá bớp, nghêu hấp thơm ngọt tươi rói đánh bắt trong ngày.`,
-      image: getVerifiedImageForTopic(result.destination, "ẩm thực đặc sản", 4),
+      image: foodImg,
       imageCaption: `Văn hóa ẩm thực miền Trung đậm đà với những món ngon dân dã khó quên`,
       tips: ["Bác tài Taxi 24H luôn sẵn sàng đưa bạn đến đúng quán ăn gốc địa phương lâu năm, giá bình dân không lo chặt chém."],
     });
@@ -1357,6 +1394,8 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
   // Nếu thiếu phần 6 (Dịch vụ Taxi 24H)
   const hasTaxiSection = sections.some((s) => s.heading.toLowerCase().includes("taxi") || s.heading.toLowerCase().includes("dịch vụ"));
   if (!hasTaxiSection || sections.length < 6) {
+    const taxiImg = getVerifiedImageForTopic(result.destination, "taxi đưa đón sân bay ga tàu", 6, usedImages);
+    if (taxiImg) usedImages.add(taxiImg);
     sections.push({
       heading: `${sections.length + 1}. Dịch vụ Taxi Quảng Bình - Đồng Hới 24H: Đón nhanh 5 phút, giá tốt nhất`,
       content: `Taxi Quảng Bình - Đồng Hới 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường:
@@ -1366,7 +1405,7 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
 • Tài xế bản xứ Đồng Hới am hiểu từng cung đường, lái xe điềm đạm, hỗ trợ xách hành lý và tư vấn điểm ăn chơi miễn phí.
 • Giá cước trọn gói công khai chỉ từ 12.000đ/km, cam kết không phát sinh phụ phí ẩn, đưa đón tận nơi 24/7.
 • Hotline tổng đài đặt xe nhanh 24/7: 0877.669.555 (Zalo: 0398.567.070).`,
-      image: getVerifiedImageForTopic(result.destination, "taxi đưa đón", 5),
+      image: taxiImg,
       imageCaption: `Đội xe Taxi Quảng Bình - Đồng Hới 24H sẵn sàng phục vụ quý khách chu đáo trên mọi nẻo đường`,
       tips: ["Gọi Hotline 0877.669.555 trước 30 phút để đặt xe và nhận ưu đãi giảm giá lên tới 50% cho chiều về."],
     });
@@ -1383,13 +1422,15 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
       "Thưởng thức nền ẩm thực bản địa phong phú với các món ngon khó cưỡng",
       "Dịch vụ taxi 4 - 7 chỗ giá rẻ chỉ từ 12.000đ/km, đón nhanh sau 5 - 10 phút gọi",
     ];
+  } else {
+    result.highlights = result.highlights.map(cleanVietnameseText).filter(Boolean);
   }
 
   // 4. Đảm bảo có 3 FAQs
   if (!result.faqs || result.faqs.length < 3) {
     result.faqs = [
       {
-        question: `Từ Đồng Hới hoặc Đông Hà đi taxi đến ${result.destination} mất bao lâu?`,
+        question: `Từ Đồng Hới đi taxi đến ${result.destination} mất bao lâu?`,
         answer: `Thời gian di chuyển bằng taxi chỉ mất khoảng ${result.distanceFromDongHoi || "45 - 60 phút"}. Tuyến đường trải nhựa bằng phẳng, xe chạy êm ái.`,
       },
       {
@@ -1401,6 +1442,11 @@ export function ensureGoldenBlueprintQuality(seed: TopicSeed): TopicSeed {
         answer: "Quý khách chỉ cần liên hệ Hotline 0877.669.555 hoặc Zalo 0398.567.070, tài xế sẽ có mặt đón tận nơi sau 5 - 10 phút.",
       },
     ];
+  } else {
+    result.faqs = result.faqs.map((f) => ({
+      question: cleanVietnameseText(f.question),
+      answer: cleanVietnameseText(f.answer),
+    }));
   }
 
   return result;
@@ -1458,74 +1504,62 @@ export function synthesizeCustomGoldenTopic(rawTopic: string): TopicSeed {
     ],
     gallery: [
       {
-        url: coverImage,
+        url: getVerifiedImageForTopic(cleanTopic, "toàn cảnh điểm đến", 1),
         caption: `Toàn cảnh vẻ đẹp kỳ vĩ của ${cleanTopic} nhìn từ trên cao`,
       },
       {
-        url: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
-          : "https://upload.wikimedia.org/wikipedia/commons/f/fa/Son_Doong_Cave_DB_%283%29.jpg",
+        url: getVerifiedImageForTopic(cleanTopic, "khung cảnh thiên nhiên", 2),
         caption: `Không gian ấn tượng thu hút đông đảo du khách ghé thăm ${cleanTopic}`,
       },
       {
-        url: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/f/f0/C%E1%BA%A7u_Hi%E1%BB%81n_L%C6%B0%C6%A1ng_%28nh%C3%ACn_t%E1%BB%AB_b%E1%BB%9D_Nam%29.JPG"
-          : "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-        caption: "Cung đường di chuyển bằng phẳng, thuận lợi cho mọi hành trình",
+        url: getVerifiedImageForTopic(cleanTopic, "ẩm thực đặc sản", 3),
+        caption: "Hương vị ẩm thực miền Trung làm say lòng du khách thập phương",
       },
       {
-        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-        caption: "Hương vị ẩm thực miền Trung làm say lòng du khách thập phương",
+        url: getVerifiedImageForTopic(cleanTopic, "lộ trình taxi đưa đón", 4),
+        caption: "Cung đường di chuyển bằng phẳng, thuận lợi cho mọi hành trình",
       },
     ],
     sections: [
       {
         heading: `1. Khám phá vẻ đẹp và ý nghĩa sâu sắc của ${cleanTopic}`,
         content: `${cleanTopic} là một trong những điểm đến nổi bật của vùng đất ${region}, nơi lưu giữ những nét đẹp thiên nhiên và giá trị văn hóa độc đáo. Đặt chân đến đây, du khách sẽ ngay lập tức cảm nhận được sự giao hòa tuyệt vời giữa cảnh sắc thiên nhiên hữu tình và chiều sâu lắng đọng của thời gian.\n\nVùng đất này đã chứng kiến bao biến thiên lịch sử, là niềm tự hào của người dân địa phương và luôn mở rộng vòng tay đón chào du khách từ khắp mọi miền Tổ quốc đến chiêm ngưỡng và khám phá.`,
-        image: coverImage,
+        image: getVerifiedImageForTopic(cleanTopic, "vẻ đẹp thiên nhiên di sản", 1),
         imageCaption: `Vẻ đẹp ấn tượng của ${cleanTopic} chào đón du khách đến tham quan`,
         tips: ["Quý khách nên chuẩn bị máy ảnh hoặc điện thoại đầy pin để ghi lại những khoảnh khắc đẹp."],
       },
       {
         heading: `2. Những trải nghiệm và điểm check-in không thể bỏ lỡ tại ${cleanTopic}`,
         content: `Đến với ${cleanTopic}, du khách sẽ có cơ hội hòa mình vào không gian kiến trúc độc đáo, chiêm ngưỡng những góc cảnh sắc thiên nhiên tuyệt tác và tận hưởng bầu không khí trong lành, thư thái.\n\nTừng góc nhỏ nơi đây đều mang một nét duyên thầm riêng biệt, từ những lối đi rợp bóng cây xanh, các công trình biểu tượng cho đến khung cảnh thơ mộng khiến bất kỳ ai cũng muốn dừng chân thật lâu để lưu lại những bức hình kỷ niệm.`,
-        image: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/0/09/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_4.jpg"
-          : "https://upload.wikimedia.org/wikipedia/commons/c/cd/Son_Doong_Cave_DB_%281%29.jpg",
+        image: getVerifiedImageForTopic(cleanTopic, "trải nghiệm check-in", 2),
         imageCaption: `Những góc check-in tuyệt đẹp và công trình đặc trưng tại ${cleanTopic}`,
         tips: ["Nên đi vào buổi sáng sớm hoặc xế chiều để có ánh sáng đẹp nhất và thời tiết mát mẻ."],
       },
       {
         heading: `3. Cảm xúc lắng đọng và giá trị tinh thần bất tận`,
         content: `Mỗi chuyến đi đến ${cleanTopic} không chỉ đơn thuần là một chuyến du lịch ngắm cảnh, mà còn là hành trình tìm về với sự bình yên trong tâm hồn. Lắng nghe những câu chuyện kể từ người dân bản xứ, ngắm nhìn nhịp sống bình dị trôi qua bên dòng sông hay triền núi, bạn sẽ cảm nhận rõ rệt tình yêu quê hương đất nước nồng nàn và trân quý hơn từng phút giây của cuộc sống.`,
-        image: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/1/11/S%C3%B4ng_Th%E1%BA%A1ch_H%C3%A3n_4.JPG"
-          : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        image: getVerifiedImageForTopic(cleanTopic, "không gian thanh tịnh bình yên", 3),
         imageCaption: `Không gian tĩnh lặng và cảm xúc sâu lắng tại điểm đến`,
         tips: ["Hãy dành một khoảng lặng để lắng nghe tiếng gió và tận hưởng không gian thanh tịnh."],
       },
       {
         heading: `4. Gợi ý lịch trình Tour ${cleanTopic} 1 Ngày trọn vẹn xuất phát từ TP. Đồng Hới`,
         content: `Một hành trình khoa học và tiện lợi nhất khi thuê xe Taxi Quảng Bình - Đồng Hới 24H:\n\n• 07:30 - 08:30: Xe đón quý khách tại trung tâm TP. Đồng Hới (Sân bay Đồng Hới, Ga tàu hoặc các khách sạn đường Trương Pháp, Bảo Ninh), khởi hành đi ${cleanTopic}.\n• 08:30 - 11:30: Tham quan chi tiết các điểm nhấn chính của ${cleanTopic}, chụp ảnh lưu niệm và tìm hiểu câu chuyện bản xứ.\n• 11:45 - 13:30: Thưởng thức bữa trưa đặc sản nức tiếng tại nhà hàng địa phương uy tín.\n• 13:45 - 16:30: Kết hợp tham quan các danh lam thắng cảnh lân cận trên cùng trục đường.\n• 17:00: Xe đưa đoàn trở về trung tâm TP. Đồng Hới an toàn, kết thúc chuyến đi đầy ắp kỷ niệm đẹp.`,
-        image: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/b/b3/To%C3%A0n_c%E1%BA%A3nh_qu%E1%BA%A3ng_tr%C6%B0%E1%BB%9Dng_La_Vang.JPG"
-          : "https://upload.wikimedia.org/wikipedia/commons/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg",
+        image: getVerifiedImageForTopic(cleanTopic, "lịch trình tour taxi đón tiễn", 4),
         imageCaption: `Cung đường di chuyển thuận lợi xuất phát từ Đồng Hới kết nối tour 1 ngày hoàn hảo`,
         tips: ["Đặt xe taxi trọn gói khứ hồi với Taxi 24H từ Đồng Hới để không phải lo lắng việc tìm xe hay đổi xe giữa đường, tiết kiệm 50% chiều về."],
       },
       {
         heading: `5. Thưởng thức đặc sản ẩm thực TP. Đồng Hới & ${region} thơm ngon khó cưỡng`,
         content: `Ẩm thực Đồng Hới & ${region} luôn làm say lòng du khách với những món ăn đậm đà, mộc mạc mang trọn hồn quê:\n• Bánh bột lọc Mệ Xuân trứ danh với vỏ trong veo dai giòn bọc tôm sông thịt mỡ chấm mắm ớt cay nồng.\n• Cháo canh cá lóc (bánh canh) Đồng Hới nóng hổi ngọt lịm từ nước hầm xương cá đồng.\n• Gà đồi nướng than chấm muối cheo thơm lừng mùi lá rừng Phong Nha.\n• Hải sản bờ kè Nhật Lệ & Bảo Ninh tươi sống cập bến hàng ngày ngọt đậm đà vị biển miền Trung.`,
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        image: getVerifiedImageForTopic(cleanTopic, "ẩm thực đặc sản bánh lọc cháo canh", 5),
         imageCaption: `Mâm đặc sản ẩm thực Đồng Hới đậm đà hương vị miền Trung`,
         tips: ["Bác tài Taxi 24H bản xứ Đồng Hới sẽ gợi ý những quán ăn ngon đúng điệu của người bản địa, giá cả rất bình dân."],
       },
       {
         heading: `6. Dịch vụ Taxi Quảng Bình - Đồng Hới 24H: Đón nhanh 5 phút, an toàn, giá tốt nhất`,
         content: `Taxi Quảng Bình - Đồng Hới 24H luôn sẵn sàng đồng hành cùng bạn trên mọi nẻo đường:\n• Đội ngũ tài xế tập trung đông đảo nhất tại TP. Đồng Hới, đón khách nhanh chóng chỉ sau 5 phút tại Sân bay, Ga tàu và các khách sạn.\n• Đội xe đời mới từ 4 chỗ đến 7 chỗ sang trọng, nội thất sạch sẽ, điều hòa mát rượi.\n• Tài xế bản xứ Đồng Hới thân thiện, rành đường, hỗ trợ hành lý chu đáo và tư vấn miễn phí suốt hành trình.\n• Giá cước niêm yết rõ ràng chỉ từ 12.000đ/km, ưu đãi giảm tới 50% cho chiều về khi đặt khứ hồi.\n• Tổng đài đặt xe nhanh 24/7: Hotline 0877.669.555 (Zalo: 0398.567.070).`,
-        image: isQuangTri
-          ? "https://upload.wikimedia.org/wikipedia/commons/4/4b/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_ng%C3%A0y_nay.jpg"
-          : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+        image: getVerifiedImageForTopic(cleanTopic, "taxi đồng hới đưa đón sân bay", 6),
         imageCaption: `Đội xe Taxi Quảng Bình - Đồng Hới 24H luôn túc trực phục vụ quý khách tận tình`,
         tips: ["Gọi ngay Hotline 0877.669.555 trước 30 phút để giữ xe đời mới nhất cho hành trình của bạn."],
       },
@@ -1735,10 +1769,11 @@ BẮT BUỘC TUÂN THỦ "MẪU CHUẨN VÀNG" ĐÃ ĐƯỢC CHỦ XE DUYỆT SA
    - Phần 4: Gợi ý lịch trình Tour 1 ngày trọn vẹn theo khung giờ cụ thể (07:30 đến 17:30) XUẤT PHÁT TỪ TRUNG TÂM TP. ĐỒNG HỚI kết nối với các điểm du lịch lân cận.
    - Phần 5: Cẩm nang ẩm thực đặc sản bản địa trứ danh tại TP. Đồng Hới / Quảng Bình (4-5 món độc đáo và quán ăn ngon chuẩn vị).
    - Phần 6: Dịch vụ Taxi Quảng Bình - Đồng Hới 24H: Đội xe tập trung tại Đồng Hới đón nhanh 5 phút, xe sạch mát 4-7 chỗ, giá trọn gói từ 12.000đ/km, ưu đãi 50% chiều về, Hotline 0877.669.555.
-3. HÌNH ẢNH MINH HỌA: Mỗi phần (section) BẮT BUỘC phải có trường "image" (URL ảnh chất lượng cao) và "imageCaption" (chú thích ảnh chi tiết, cảm xúc).
-4. BỘ SƯU TẬP ẢNH (GALLERY): Mảng "gallery" gồm 4-5 ảnh chụp các góc độ đặc sắc khác nhau của địa danh kèm "caption".
-5. MẸO BÁC TÀI BẢN ĐỊA: Mỗi phần có 1-2 mẹo hữu ích từ kinh nghiệm lái xe thực tế (tips).
-6. CÂU HỎI THƯỜNG GẶP (FAQS): 3 câu hỏi thực tế về thời gian di chuyển từ TP. Đồng Hới, giá cước taxi, trang phục và vé vào cổng.
+3. HÌNH ẢNH & BỘ SƯU TẬP (GALLERY):
+   - Mỗi phần (section) và mỗi ảnh gallery chỉ cần cung cấp "imageCaption" chi tiết, giàu cảm xúc miêu tả vẻ đẹp của góc chụp.
+   - Không tự bịa URL ảnh hỏng, hệ thống sẽ tự động đối khớp ảnh thực tế bách khoa toàn thư đã kiểm chứng.
+4. CHUẨN HÓA VĂN BẢN:
+   - Viết tiếng Việt chuẩn, không sử dụng mã thực thể HTML như &#x27;, &quot;, &amp;. Dùng dấu nháy đơn ' và nháy kép " trực tiếp.
 
 Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm markdown code block hoặc text nào khác) với cấu trúc sau:
 {
@@ -1748,7 +1783,7 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
   "metaDescription": "Đoạn mô tả SEO 150-160 ký tự",
   "excerpt": "Đoạn mở đầu truyền cảm hứng 2-3 câu sâu sắc",
   "category": "Di Sản Thiên Nhiên Thế Giới" hoặc "Điểm Đến Du Lịch Hot" hoặc "Tuyến Đường & Đón Tiễn" hoặc "Di Tích Lịch Sử Tâm Linh",
-  "coverImage": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
+  "coverImage": "",
   "destination": "Tên địa danh cụ thể tại Quảng Bình",
   "distanceFromDongHoi": "Khoảng cách và thời gian đi từ trung tâm TP. Đồng Hới",
   "taxiFare4Seats": "Giá xe 4 chỗ (VD: 550.000 VNĐ)",
@@ -1758,48 +1793,46 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
   "readTime": "8 phút đọc",
   "highlights": ["Điểm nổi bật 1", "Điểm nổi bật 2", "Điểm nổi bật 3", "Điểm nổi bật 4", "Điểm nổi bật 5"],
   "gallery": [
-    { "url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 1" },
-    { "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 2" },
-    { "url": "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 3" },
-    { "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", "caption": "Góc chụp 4" }
+    { "caption": "Toàn cảnh vẻ đẹp kỳ vĩ tại điểm đến" },
+    { "caption": "Góc check-in thiên nhiên thơ mộng" },
+    { "caption": "Trải nghiệm tham quan đặc sắc" },
+    { "caption": "Ẩm thực địa phương hấp dẫn" }
   ],
   "sections": [
     {
       "heading": "1. Tiêu đề phần 1",
       "content": "Nội dung giàu cảm xúc, thấm đượm văn hóa lịch sử khoảng 120-180 từ...",
-      "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
-      "imageCaption": "Chú thích ảnh phần 1",
+      "imageCaption": "Chú thích góc chụp đẹp phần 1",
       "tips": ["Mẹo hữu ích từ bác tài bản địa Đồng Hới"]
     },
     {
       "heading": "2. Tiêu đề phần 2",
       "content": "Nội dung chi tiết 120-180 từ...",
-      "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
-      "imageCaption": "Chú thích ảnh phần 2",
+      "imageCaption": "Chú thích góc chụp đẹp phần 2",
       "tips": ["Mẹo phần 2"]
     },
     {
       "heading": "3. Tiêu đề phần 3",
       "content": "Nội dung chi tiết 120-180 từ...",
-      "image": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=80",
-      "imageCaption": "Chú thích ảnh phần 3",
+      "imageCaption": "Chú thích góc chụp đẹp phần 3",
       "tips": ["Mẹo phần 3"]
     },
     {
       "heading": "4. Gợi ý lịch trình Tour 1 Ngày chi tiết xuất phát từ TP. Đồng Hới",
       "content": "Lịch trình theo các mốc giờ 07:30, 09:30, 11:30, 13:30, 15:30 từ TP. Đồng Hới...",
-      "image": "https://images.unsplash.com/photo-1548625361-1979ad2d67ad?auto=format&fit=crop&w=1000&q=80",
-      "imageCaption": "Chú thích ảnh lịch trình tour",
+      "imageCaption": "Chú thích góc chụp lịch trình tour",
       "tips": ["Mẹo đặt xe trọn gói khứ hồi từ Đồng Hới để nhận ưu đãi 50% chiều về"]
     },
     {
       "heading": "5. Thưởng thức đặc sản ẩm thực TP. Đồng Hới & Quảng Bình nức tiếng",
       "content": "Giới thiệu 4-5 món đặc sản độc đáo và địa chỉ quán ngon chuẩn vị tại Đồng Hới...",
+      "imageCaption": "Chú thích mâm đặc sản ẩm thực nức tiếng",
       "tips": ["Mẹo thưởng thức ẩm thực từ bác tài Đồng Hới"]
     },
     {
       "heading": "6. Dịch vụ Taxi Quảng Bình - Đồng Hới 24H đưa đón chu đáo",
       "content": "Đội xe tập trung tại TP. Đồng Hới đón nhanh 5 phút, giá từ 12.000đ/km, tài xế bản xứ am hiểu địa phương, Hotline 0877.669.555...",
+      "imageCaption": "Chú thích đội xe taxi đón nhanh 5 phút",
       "tips": ["Mẹo liên hệ đặt xe trước để nhận ưu đãi chiều về tới 50%"]
     }
   ],
@@ -1832,14 +1865,50 @@ Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ (không kèm mark
     const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!rawText) return null;
 
+    let parsed: any = null;
     const firstBrace = rawText.indexOf("{");
     const lastBrace = rawText.lastIndexOf("}");
     if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
       const cleanJson = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-      return JSON.parse(cleanJson);
+      parsed = JSON.parse(cleanJson);
+    } else {
+      const cleanJson = rawText.substring(firstBrace, lastBrace + 1);
+      parsed = JSON.parse(cleanJson);
     }
-    const cleanJson = rawText.substring(firstBrace, lastBrace + 1);
-    return JSON.parse(cleanJson);
+
+    if (!parsed) return null;
+
+    // Giải mã toàn bộ thực thể HTML và chuẩn hóa Unicode NFC
+    return {
+      ...parsed,
+      title: cleanVietnameseText(parsed.title),
+      metaTitle: cleanVietnameseText(parsed.metaTitle),
+      metaDescription: cleanVietnameseText(parsed.metaDescription),
+      excerpt: cleanVietnameseText(parsed.excerpt),
+      category: cleanVietnameseText(parsed.category),
+      destination: cleanVietnameseText(parsed.destination),
+      distanceFromDongHoi: cleanVietnameseText(parsed.distanceFromDongHoi),
+      taxiFare4Seats: cleanVietnameseText(parsed.taxiFare4Seats),
+      taxiFare6Seats: cleanVietnameseText(parsed.taxiFare6Seats),
+      ticketPrice: cleanVietnameseText(parsed.ticketPrice),
+      bestTimeToVisit: cleanVietnameseText(parsed.bestTimeToVisit),
+      highlights: Array.isArray(parsed.highlights) ? parsed.highlights.map(cleanVietnameseText).filter(Boolean) : [],
+      sections: Array.isArray(parsed.sections) ? parsed.sections.map((s: any) => ({
+        ...s,
+        heading: cleanVietnameseText(s.heading),
+        content: cleanVietnameseText(s.content),
+        imageCaption: cleanVietnameseText(s.imageCaption),
+        tips: Array.isArray(s.tips) ? s.tips.map(cleanVietnameseText).filter(Boolean) : [],
+      })) : [],
+      gallery: Array.isArray(parsed.gallery) ? parsed.gallery.map((g: any) => ({
+        ...g,
+        caption: cleanVietnameseText(g.caption),
+      })) : [],
+      faqs: Array.isArray(parsed.faqs) ? parsed.faqs.map((f: any) => ({
+        question: cleanVietnameseText(f.question),
+        answer: cleanVietnameseText(f.answer),
+      })) : [],
+    };
   } catch (err) {
     console.error("Gemini API generation error:", err);
     return null;

@@ -121,7 +121,10 @@ export default function ArticlesManagementTab() {
   const fetchGuides = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/travel-guides");
+      const res = await fetch(`/api/travel-guides?t=${Date.now()}`, {
+        cache: "no-store",
+        headers: { Pragma: "no-cache", "Cache-Control": "no-cache" },
+      });
       const data = await res.json();
       if (data.success && Array.isArray(data.data)) {
         setGuides(data.data);
@@ -462,6 +465,13 @@ export default function ArticlesManagementTab() {
             ...nextSections[sIdx],
             image: url,
             imageCaption: caption || nextSections[sIdx].imageCaption || "",
+          };
+        } else {
+          nextSections[sIdx] = {
+            heading: `${sIdx + 1}. Phần nội dung`,
+            content: "",
+            image: url,
+            imageCaption: caption || "",
           };
         }
         return { ...prev, sections: nextSections };

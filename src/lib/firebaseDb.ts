@@ -14,6 +14,7 @@ import {
 import { BookingRecord, Driver, WalletTransaction, FleetSystemSettings } from "@/types";
 import { TravelGuide, travelGuides as initialTravelGuides } from "@/data/travelGuides";
 import { DEFAULT_FLEET_SETTINGS } from "./drivers";
+import { sanitizeDataForFirestore } from "./textSanitizer";
 
 // ==========================================
 // 1. BOOKINGS (ĐƠN ĐẶT XE)
@@ -121,11 +122,12 @@ export async function getTravelGuideBySlugFromDb(slug: string): Promise<TravelGu
 export async function saveTravelGuideToDb(guide: TravelGuide): Promise<boolean> {
   try {
     const docRef = doc(db, GUIDES_COLLECTION, guide.slug);
-    await setDoc(docRef, guide, { merge: true });
+    const cleaned = sanitizeDataForFirestore(guide);
+    await setDoc(docRef, cleaned, { merge: true });
     return true;
   } catch (error) {
     console.error("[FIRESTORE ERROR] saveTravelGuideToDb:", error);
-    return false;
+    throw error;
   }
 }
 

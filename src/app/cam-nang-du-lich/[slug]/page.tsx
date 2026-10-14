@@ -11,6 +11,7 @@ import {
   getTravelGuideBySlugAsync,
 } from "@/lib/travelGuidesService";
 import { getVerifiedImageForTopic } from "@/lib/verifiedImages";
+import { sanitizeGuideText, cleanVietnameseText } from "@/lib/textSanitizer";
 import { siteConfig } from "@/config/siteConfig";
 import {
   MapPin,
@@ -51,14 +52,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const guide = await getTravelGuideBySlugAsync(slug);
+  const rawGuide = await getTravelGuideBySlugAsync(slug);
 
-  if (!guide) {
+  if (!rawGuide) {
     return {
       title: "Bài Viết Không Tồn Tại | Taxi Quảng Trị 24H",
       description: "Không tìm thấy cẩm nang du lịch bạn đang tìm kiếm.",
     };
   }
+  const guide = sanitizeGuideText(rawGuide);
 
   const canonicalUrl = `https://taxiquangtri.com.vn/cam-nang-du-lich/${guide.slug}`;
 
@@ -106,11 +108,12 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function TravelGuideDetailPage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const guide = await getTravelGuideBySlugAsync(slug);
+  const rawGuide = await getTravelGuideBySlugAsync(slug);
 
-  if (!guide) {
+  if (!rawGuide) {
     notFound();
   }
+  const guide = sanitizeGuideText(rawGuide);
 
   const allGuides = await getAllTravelGuidesAsync();
   // Lọc các bài viết liên quan
@@ -364,7 +367,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                           src={section.image}
                           alt={section.imageCaption || section.heading}
                           className="w-full h-64 sm:h-80 md:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
-                          fallbackSrc={getVerifiedImageForTopic(guide.destination, section.heading, idx)}
+                          fallbackSrc={getVerifiedImageForTopic(guide.destination, section.heading, idx + 1)}
                         />
                       </div>
                       {section.imageCaption && (
@@ -425,7 +428,7 @@ export default async function TravelGuideDetailPage({ params }: ArticlePageProps
                           src={img.url}
                           alt={img.caption || `${guide.destination} hình ảnh ${gIdx + 1}`}
                           className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                          fallbackSrc={getVerifiedImageForTopic(guide.destination, img.caption, gIdx + 1)}
+                          fallbackSrc={getVerifiedImageForTopic(guide.destination, img.caption, gIdx + 7)}
                         />
                       </div>
                       {img.caption && (

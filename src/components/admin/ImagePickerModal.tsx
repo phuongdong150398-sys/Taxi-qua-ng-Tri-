@@ -97,7 +97,7 @@ export default function ImagePickerModal({
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const MAX_WIDTH = 1200;
+        const MAX_WIDTH = 1080;
         let width = img.width;
         let height = img.height;
 
@@ -111,7 +111,10 @@ export default function ImagePickerModal({
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
 
-        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.82);
+        let compressedDataUrl = canvas.toDataURL("image/jpeg", 0.78);
+        if (compressedDataUrl.length > 700000) {
+          compressedDataUrl = canvas.toDataURL("image/jpeg", 0.65);
+        }
         setUploadPreview(compressedDataUrl);
       };
       img.src = event.target?.result as string;

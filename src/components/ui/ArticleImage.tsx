@@ -21,8 +21,14 @@ export default function ArticleImage({
     if (fallbackSrc && fallbackSrc !== DEFAULT_FALLBACK_IMAGE) {
       return fallbackSrc;
     }
-    return getVerifiedImageForTopic("", alt, 0) || DEFAULT_FALLBACK_IMAGE;
-  }, [fallbackSrc, alt]);
+    let hash = 0;
+    const str = `${alt || ""} ${src || ""}`;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    const dynamicIndex = hash % 5;
+    return getVerifiedImageForTopic("", alt, dynamicIndex) || DEFAULT_FALLBACK_IMAGE;
+  }, [fallbackSrc, alt, src]);
 
   const [currentSrc, setCurrentSrc] = useState(src || smartFallback);
   const [hasError, setHasError] = useState(false);

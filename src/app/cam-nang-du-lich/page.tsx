@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
 import ArticleImage from "@/components/ui/ArticleImage";
 import { getAllTravelGuidesAsync } from "@/lib/travelGuidesService";
+import { sanitizeGuideText } from "@/lib/textSanitizer";
 import { siteConfig } from "@/config/siteConfig";
 import {
   MapPin,
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80",
+        url: "https://upload.wikimedia.org/wikipedia/commons/1/19/Nhat_Le_Beach.jpg",
         width: 1200,
         height: 630,
         alt: "Cẩm nang du lịch Quảng Bình",
@@ -49,7 +50,8 @@ export const metadata: Metadata = {
 };
 
 export default async function TravelGuideHubPage() {
-  const travelGuides = await getAllTravelGuidesAsync();
+  const rawGuides = await getAllTravelGuidesAsync();
+  const travelGuides = rawGuides.map(sanitizeGuideText);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
